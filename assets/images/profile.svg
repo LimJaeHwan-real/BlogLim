@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>generic blog icon</title>
+  <rect width="64" height="64" rx="18" fill="#f8f9fa"/>
+  <path
+    d="M22 14h16l10 10v24a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4Z"
+    fill="#ffffff"
+    stroke="#495057"
+    stroke-width="3"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M38 14v10h10"
+    fill="#e9ecef"
+    stroke="#495057"
+    stroke-width="3"
+    stroke-linejoin="round"
+  />
+  <path d="M26 33h12" stroke="#868e96" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 40h14" stroke="#adb5bd" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 47h9" stroke="#adb5bd" stroke-width="3" stroke-linecap="round"/>
+</svg>

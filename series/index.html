@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ko-KR">
+  <head>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff" data-theme-color>
+<meta name="apple-mobile-web-app-status-bar-style" content="default" data-apple-status-bar>
+<title>시리즈 | Velog Style Jekyll Theme</title>
+<meta name="generator" content="Jekyll v4.3.3">
+<meta name="description" content="연속된 주제로 묶인 글을 한곳에서 볼 수 있습니다.">
+<link rel="canonical" href="https://woonyong-kr.github.io/jekyll-theme-velog/series/">
+<meta property="og:title" content="시리즈 | Velog Style Jekyll Theme">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:description" content="연속된 주제로 묶인 글을 한곳에서 볼 수 있습니다.">
+<meta property="og:url" content="https://woonyong-kr.github.io/jekyll-theme-velog/series/">
+<meta property="og:site_name" content="Velog Style Jekyll Theme">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="시리즈 | Velog Style Jekyll Theme">
+<meta name="twitter:description" content="연속된 주제로 묶인 글을 한곳에서 볼 수 있습니다.">
+
+
+<link rel="icon" href="/jekyll-theme-velog/assets/images/favicon.png?v=1776337719" type="image/png" sizes="256x256">
+<link rel="shortcut icon" href="/jekyll-theme-velog/assets/images/favicon.png?v=1776337719" type="image/png">
+<link rel="apple-touch-icon" href="/jekyll-theme-velog/assets/images/favicon.png?v=1776337719">
+<link rel="mask-icon" href="/jekyll-theme-velog/assets/images/profile.svg?v=1776337719" color="#495057">
+<link rel="alternate" type="application/atom+xml" href="/jekyll-theme-velog/feed.xml" title="Velog Style Jekyll Theme">
+
+<link rel="stylesheet" href="/jekyll-theme-velog/assets/css/main.css?v=1776337719">
+<script>
+  (function () {
+    function applyTheme(theme) {
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      var color = safeTheme === "dark" ? "#121212" : "#ffffff";
+      var themeColorMeta = document.querySelector("[data-theme-color]");
+      var appleStatusMeta = document.querySelector("[data-apple-status-bar]");
+
+      document.documentElement.setAttribute("data-theme", safeTheme);
+
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute("content", color);
+      }
+
+      if (appleStatusMeta) {
+        appleStatusMeta.setAttribute("content", safeTheme === "dark" ? "black" : "default");
+      }
+    }
+
+    try {
+      var storedTheme = localStorage.getItem("velog-theme");
+      var hasStoredTheme = storedTheme === "light" || storedTheme === "dark";
+      var theme = hasStoredTheme
+        ? storedTheme
+        : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+
+      applyTheme(theme);
+    } catch (error) {
+      applyTheme(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+  })();
+</script>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Velog Style Jekyll Theme",
+    "headline": "시리즈 | Velog Style Jekyll Theme",
+    "description": "연속된 주제로 묶인 글을 한곳에서 볼 수 있습니다.",
+    "url": "https://woonyong-kr.github.io/jekyll-theme-velog/series/"
+  }
+</script>
+
+  </head>
+  <body>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <header class="site-header">
+  <div class="site-header__inner">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <a class="header-logo" href="/jekyll-theme-velog/" aria-label="Velog Style Jekyll Theme">
+      
+        <img
+          class="header-logo__mark header-logo__mark--avatar"
+          src="/jekyll-theme-velog/assets/images/avatar-placeholder.svg"
+          alt=""
+          width="36"
+          height="36"
+        >
+      
+      <span class="header-logo__text">Velog Style Jekyll Theme</span>
+    </a>
+
+    
+    
+    
+    
+      <nav class="header-actions" aria-label="바로가기">
+        
+          <a
+            class="icon-button"
+            href="https://github.com/your-handle"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.14 1.18a10.9 10.9 0 0 1 5.72 0c2.18-1.49 3.14-1.18 3.14-1.18.62 1.58.23 2.75.12 3.04.73.8 1.17 1.83 1.17 3.09 0 4.42-2.69 5.39-5.25 5.67.41.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .31.2.67.8.56A11.52 11.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+              ></path>
+            </svg>
+          </a>
+        
+        
+          <a class="icon-button" href="/jekyll-theme-velog/feed.xml" aria-label="RSS" title="RSS">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M5 3.5a1.5 1.5 0 0 0 0 3c6.9 0 12.5 5.6 12.5 12.5a1.5 1.5 0 0 0 3 0C20.5 10.44 13.56 3.5 5 3.5Zm0 6a1.5 1.5 0 0 0 0 3c3.58 0 6.5 2.92 6.5 6.5a1.5 1.5 0 0 0 3 0c0-5.24-4.26-9.5-9.5-9.5Zm.5 7.75A2.25 2.25 0 1 0 5.5 21.5a2.25 2.25 0 0 0 0-4.25Z"
+              ></path>
+            </svg>
+          </a>
+        
+        
+          <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="테마 전환" title="테마 전환">
+            <span class="theme-toggle__sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 17.5A5.5 5.5 0 1 0 12 6.5a5.5 5.5 0 0 0 0 11Zm0-15a1 1 0 0 1 1 1v1.5a1 1 0 1 1-2 0V3.5a1 1 0 0 1 1-1Zm0 16a1 1 0 0 1 1 1V21a1 1 0 1 1-2 0v-1.5a1 1 0 0 1 1-1Zm8.5-7.5a1 1 0 1 1 0 2H19a1 1 0 1 1 0-2h1.5ZM5 12a1 1 0 0 1-1 1H2.5a1 1 0 1 1 0-2H4a1 1 0 0 1 1 1Zm11.36 5.95a1 1 0 0 1 1.42 0l1.06 1.06a1 1 0 0 1-1.42 1.42l-1.06-1.06a1 1 0 0 1 0-1.42ZM6.58 7.64a1 1 0 0 1 0-1.42L7.64 5.16a1 1 0 1 1 1.42 1.42L8 7.64a1 1 0 0 1-1.42 0Zm10.2-1.42a1 1 0 1 1 1.42-1.42l1.06 1.06a1 1 0 0 1-1.42 1.42l-1.06-1.06Zm-10.2 10.2a1 1 0 0 1 1.42 0L9.06 17.5a1 1 0 0 1-1.42 1.42L6.58 17.86a1 1 0 0 1 0-1.42Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="theme-toggle__moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M14.55 2.2a1 1 0 0 1 1.11 1.3 8.5 8.5 0 1 0 10.84 10.84 1 1 0 0 1 1.3 1.11A10.5 10.5 0 1 1 14.55 2.2Z"
+                  transform="translate(-3 -3)"
+                ></path>
+              </svg>
+            </span>
+          </button>
+        
+      </nav>
+    
+  </div>
+</header>
+
+    <main>
+      <div class="velog-layout velog-layout--wide">
+  
+
+
+
+
+
+
+
+
+
+
+<section class="profile">
+  <div class="profile__section">
+    <div class="profile__left">
+      
+        <img
+          class="profile__avatar"
+          src="/jekyll-theme-velog/assets/images/avatar-placeholder.svg"
+          alt="Theme Demo"
+          width="128"
+          height="128"
+        >
+      
+      <div class="profile__info">
+        <h1 class="profile__name">Theme Demo</h1>
+        <p class="profile__bio">velog 스타일 Jekyll 테마를 소개하는 샘플 프로필입니다.</p>
+        <p class="profile__intro">GitHub 프로필을 연결하면 이름, 아바타, 링크가 자동으로 동기화되고, 연결 전에는 이 샘플 문구가 표시됩니다.</p>
+        
+          <div class="profile__stats">
+            <div class="profile__stat">
+              <span class="profile__stat-value">6</span>
+              <span class="profile__stat-label">포스트</span>
+            </div>
+            <div class="profile__stat">
+              <span class="profile__stat-value">3</span>
+              <span class="profile__stat-label">시리즈</span>
+            </div>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="profile__separator"></div>
+  
+
+
+
+</section>
+
+  
+
+
+
+
+<nav class="velog-tabs" aria-label="콘텐츠 구분">
+  <div class="velog-tabs__inner">
+    <a class="velog-tabs__item" href="/jekyll-theme-velog/">글</a>
+    <a class="velog-tabs__item is-active" href="/jekyll-theme-velog/series/">시리즈</a>
+    
+    <span class="velog-tabs__indicator" style="--tab-index: 1;"></span>
+  </div>
+</nav>
+
+
+  <section class="content-section content-section--series">
+    <div class="series-list">
+      
+
+
+
+  
+  
+  
+    
+    
+    
+    <article class="series-card">
+      <a href="/jekyll-theme-velog/?series=theme-overview">
+        
+          <div class="series-card__image">
+            <img
+              src="/jekyll-theme-velog/assets/images/posts/theme-intro-cover.png"
+              alt="테마 소개와 구조"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+        
+        <h3 class="series-card__title">테마 소개와 구조</h3>
+        
+          <p class="series-card__description">홈 구성, 글 목록, 시리즈 카드처럼 테마의 핵심 화면 구성을 빠르게 훑습니다.</p>
+        
+        <p class="series-card__meta">
+          <span class="series-card__count">2개의 포스트</span>
+          <span class="series-card__dot">·</span>
+          <span>마지막 업데이트 2026년 4월 9일</span>
+        </p>
+      </a>
+    </article>
+
+  
+  
+  
+    
+    
+    
+    <article class="series-card">
+      <a href="/jekyll-theme-velog/?series=theme-setup">
+        
+          <div class="series-card__image">
+            <img
+              src="/jekyll-theme-velog/assets/images/posts/local-setup-cover.png"
+              alt="설치와 커스터마이징"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+        
+        <h3 class="series-card__title">설치와 커스터마이징</h3>
+        
+          <p class="series-card__description">로컬 실행부터 설정 파일 수정까지 테마를 자기 블로그에 맞게 바꾸는 과정을 다룹니다.</p>
+        
+        <p class="series-card__meta">
+          <span class="series-card__count">2개의 포스트</span>
+          <span class="series-card__dot">·</span>
+          <span>마지막 업데이트 2026년 4월 9일</span>
+        </p>
+      </a>
+    </article>
+
+  
+  
+  
+    
+    
+    
+    <article class="series-card">
+      <a href="/jekyll-theme-velog/?series=theme-operations">
+        
+          <div class="series-card__image">
+            <img
+              src="/jekyll-theme-velog/assets/images/posts/deployment-guide-cover.png"
+              alt="배포와 운영"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+        
+        <h3 class="series-card__title">배포와 운영</h3>
+        
+          <p class="series-card__description">GitHub Pages, Jenkins, GitHub 연동처럼 공개 배포와 운영 자동화 흐름을 정리합니다.</p>
+        
+        <p class="series-card__meta">
+          <span class="series-card__count">2개의 포스트</span>
+          <span class="series-card__dot">·</span>
+          <span>마지막 업데이트 2026년 4월 9일</span>
+        </p>
+      </a>
+    </article>
+
+
+
+    </div>
+  </section>
+</div>
+
+    </main>
+    <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p>Copyright &copy; 2026 Velog Style Jekyll Theme</p>
+    <p>Open-source Jekyll theme for developer blogs.</p>
+  </div>
+</footer>
+
+    
+    <script src="/jekyll-theme-velog/assets/js/site.js?v=1776337719"></script>
+  </body>
+</html>

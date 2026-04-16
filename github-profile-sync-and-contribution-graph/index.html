@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ko-KR">
+  <head>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff" data-theme-color>
+<meta name="apple-mobile-web-app-status-bar-style" content="default" data-apple-status-bar>
+<title>GitHub 프로필 동기화와 기여 그래프를 붙이는 방법 | Velog Style Jekyll Theme</title>
+<meta name="generator" content="Jekyll v4.3.3">
+<meta name="description" content="GitHub 아이디만 연결하면 이름, 아바타, 링크, 기여 그래프가 홈 화면에 반영되는 흐름과 fallback 규칙을 설명합니다.">
+<link rel="canonical" href="https://woonyong-kr.github.io/jekyll-theme-velog/github-profile-sync-and-contribution-graph/">
+<meta property="og:title" content="GitHub 프로필 동기화와 기여 그래프를 붙이는 방법 | Velog Style Jekyll Theme">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:description" content="GitHub 아이디만 연결하면 이름, 아바타, 링크, 기여 그래프가 홈 화면에 반영되는 흐름과 fallback 규칙을 설명합니다.">
+<meta property="og:url" content="https://woonyong-kr.github.io/jekyll-theme-velog/github-profile-sync-and-contribution-graph/">
+<meta property="og:site_name" content="Velog Style Jekyll Theme">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GitHub 프로필 동기화와 기여 그래프를 붙이는 방법 | Velog Style Jekyll Theme">
+<meta name="twitter:description" content="GitHub 아이디만 연결하면 이름, 아바타, 링크, 기여 그래프가 홈 화면에 반영되는 흐름과 fallback 규칙을 설명합니다.">
+
+  <meta property="article:published_time" content="2026-03-28T09:00:00+09:00">
+
+
+  <meta property="article:modified_time" content="2026-04-09T10:00:00+09:00">
+
+<link rel="icon" href="/jekyll-theme-velog/assets/images/favicon.png?v=1776337719" type="image/png" sizes="256x256">
+<link rel="shortcut icon" href="/jekyll-theme-velog/assets/images/favicon.png?v=1776337719" type="image/png">
+<link rel="apple-touch-icon" href="/jekyll-theme-velog/assets/images/favicon.png?v=1776337719">
+<link rel="mask-icon" href="/jekyll-theme-velog/assets/images/profile.svg?v=1776337719" color="#495057">
+<link rel="alternate" type="application/atom+xml" href="/jekyll-theme-velog/feed.xml" title="Velog Style Jekyll Theme">
+
+<link rel="stylesheet" href="/jekyll-theme-velog/assets/css/main.css?v=1776337719">
+<script>
+  (function () {
+    function applyTheme(theme) {
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      var color = safeTheme === "dark" ? "#121212" : "#ffffff";
+      var themeColorMeta = document.querySelector("[data-theme-color]");
+      var appleStatusMeta = document.querySelector("[data-apple-status-bar]");
+
+      document.documentElement.setAttribute("data-theme", safeTheme);
+
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute("content", color);
+      }
+
+      if (appleStatusMeta) {
+        appleStatusMeta.setAttribute("content", safeTheme === "dark" ? "black" : "default");
+      }
+    }
+
+    try {
+      var storedTheme = localStorage.getItem("velog-theme");
+      var hasStoredTheme = storedTheme === "light" || storedTheme === "dark";
+      var theme = hasStoredTheme
+        ? storedTheme
+        : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+
+      applyTheme(theme);
+    } catch (error) {
+      applyTheme(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+  })();
+</script>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "name": "Velog Style Jekyll Theme",
+    "headline": "GitHub 프로필 동기화와 기여 그래프를 붙이는 방법 | Velog Style Jekyll Theme",
+    "description": "GitHub 아이디만 연결하면 이름, 아바타, 링크, 기여 그래프가 홈 화면에 반영되는 흐름과 fallback 규칙을 설명합니다.",
+    "url": "https://woonyong-kr.github.io/jekyll-theme-velog/github-profile-sync-and-contribution-graph/",
+    "datePublished": "2026-03-28T09:00:00+09:00",
+    "dateModified": "2026-04-09T10:00:00+09:00"
+  }
+</script>
+
+  </head>
+  <body>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <header class="site-header">
+  <div class="site-header__inner">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <a class="header-logo" href="/jekyll-theme-velog/" aria-label="Velog Style Jekyll Theme">
+      
+        <img
+          class="header-logo__mark header-logo__mark--avatar"
+          src="/jekyll-theme-velog/assets/images/avatar-placeholder.svg"
+          alt=""
+          width="36"
+          height="36"
+        >
+      
+      <span class="header-logo__text">Velog Style Jekyll Theme</span>
+    </a>
+
+    
+    
+    
+    
+      <nav class="header-actions" aria-label="바로가기">
+        
+          <a
+            class="icon-button"
+            href="https://github.com/your-handle"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.14 1.18a10.9 10.9 0 0 1 5.72 0c2.18-1.49 3.14-1.18 3.14-1.18.62 1.58.23 2.75.12 3.04.73.8 1.17 1.83 1.17 3.09 0 4.42-2.69 5.39-5.25 5.67.41.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .31.2.67.8.56A11.52 11.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+              ></path>
+            </svg>
+          </a>
+        
+        
+          <a class="icon-button" href="/jekyll-theme-velog/feed.xml" aria-label="RSS" title="RSS">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M5 3.5a1.5 1.5 0 0 0 0 3c6.9 0 12.5 5.6 12.5 12.5a1.5 1.5 0 0 0 3 0C20.5 10.44 13.56 3.5 5 3.5Zm0 6a1.5 1.5 0 0 0 0 3c3.58 0 6.5 2.92 6.5 6.5a1.5 1.5 0 0 0 3 0c0-5.24-4.26-9.5-9.5-9.5Zm.5 7.75A2.25 2.25 0 1 0 5.5 21.5a2.25 2.25 0 0 0 0-4.25Z"
+              ></path>
+            </svg>
+          </a>
+        
+        
+          <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="테마 전환" title="테마 전환">
+            <span class="theme-toggle__sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 17.5A5.5 5.5 0 1 0 12 6.5a5.5 5.5 0 0 0 0 11Zm0-15a1 1 0 0 1 1 1v1.5a1 1 0 1 1-2 0V3.5a1 1 0 0 1 1-1Zm0 16a1 1 0 0 1 1 1V21a1 1 0 1 1-2 0v-1.5a1 1 0 0 1 1-1Zm8.5-7.5a1 1 0 1 1 0 2H19a1 1 0 1 1 0-2h1.5ZM5 12a1 1 0 0 1-1 1H2.5a1 1 0 1 1 0-2H4a1 1 0 0 1 1 1Zm11.36 5.95a1 1 0 0 1 1.42 0l1.06 1.06a1 1 0 0 1-1.42 1.42l-1.06-1.06a1 1 0 0 1 0-1.42ZM6.58 7.64a1 1 0 0 1 0-1.42L7.64 5.16a1 1 0 1 1 1.42 1.42L8 7.64a1 1 0 0 1-1.42 0Zm10.2-1.42a1 1 0 1 1 1.42-1.42l1.06 1.06a1 1 0 0 1-1.42 1.42l-1.06-1.06Zm-10.2 10.2a1 1 0 0 1 1.42 0L9.06 17.5a1 1 0 0 1-1.42 1.42L6.58 17.86a1 1 0 0 1 0-1.42Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="theme-toggle__moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M14.55 2.2a1 1 0 0 1 1.11 1.3 8.5 8.5 0 1 0 10.84 10.84 1 1 0 0 1 1.3 1.11A10.5 10.5 0 1 1 14.55 2.2Z"
+                  transform="translate(-3 -3)"
+                ></path>
+              </svg>
+            </span>
+          </button>
+        
+      </nav>
+    
+  </div>
+</header>
+
+    <main>
+      
+
+
+
+
+
+
+
+
+<article class="post-view">
+  <a class="post-view__back" href="/jekyll-theme-velog/">글 목록으로 돌아가기</a>
+
+  <header class="post-head">
+    
+      <p class="post-head__series">배포와 운영</p>
+    
+    <h1 class="post-head__title">GitHub 프로필 동기화와 기여 그래프를 붙이는 방법</h1>
+    
+      <p class="post-head__description">GitHub 아이디만 연결하면 이름, 아바타, 링크, 기여 그래프가 홈 화면에 반영되는 흐름과 fallback 규칙을 설명합니다.</p>
+    
+
+    <div class="post-head__author">
+      
+        <img
+          class="post-head__avatar"
+          src="/jekyll-theme-velog/assets/images/avatar-placeholder.svg"
+          alt="Theme Demo"
+          width="48"
+          height="48"
+        >
+      
+      <div class="post-head__meta-block">
+        <strong>Theme Demo</strong>
+        <span>
+          2026년 3월 28일 · 3분 읽기 · 수정 2026년 4월 9일
+        </span>
+      </div>
+    </div>
+
+    
+      <div class="post-head__tags">
+        
+          <a class="tag-chip" href="/jekyll-theme-velog/?tag=GitHub">GitHub</a>
+        
+          <a class="tag-chip" href="/jekyll-theme-velog/?tag=GraphQL">GraphQL</a>
+        
+          <a class="tag-chip" href="/jekyll-theme-velog/?tag=Profile%20Sync">Profile Sync</a>
+        
+          <a class="tag-chip" href="/jekyll-theme-velog/?tag=Jekyll%20Theme">Jekyll Theme</a>
+        
+      </div>
+    
+
+    
+      <div class="post-head__thumbnail">
+        <img src="/jekyll-theme-velog/assets/images/posts/github-sync-cover.png" alt="GitHub 프로필 동기화와 기여 그래프를 붙이는 방법" decoding="async">
+      </div>
+    
+  </header>
+
+  <section class="prose">
+    <p>이 테마는 GitHub 계정을 연결하면 홈의 프로필 이름, 아바타, 기여 그래프를 자동으로 채웁니다. 연결이 실패하거나 설정을 안 해도 화면이 깨지지 않는 fallback 구조도 함께 갖고 있습니다.</p>
+
+<h2 id="어떤-데이터를-가져오나요">어떤 데이터를 가져오나요?</h2>
+
+<p>동기화 스크립트는 두 종류의 캐시 파일을 만듭니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>파일</th>
+      <th>내용</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_data/github_profile_cache.json</code></td>
+      <td>이름, 아바타 URL, GitHub 링크, 소개</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_data/github_contributions_cache.json</code></td>
+      <td>최근 1년간 날짜별 기여 횟수</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>빌드 시에는 이 캐시 파일만 읽기 때문에 <strong>브라우저에 토큰이 노출되지 않습니다.</strong></p>
+
+<h2 id="설정-방법">설정 방법</h2>
+
+<h3 id="1-_datathemeyml-수정">1. <code class="language-plaintext highlighter-rouge">_data/theme.yml</code> 수정</h3>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">hero</span><span class="pi">:</span>
+  <span class="na">github_contributions</span><span class="pi">:</span>
+    <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>          <span class="c1"># 기여 그래프 활성화</span>
+    <span class="na">username</span><span class="pi">:</span> <span class="s">your-id</span>      <span class="c1"># 본인 GitHub 아이디 (예: hong)</span>
+
+<span class="na">profile</span><span class="pi">:</span>
+  <span class="na">github_sync</span><span class="pi">:</span>
+    <span class="na">enabled</span><span class="pi">:</span> <span class="no">true</span>          <span class="c1"># 프로필 동기화 활성화</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">username</code>이 비어 있으면 <code class="language-plaintext highlighter-rouge">_data/profile.yml</code>의 <code class="language-plaintext highlighter-rouge">github</code> 링크에서 아이디를 유추합니다.</p>
+
+<h3 id="2-인증-준비">2. 인증 준비</h3>
+
+<p>아래 세 가지 중 하나면 됩니다.</p>
+
+<p><strong>방법 A — GitHub CLI (가장 쉬움)</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gh auth login
+</code></pre></div></div>
+
+<p>프롬프트에 따라 브라우저에서 GitHub 로그인하면 자동으로 인증됩니다.</p>
+
+<p><strong>방법 B — Personal Access Token</strong></p>
+
+<ol>
+  <li>GitHub → <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong></li>
+  <li><strong>Generate new token</strong> 클릭</li>
+  <li>Repository access: <code class="language-plaintext highlighter-rouge">Public Repositories (read-only)</code></li>
+  <li>Permissions에서 <code class="language-plaintext highlighter-rouge">read:user</code> 선택</li>
+  <li>토큰 생성 후 복사</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">GITHUB_TOKEN</span><span class="o">=</span>ghp_xxxxxxxxxxxx
+</code></pre></div></div>
+
+<blockquote>
+  <p>토큰은 한 번만 보여줍니다. 반드시 복사해두세요.</p>
+</blockquote>
+
+<h3 id="3-동기화-스크립트-실행">3. 동기화 스크립트 실행</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ruby scripts/fetch_github_contributions.rb
+</code></pre></div></div>
+
+<p>성공하면 아래처럼 출력됩니다.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fetching GitHub profile for: your-id
+✓ Profile saved to _data/github_profile_cache.json
+✓ Contributions saved to _data/github_contributions_cache.json
+</code></pre></div></div>
+
+<h3 id="4-결과-확인">4. 결과 확인</h3>
+
+<p>로컬에서 확인:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">BUNDLE_FORCE_RUBY_PLATFORM</span><span class="o">=</span><span class="nb">true </span>bundle <span class="nb">exec </span>jekyll serve
+</code></pre></div></div>
+
+<p>홈 화면에 본인 GitHub 아바타, 이름, 기여 그래프가 표시되면 성공입니다.</p>
+
+<h2 id="배포-환경에서-자동-동기화">배포 환경에서 자동 동기화</h2>
+
+<p>로컬에서 수동으로 실행하는 방법 외에, GitHub Actions로 배포할 때 자동으로 동기화됩니다.</p>
+
+<h3 id="1-repository-secret-등록">1. Repository Secret 등록</h3>
+
+<p>저장소 <strong>Settings → Secrets and variables → Actions → New repository secret</strong></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Name: GH_PAT
+Secret: (위에서 만든 Personal Access Token 값)
+</code></pre></div></div>
+
+<h3 id="2-자동-동기화-스케줄-확인">2. 자동 동기화 스케줄 확인</h3>
+
+<p>이 저장소의 <code class="language-plaintext highlighter-rouge">.github/workflows/deploy.yml</code>에는 두 가지 트리거가 있습니다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">main</code> 브랜치 push 시 → 배포와 함께 프로필 동기화</li>
+  <li><strong>매일 새벽 3시 17분</strong> → 기여 그래프 자동 갱신</li>
+</ul>
+
+<p>즉, 새 글을 push할 때마다 기여 그래프도 최신으로 업데이트됩니다.</p>
+
+<h2 id="fallback-규칙">fallback 규칙</h2>
+
+<p>연결이 완벽하지 않아도 화면이 망가지지 않습니다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>상황</th>
+      <th>화면 동작</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GitHub 아바타 있음</td>
+      <td>GitHub 아바타 사용</td>
+    </tr>
+    <tr>
+      <td>GitHub 아바타 없음</td>
+      <td><code class="language-plaintext highlighter-rouge">_data/profile.yml</code>의 <code class="language-plaintext highlighter-rouge">avatar</code> 사용</td>
+    </tr>
+    <tr>
+      <td>GitHub 이름 있음</td>
+      <td>GitHub 이름으로 표시</td>
+    </tr>
+    <tr>
+      <td>GitHub <code class="language-plaintext highlighter-rouge">bio</code> 비어 있음</td>
+      <td><code class="language-plaintext highlighter-rouge">_data/profile.yml</code>의 소개 유지</td>
+    </tr>
+    <tr>
+      <td>기여 그래프 캐시 없음</td>
+      <td>마지막 캐시 또는 빈 그래프 표시</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>즉, 처음 fork했을 때는 <code class="language-plaintext highlighter-rouge">_data/profile.yml</code>의 샘플 데이터가 보이고, GitHub 연동을 완료하면 자동으로 실제 데이터로 교체됩니다.</p>
+
+<h2 id="동기화가-안-될-때-확인할-것">동기화가 안 될 때 확인할 것</h2>
+
+<h3 id="스크립트-실행-후-파일이-생성됐는지-확인">스크립트 실행 후 파일이 생성됐는지 확인</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls </span>_data/github_<span class="k">*</span>_cache.json
+</code></pre></div></div>
+
+<p>파일이 없다면 인증이 실패한 것입니다.</p>
+
+<hr />
+
+<h3 id="인증-오류가-날-때">인증 오류가 날 때</h3>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Error: Could not authenticate with GitHub API
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GITHUB_TOKEN</code> 환경 변수가 설정됐는지 확인</li>
+  <li><code class="language-plaintext highlighter-rouge">gh auth status</code>로 GitHub CLI 로그인 상태 확인</li>
+  <li>토큰이 만료됐거나 권한이 부족하지 않은지 확인</li>
+</ul>
+
+<hr />
+
+<h3 id="프로필은-동기화됐는데-기여-그래프가-안-보일-때">프로필은 동기화됐는데 기여 그래프가 안 보일 때</h3>
+
+<p><code class="language-plaintext highlighter-rouge">_data/theme.yml</code>에서 <code class="language-plaintext highlighter-rouge">hero.github_contributions.enabled</code>가 <code class="language-plaintext highlighter-rouge">true</code>인지,<br />
+<code class="language-plaintext highlighter-rouge">username</code>이 실제 GitHub 아이디와 일치하는지 확인하세요.</p>
+
+<hr />
+
+<h3 id="github-actions에서-동기화-실패할-때">GitHub Actions에서 동기화 실패할 때</h3>
+
+<p>저장소 <strong>Settings → Secrets and variables → Actions</strong>에서 <code class="language-plaintext highlighter-rouge">GH_PAT</code> 시크릿이 등록됐는지 확인하세요. 없으면 Actions가 GitHub API에 접근할 수 없습니다.</p>
+
+<h2 id="github-연동-없이-프로필만-꾸미기">GitHub 연동 없이 프로필만 꾸미기</h2>
+
+<p>GitHub 동기화를 쓰지 않더라도 <code class="language-plaintext highlighter-rouge">_data/profile.yml</code>을 직접 편집하면 됩니다.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">display_name</span><span class="pi">:</span> <span class="s">홍길동</span>
+<span class="na">bio</span><span class="pi">:</span> <span class="s">백엔드 개발자, 기록을 좋아합니다</span>
+<span class="na">intro</span><span class="pi">:</span> <span class="s">Python, Django, PostgreSQL 주로 사용</span>
+<span class="na">avatar</span><span class="pi">:</span> <span class="s">/assets/images/my-avatar.jpg</span>   <span class="c1"># 직접 이미지 업로드</span>
+<span class="na">github</span><span class="pi">:</span> <span class="s">https://github.com/your-handle</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">avatar</code>에 외부 URL(예: GitHub 프로필 이미지 URL)을 직접 넣어도 됩니다.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">avatar</span><span class="pi">:</span> <span class="s">https://avatars.githubusercontent.com/u/12345678</span>
+</code></pre></div></div>
+
+<h2 id="정리">정리</h2>
+
+<p>이 테마의 GitHub 연동 구조를 한 줄로 정리하면:</p>
+
+<blockquote>
+  <p><strong>연결되면 자동으로 좋아지고, 연결이 안 돼도 깨지지 않는다.</strong></p>
+</blockquote>
+
+<p>처음에는 <code class="language-plaintext highlighter-rouge">_data/profile.yml</code>로 빠르게 채우고, 나중에 여유가 생기면 GitHub 동기화를 붙이는 방식으로도 충분합니다.</p>
+
+  </section>
+
+  
+    <nav class="post-navigation" aria-label="이전 다음 글">
+      
+      
+        <a class="post-navigation__item post-navigation__item--next" href="/jekyll-theme-velog/deploying-with-github-pages-and-jenkins/">
+          <span class="post-navigation__content">
+            <span class="post-navigation__label">다음 포스트</span>
+            <strong class="post-navigation__title">GitHub Pages와 Jenkins로 테마를 배포하는 방법</strong>
+          </span>
+          <span class="post-navigation__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 11h12.17l-5.58-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4z" fill="currentColor"></path>
+            </svg>
+          </span>
+        </a>
+      
+    </nav>
+  
+
+  
+
+  
+
+
+</article>
+
+    </main>
+    <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p>Copyright &copy; 2026 Velog Style Jekyll Theme</p>
+    <p>Open-source Jekyll theme for developer blogs.</p>
+  </div>
+</footer>
+
+    
+    <script src="/jekyll-theme-velog/assets/js/site.js?v=1776337719"></script>
+  </body>
+</html>
