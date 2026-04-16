@@ -5,9 +5,9 @@
       
       {
         "title": "Velog Style Jekyll Theme 소개",
-        "url": "/jekyll-theme-velog/introducing-velog-style-jekyll-theme/",
+        "url": "/BlogLim/introducing-velog-style-jekyll-theme/",
         "description": "velog의 읽기 흐름을 참고해 Jekyll과 GitHub Pages에 맞게 다시 구성한 오픈소스 개발 블로그 테마를 소개합니다.",
-        "thumbnail": "/jekyll-theme-velog/assets/images/posts/theme-intro-cover.png",
+        "thumbnail": "/BlogLim/assets/images/posts/theme-intro-cover.png",
         "tags": ["Jekyll Theme","Velog Style","GitHub Pages","Open Source"],
         "series_key": "theme-overview",
         "series_title": "테마 소개와 구조",
@@ -20,9 +20,9 @@
       
       {
         "title": "로컬에서 테마를 설치하고 미리보기하는 가장 빠른 방법",
-        "url": "/jekyll-theme-velog/installing-the-theme-locally/",
+        "url": "/BlogLim/installing-the-theme-locally/",
         "description": "Ruby 의존성 설치부터 GitHub 연동 데이터 동기화, 로컬 미리보기와 흔한 오류 대응까지 한 번에 정리합니다.",
-        "thumbnail": "/jekyll-theme-velog/assets/images/posts/local-setup-cover.png",
+        "thumbnail": "/BlogLim/assets/images/posts/local-setup-cover.png",
         "tags": ["Quick Start","Local Preview","Ruby","Jekyll"],
         "series_key": "theme-setup",
         "series_title": "설치와 커스터마이징",
@@ -35,9 +35,9 @@
       
       {
         "title": "프로필, 탭, 홈 화면을 테마 설정으로 커스터마이징하기",
-        "url": "/jekyll-theme-velog/customizing-profile-navigation-and-home/",
+        "url": "/BlogLim/customizing-profile-navigation-and-home/",
         "description": "브랜드 문구와 탭 노출 여부, 헤더 버튼, 홈 검색 문구, GitHub 동기화 옵션을 어디서 조절하는지 체계적으로 정리합니다.",
-        "thumbnail": "/jekyll-theme-velog/assets/images/posts/customization-cover.png",
+        "thumbnail": "/BlogLim/assets/images/posts/customization-cover.png",
         "tags": ["Theme Config","Navigation","Profile","Customization"],
         "series_key": "theme-setup",
         "series_title": "설치와 커스터마이징",
@@ -50,9 +50,9 @@
       
       {
         "title": "글, 시리즈, 태그, 썸네일을 이 테마에서 다루는 방법",
-        "url": "/jekyll-theme-velog/writing-posts-series-and-thumbnails/",
+        "url": "/BlogLim/writing-posts-series-and-thumbnails/",
         "description": "front matter 설계, Markdown 지원 범위, 시리즈와 태그 연결, 썸네일 표시 규칙까지 작성자 관점에서 정리합니다.",
-        "thumbnail": "/jekyll-theme-velog/assets/images/posts/writing-guide-cover.png",
+        "thumbnail": "/BlogLim/assets/images/posts/writing-guide-cover.png",
         "tags": ["Markdown","Series","Tags","Thumbnail"],
         "series_key": "theme-overview",
         "series_title": "테마 소개와 구조",
@@ -65,9 +65,9 @@
       
       {
         "title": "GitHub Pages와 Jenkins로 테마를 배포하는 방법",
-        "url": "/jekyll-theme-velog/deploying-with-github-pages-and-jenkins/",
+        "url": "/BlogLim/deploying-with-github-pages-and-jenkins/",
         "description": "프로젝트 페이지 기준으로 빌드 결과를 gh-pages 브랜치에 배포하는 흐름과 저장소 이름 변경 시 주의할 점까지 정리합니다.",
-        "thumbnail": "/jekyll-theme-velog/assets/images/posts/deployment-guide-cover.png",
+        "thumbnail": "/BlogLim/assets/images/posts/deployment-guide-cover.png",
         "tags": ["GitHub Pages","Jenkins","Deployment","Open Source"],
         "series_key": "theme-operations",
         "series_title": "배포와 운영",
@@ -80,9 +80,9 @@
       
       {
         "title": "GitHub 프로필 동기화와 기여 그래프를 붙이는 방법",
-        "url": "/jekyll-theme-velog/github-profile-sync-and-contribution-graph/",
+        "url": "/BlogLim/github-profile-sync-and-contribution-graph/",
         "description": "GitHub 아이디만 연결하면 이름, 아바타, 링크, 기여 그래프가 홈 화면에 반영되는 흐름과 fallback 규칙을 설명합니다.",
-        "thumbnail": "/jekyll-theme-velog/assets/images/posts/github-sync-cover.png",
+        "thumbnail": "/BlogLim/assets/images/posts/github-sync-cover.png",
         "tags": ["GitHub","GraphQL","Profile Sync","Jekyll Theme"],
         "series_key": "theme-operations",
         "series_title": "배포와 운영",
