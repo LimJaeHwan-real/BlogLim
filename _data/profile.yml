@@ -1,0 +1,5 @@
+display_name: Theme Demo
+bio: velog 스타일 Jekyll 테마를 소개하는 샘플 프로필입니다.
+intro: GitHub 프로필을 연결하면 이름, 아바타, 링크가 자동으로 동기화되고, 연결 전에는 이 샘플 문구가 표시됩니다.
+avatar: /assets/images/avatar-placeholder.svg
+github: https://github.com/your-handle

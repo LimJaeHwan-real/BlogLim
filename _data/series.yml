@@ -1,0 +1,9 @@
+theme-overview:
+  title: 테마 소개와 구조
+  description: 홈 구성, 글 목록, 시리즈 카드처럼 테마의 핵심 화면 구성을 빠르게 훑습니다.
+theme-setup:
+  title: 설치와 커스터마이징
+  description: 로컬 실행부터 설정 파일 수정까지 테마를 자기 블로그에 맞게 바꾸는 과정을 다룹니다.
+theme-operations:
+  title: 배포와 운영
+  description: GitHub Pages, Jenkins, GitHub 연동처럼 공개 배포와 운영 자동화 흐름을 정리합니다.

@@ -1,0 +1,13 @@
+---
+layout: default
+---
+<div class="velog-layout{% if page.layout_width == 'wide' %} velog-layout--wide{% endif %}">
+  {% include profile.html %}
+  {% include tabs.html active=page.active_tab %}
+
+  <section class="content-section{% if page.active_tab %} content-section--{{ page.active_tab }}{% endif %}">
+    <div class="{% if page.body_class %}{{ page.body_class }}{% else %}page-panel{% endif %}">
+      {{ content }}
+    </div>
+  </section>
+</div>

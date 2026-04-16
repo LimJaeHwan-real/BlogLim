@@ -1,0 +1,24 @@
+---
+layout: null
+permalink: /posts.json
+---
+{
+  "posts": [
+    {% for post in site.posts %}
+      {% assign series = site.data.series[post.series] %}
+      {% capture search_text %}{{ post.title }} {{ post.description }} {{ post.tags | join: ' ' }} {% if series %}{{ series.title }}{% endif %}{% endcapture %}
+      {
+        "title": {{ post.title | jsonify }},
+        "url": {{ post.url | relative_url | jsonify }},
+        "description": {{ post.description | default: "" | jsonify }},
+        "thumbnail": {% if post.thumbnail %}{{ post.thumbnail | relative_url | jsonify }}{% else %}null{% endif %},
+        "tags": {{ post.tags | default: empty | jsonify }},
+        "series_key": {{ post.series | default: "" | downcase | jsonify }},
+        "series_title": {% if series %}{{ series.title | jsonify }}{% else %}null{% endif %},
+        "date_label": {{ post.date | date: "%Y년 %-m월 %-d일" | jsonify }},
+        "reading_time_label": {{ post.content | strip_html | number_of_words | divided_by: 220 | plus: 1 | append: "분 읽기" | jsonify }},
+        "search": {{ search_text | strip | downcase | jsonify }}
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+}

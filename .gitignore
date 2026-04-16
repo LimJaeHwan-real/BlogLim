@@ -1,0 +1,10 @@
+_site/
+.jekyll-cache/
+.sass-cache/
+.bundle/
+vendor/
+vendor/bundle/
+.DS_Store
+.playwright-cli/
+_data/github_contributions_cache.json
+_data/github_profile_cache.json

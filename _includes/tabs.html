@@ -1,0 +1,19 @@
+{% assign active = include.active | default: 'posts' %}
+{% assign theme = site.data.theme %}
+{% assign show_about = theme.tabs.show_about | default: false %}
+{% assign tab_index = 0 %}
+{% if active == 'series' %}
+  {% assign tab_index = 1 %}
+{% elsif active == 'about' and show_about %}
+  {% assign tab_index = 2 %}
+{% endif %}
+<nav class="velog-tabs" aria-label="콘텐츠 구분">
+  <div class="velog-tabs__inner">
+    <a class="velog-tabs__item{% if active == 'posts' %} is-active{% endif %}" href="{{ '/' | relative_url }}">{{ theme.tabs.posts_label }}</a>
+    <a class="velog-tabs__item{% if active == 'series' %} is-active{% endif %}" href="{{ '/series/' | relative_url }}">{{ theme.tabs.series_label }}</a>
+    {% if show_about %}
+      <a class="velog-tabs__item{% if active == 'about' %} is-active{% endif %}" href="{{ '/about/' | relative_url }}">{{ theme.tabs.about_label }}</a>
+    {% endif %}
+    <span class="velog-tabs__indicator" style="--tab-index: {{ tab_index }};"></span>
+  </div>
+</nav>

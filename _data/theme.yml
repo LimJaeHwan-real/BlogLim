@@ -1,0 +1,35 @@
+header:
+  show_github_link: true
+  show_rss_link: true
+  show_theme_toggle: true
+
+tabs:
+  posts_label: 글
+  series_label: 시리즈
+  about_label: 소개
+  show_about: false
+
+labels:
+  posts: 포스트
+  series: 시리즈
+
+home:
+  initial_post_count: 12
+  search_placeholder: 검색어를 입력하세요
+  all_posts_label: 전체보기
+  tag_list_title: 태그 목록
+  more_posts_label: 스크롤하면 더 많은 글을 볼 수 있습니다.
+  empty_posts_label: 조건에 맞는 글이 없습니다.
+
+hero:
+  show_stats: true
+  github_contributions:
+    enabled: false
+    username: ""
+
+profile:
+  github_sync:
+    enabled: false
+
+footer:
+  tagline: Open-source Jekyll theme for developer blogs.

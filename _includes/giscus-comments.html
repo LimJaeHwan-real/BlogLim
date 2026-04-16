@@ -1,0 +1,60 @@
+{% assign comments_provider = site.comments.provider | default: "" %}
+{% assign giscus = site.comments.giscus %}
+{% assign giscus_repo = giscus.repo | default: "" %}
+{% assign giscus_repo_id = giscus.repo_id | default: "" %}
+{% assign giscus_category = giscus.category | default: "" %}
+{% assign giscus_category_id = giscus.category_id | default: "" %}
+{% assign giscus_theme_light = giscus.theme_light | default: "light" %}
+{% assign giscus_theme_dark = giscus.theme_dark | default: "transparent_dark" %}
+{% assign giscus_theme_light_resolved = giscus_theme_light %}
+{% assign giscus_theme_dark_resolved = giscus_theme_dark %}
+{% if giscus_theme_light contains '.css' %}
+  {% unless giscus_theme_light contains '://' %}
+    {% assign giscus_theme_light_resolved = giscus_theme_light | relative_url | absolute_url %}
+  {% endunless %}
+{% endif %}
+{% if giscus_theme_dark contains '.css' %}
+  {% unless giscus_theme_dark contains '://' %}
+    {% assign giscus_theme_dark_resolved = giscus_theme_dark | relative_url | absolute_url %}
+  {% endunless %}
+{% endif %}
+{% if page.comments != false and comments_provider == "giscus" and giscus_repo != "" and giscus_repo_id != "" and giscus_category != "" and giscus_category_id != "" %}
+  <section
+    class="comments-section"
+    aria-label="댓글"
+    data-comments-provider="giscus"
+    data-giscus-theme-light="{{ giscus_theme_light_resolved }}"
+    data-giscus-theme-dark="{{ giscus_theme_dark_resolved }}"
+  >
+    <h2 class="comments-section__title">댓글</h2>
+    <div class="giscus"></div>
+    <script>
+      (function () {
+        var container = document.currentScript.parentElement;
+        var currentTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+        var resolvedTheme = container.getAttribute(currentTheme === "dark" ? "data-giscus-theme-dark" : "data-giscus-theme-light")
+          || "preferred_color_scheme";
+        var script = document.createElement("script");
+
+        script.src = "https://giscus.app/client.js";
+        script.setAttribute("data-repo", "{{ giscus_repo }}");
+        script.setAttribute("data-repo-id", "{{ giscus_repo_id }}");
+        script.setAttribute("data-category", "{{ giscus_category }}");
+        script.setAttribute("data-category-id", "{{ giscus_category_id }}");
+        script.setAttribute("data-mapping", "{{ giscus.mapping | default: 'pathname' }}");
+        script.setAttribute("data-strict", "{% if giscus.strict %}1{% else %}0{% endif %}");
+        script.setAttribute("data-reactions-enabled", "{% if giscus.reactions_enabled == false %}0{% else %}1{% endif %}");
+        script.setAttribute("data-emit-metadata", "{% if giscus.emit_metadata %}1{% else %}0{% endif %}");
+        script.setAttribute("data-input-position", "{{ giscus.input_position | default: 'bottom' }}");
+        script.setAttribute("data-theme", resolvedTheme);
+        script.setAttribute("data-lang", "{{ giscus.lang | default: 'ko' }}");
+        script.setAttribute("data-loading", "{{ giscus.loading | default: 'lazy' }}");
+        script.setAttribute("crossorigin", "anonymous");
+        script.async = true;
+
+        container.appendChild(script);
+      })();
+    </script>
+    <noscript>JavaScript를 활성화해야 댓글을 볼 수 있습니다.</noscript>
+  </section>
+{% endif %}

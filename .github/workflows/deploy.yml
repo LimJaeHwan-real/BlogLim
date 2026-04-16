@@ -1,0 +1,68 @@
+name: Deploy to GitHub Pages
+
+# main 브랜치 push, 매일 새벽 3:17 자동 실행, 수동 실행 지원
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+# gh-pages 브랜치에 쓰기 권한 부여
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      # Apple Silicon 등 플랫폼 호환성 문제를 피하기 위한 Ruby 빌드 옵션
+      BUNDLE_FORCE_RUBY_PLATFORM: 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Ruby 설치 + Gemfile.lock 기반 gem 자동 캐시
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.9'
+          bundler: '2.5.23'
+          bundler-cache: true
+
+      # 파비콘 동기화에 필요한 Python 이미지 라이브러리
+      # 설치 실패 시 파비콘 동기화만 건너뛰고 빌드는 계속 진행
+      - name: Install Pillow
+        run: pip install Pillow --break-system-packages
+        continue-on-error: true
+
+      # GitHub 프로필 및 잔디 그래프 캐시 생성
+      # GH_PAT: Settings > Secrets에 등록한 Personal Access Token (선택)
+      # 없으면 자동 제공되는 GITHUB_TOKEN으로 폴백
+      # 실패 시 _data/profile.yml 샘플 데이터로 대체되고 빌드는 계속 진행
+      - name: Fetch GitHub Contributions
+        env:
+          GITHUB_GRAPHQL_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: ruby scripts/fetch_github_contributions.rb
+        continue-on-error: true
+
+      # Jekyll 정적 파일 빌드
+      - name: Build Site
+        run: bundle exec jekyll build
+
+      # 빌드 결과물 최소 검증
+      - name: Verify Build
+        run: |
+          test -d _site
+          test -f _site/index.html
+
+      # _site/ 결과물을 gh-pages 브랜치로 배포
+      # .nojekyll 자동 추가로 GitHub Pages가 Jekyll 재빌드하지 않도록 처리
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages

@@ -1,0 +1,73 @@
+{% assign theme = site.data.theme %}
+{% assign series_count = site.posts | where_exp: "post", "post.series" | group_by: "series" | size %}
+{% assign github_profile = site.data.github_profile_cache %}
+{% assign configured_login = site.data.theme.hero.github_contributions.username | default: "" %}
+{% assign fallback_github_url = site.data.profile.github | default: "" %}
+{% if configured_login == "" and fallback_github_url contains 'github.com/' %}
+  {% assign configured_login = fallback_github_url | split: 'github.com/' | last | split: '/' | first | split: '?' | first | split: '#' | first %}
+{% endif %}
+{% assign profile_name = site.data.profile.display_name %}
+{% assign profile_bio = site.data.profile.bio %}
+{% assign profile_intro = site.data.profile.intro %}
+{% assign profile_avatar = site.data.profile.avatar %}
+{% if github_profile and github_profile.enabled and github_profile.login == configured_login %}
+  {% if github_profile.display_name != "" %}
+    {% assign profile_name = github_profile.display_name %}
+  {% elsif github_profile.login != "" %}
+    {% assign profile_name = github_profile.login %}
+  {% endif %}
+  {% if github_profile.bio != "" %}
+    {% assign profile_bio = github_profile.bio %}
+  {% endif %}
+  {% if github_profile.intro != "" %}
+    {% assign profile_intro = github_profile.intro %}
+  {% elsif profile_intro == "" or profile_intro contains 'GitHub 프로필을 연결하면' %}
+    {% assign profile_intro = '@' | append: github_profile.login %}
+  {% endif %}
+  {% if github_profile.avatar_url != "" %}
+    {% assign profile_avatar = github_profile.avatar_url %}
+  {% endif %}
+{% endif %}
+<section class="profile">
+  <div class="profile__section">
+    <div class="profile__left">
+      {% if profile_avatar contains '://' %}
+        <img
+          class="profile__avatar"
+          src="{{ profile_avatar }}"
+          alt="{{ profile_name }}"
+          width="128"
+          height="128"
+        >
+      {% else %}
+        <img
+          class="profile__avatar"
+          src="{{ profile_avatar | relative_url }}"
+          alt="{{ profile_name }}"
+          width="128"
+          height="128"
+        >
+      {% endif %}
+      <div class="profile__info">
+        <h1 class="profile__name">{{ profile_name }}</h1>
+        <p class="profile__bio">{{ profile_bio }}</p>
+        <p class="profile__intro">{{ profile_intro }}</p>
+        {% if theme.hero.show_stats != false %}
+          <div class="profile__stats">
+            <div class="profile__stat">
+              <span class="profile__stat-value">{{ site.posts | size }}</span>
+              <span class="profile__stat-label">{{ theme.labels.posts }}</span>
+            </div>
+            <div class="profile__stat">
+              <span class="profile__stat-value">{{ series_count }}</span>
+              <span class="profile__stat-label">{{ theme.labels.series }}</span>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="profile__separator"></div>
+  {% include github-contributions.html %}
+</section>

@@ -1,0 +1,17 @@
+{% assign posts = include.posts %}
+<div
+  class="post-list"
+  data-post-list
+  data-page-size="{{ include.page_size | default: 12 }}"
+  {% if include.index_url %}data-post-index-url="{{ include.index_url }}"{% endif %}
+>
+  {% if include.limit %}
+    {% for post in posts limit: include.limit %}
+      {% include post-card.html post=post %}
+    {% endfor %}
+  {% else %}
+    {% for post in posts %}
+      {% include post-card.html post=post %}
+    {% endfor %}
+  {% endif %}
+</div>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'ko-KR' }}">
+  <head>
+    {% include head.html %}
+  </head>
+  <body>
+    {% assign asset_version = site.time | date: "%s" %}
+    {% assign algolia_provider = site.search.provider | default: "local" %}
+    {% assign algolia_app_id = site.search.algolia.app_id | default: "" %}
+    {% assign algolia_api_key = site.search.algolia.api_key | default: "" %}
+    {% assign algolia_index_name = site.search.algolia.index_name | default: "" %}
+    {% assign algolia_enabled = false %}
+    {% if algolia_provider == "algolia" and algolia_app_id != "" and algolia_api_key != "" and algolia_index_name != "" %}
+      {% assign algolia_enabled = true %}
+    {% endif %}
+    {% assign algolia_page_enabled = false %}
+    {% if algolia_enabled and page.url == "/" %}
+      {% assign algolia_page_enabled = true %}
+    {% endif %}
+    {% include header.html %}
+    <main>
+      {{ content }}
+    </main>
+    {% include footer.html %}
+    {% if algolia_page_enabled %}
+      <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@4"></script>
+    {% endif %}
+    <script src="{{ '/assets/js/site.js' | relative_url }}?v={{ asset_version }}"></script>
+  </body>
+</html>

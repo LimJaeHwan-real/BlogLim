@@ -1,0 +1,90 @@
+main {
+  color-scheme: dark;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo",
+    "Malgun Gothic", "맑은 고딕", "Noto Sans KR", Arial, sans-serif;
+  --color-fg-on-emphasis: #121212;
+  --color-btn-text: #d9d9d9;
+  --color-btn-bg: #252525;
+  --color-btn-border: #4d4d4d;
+  --color-btn-shadow: 0 0 transparent;
+  --color-btn-inset-shadow: 0 0 transparent;
+  --color-btn-hover-bg: #2e2e2e;
+  --color-btn-hover-border: #595959;
+  --color-btn-active-bg: #323232;
+  --color-btn-active-border: #696969;
+  --color-btn-selected-bg: #1e1e1e;
+  --color-btn-primary-text: #121212;
+  --color-btn-primary-bg: #63e6be;
+  --color-btn-primary-border: #63e6be;
+  --color-btn-primary-shadow: 0 0 transparent;
+  --color-btn-primary-inset-shadow: 0 0 transparent;
+  --color-btn-primary-hover-bg: #96f2d7;
+  --color-btn-primary-hover-border: #96f2d7;
+  --color-btn-primary-selected-bg: #55d8b0;
+  --color-btn-primary-selected-shadow: 0 0 transparent;
+  --color-btn-primary-disabled-text: rgba(18, 18, 18, 0.56);
+  --color-btn-primary-disabled-bg: rgba(99, 230, 190, 0.48);
+  --color-btn-primary-disabled-border: rgba(99, 230, 190, 0.48);
+  --color-action-list-item-default-hover-bg: rgba(99, 230, 190, 0.1);
+  --color-segmented-control-bg: #252525;
+  --color-segmented-control-button-bg: #1e1e1e;
+  --color-segmented-control-button-selected-border: #4d4d4d;
+  --color-fg-default: #ececec;
+  --color-fg-muted: #acacac;
+  --color-fg-subtle: #7b7b7b;
+  --color-canvas-default: #1e1e1e;
+  --color-canvas-overlay: #1e1e1e;
+  --color-canvas-inset: #121212;
+  --color-canvas-subtle: #252525;
+  --color-border-default: #4d4d4d;
+  --color-border-muted: #2a2a2a;
+  --color-neutral-muted: rgba(172, 172, 172, 0.16);
+  --color-accent-fg: #63e6be;
+  --color-accent-emphasis: #96f2d7;
+  --color-accent-muted: rgba(99, 230, 190, 0.22);
+  --color-accent-subtle: rgba(99, 230, 190, 0.12);
+  --color-success-fg: #63e6be;
+  --color-attention-fg: #fcc419;
+  --color-attention-muted: rgba(252, 196, 25, 0.18);
+  --color-attention-subtle: rgba(252, 196, 25, 0.12);
+  --color-danger-fg: #ff8787;
+  --color-danger-muted: rgba(255, 135, 135, 0.2);
+  --color-danger-subtle: rgba(255, 135, 135, 0.12);
+  --color-primer-shadow-inset: 0 0 transparent;
+  --color-scale-gray-7: #2e2e2e;
+  --color-scale-blue-8: #267a61;
+  --color-social-reaction-bg-hover: rgba(99, 230, 190, 0.12);
+  --color-social-reaction-bg-reacted-hover: rgba(99, 230, 190, 0.22);
+}
+
+main .gsc-comment-box,
+main .gsc-reply-box,
+main .gsc-timeline,
+main .gsc-reactions,
+main .gsc-comment-box-textarea,
+main .gsc-comment-box-tabs,
+main .gsc-comment-box-main,
+main .gsc-comment-box-bottom {
+  border-radius: 1.125rem;
+}
+
+main .gsc-homepage-bg {
+  background-color: #1e1e1e;
+}
+
+main .gsc-comment-box,
+main .gsc-reply-box,
+main .gsc-timeline {
+  overflow: hidden;
+}
+
+main .gsc-comment-box-textarea,
+main .gsc-comment-box textarea,
+main .gsc-reply-box .gsc-comment-box-textarea,
+main .gsc-reply-box textarea {
+  min-height: 11.5rem;
+}
+
+main .gsc-comment-box-main {
+  min-height: 12rem;
+}

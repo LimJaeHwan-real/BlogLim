@@ -1,0 +1,100 @@
+<header class="site-header">
+  <div class="site-header__inner">
+    {% assign theme = site.data.theme %}
+    {% assign github_profile = site.data.github_profile_cache %}
+    {% assign configured_login = site.data.theme.hero.github_contributions.username | default: "" %}
+    {% assign fallback_github_url = site.data.profile.github | default: "" %}
+    {% if configured_login == "" and fallback_github_url contains 'github.com/' %}
+      {% assign configured_login = fallback_github_url | split: 'github.com/' | last | split: '/' | first | split: '?' | first | split: '#' | first %}
+    {% endif %}
+    {% assign resolved_github_url = fallback_github_url %}
+    {% assign header_avatar = site.data.profile.avatar %}
+    {% assign header_title = site.title %}
+    {% if github_profile and github_profile.enabled and github_profile.login == configured_login %}
+      {% if github_profile.profile_url != "" %}
+        {% assign resolved_github_url = github_profile.profile_url %}
+      {% endif %}
+      {% if github_profile.avatar_url != "" %}
+        {% assign header_avatar = github_profile.avatar_url %}
+      {% endif %}
+      {% if github_profile.display_name != "" %}
+        {% assign header_title = github_profile.display_name %}
+      {% elsif github_profile.login != "" %}
+        {% assign header_title = '@' | append: github_profile.login %}
+      {% endif %}
+    {% endif %}
+
+    <a class="header-logo" href="{{ '/' | relative_url }}" aria-label="{{ header_title }}">
+      {% if header_avatar contains '://' %}
+        <img
+          class="header-logo__mark header-logo__mark--avatar"
+          src="{{ header_avatar }}"
+          alt=""
+          width="36"
+          height="36"
+        >
+      {% else %}
+        <img
+          class="header-logo__mark header-logo__mark--avatar"
+          src="{{ header_avatar | relative_url }}"
+          alt=""
+          width="36"
+          height="36"
+        >
+      {% endif %}
+      <span class="header-logo__text">{{ header_title }}</span>
+    </a>
+
+    {% assign show_github_link = theme.header.show_github_link | default: true %}
+    {% assign show_rss_link = theme.header.show_rss_link | default: true %}
+    {% assign show_theme_toggle = theme.header.show_theme_toggle | default: true %}
+    {% if show_github_link or show_rss_link or show_theme_toggle %}
+      <nav class="header-actions" aria-label="바로가기">
+        {% if show_github_link and resolved_github_url != "" %}
+          <a
+            class="icon-button"
+            href="{{ resolved_github_url }}"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.14 1.18a10.9 10.9 0 0 1 5.72 0c2.18-1.49 3.14-1.18 3.14-1.18.62 1.58.23 2.75.12 3.04.73.8 1.17 1.83 1.17 3.09 0 4.42-2.69 5.39-5.25 5.67.41.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .31.2.67.8.56A11.52 11.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+              ></path>
+            </svg>
+          </a>
+        {% endif %}
+        {% if show_rss_link %}
+          <a class="icon-button" href="{{ '/feed.xml' | relative_url }}" aria-label="RSS" title="RSS">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M5 3.5a1.5 1.5 0 0 0 0 3c6.9 0 12.5 5.6 12.5 12.5a1.5 1.5 0 0 0 3 0C20.5 10.44 13.56 3.5 5 3.5Zm0 6a1.5 1.5 0 0 0 0 3c3.58 0 6.5 2.92 6.5 6.5a1.5 1.5 0 0 0 3 0c0-5.24-4.26-9.5-9.5-9.5Zm.5 7.75A2.25 2.25 0 1 0 5.5 21.5a2.25 2.25 0 0 0 0-4.25Z"
+              ></path>
+            </svg>
+          </a>
+        {% endif %}
+        {% if show_theme_toggle %}
+          <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="테마 전환" title="테마 전환">
+            <span class="theme-toggle__sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 17.5A5.5 5.5 0 1 0 12 6.5a5.5 5.5 0 0 0 0 11Zm0-15a1 1 0 0 1 1 1v1.5a1 1 0 1 1-2 0V3.5a1 1 0 0 1 1-1Zm0 16a1 1 0 0 1 1 1V21a1 1 0 1 1-2 0v-1.5a1 1 0 0 1 1-1Zm8.5-7.5a1 1 0 1 1 0 2H19a1 1 0 1 1 0-2h1.5ZM5 12a1 1 0 0 1-1 1H2.5a1 1 0 1 1 0-2H4a1 1 0 0 1 1 1Zm11.36 5.95a1 1 0 0 1 1.42 0l1.06 1.06a1 1 0 0 1-1.42 1.42l-1.06-1.06a1 1 0 0 1 0-1.42ZM6.58 7.64a1 1 0 0 1 0-1.42L7.64 5.16a1 1 0 1 1 1.42 1.42L8 7.64a1 1 0 0 1-1.42 0Zm10.2-1.42a1 1 0 1 1 1.42-1.42l1.06 1.06a1 1 0 0 1-1.42 1.42l-1.06-1.06Zm-10.2 10.2a1 1 0 0 1 1.42 0L9.06 17.5a1 1 0 0 1-1.42 1.42L6.58 17.86a1 1 0 0 1 0-1.42Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="theme-toggle__moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M14.55 2.2a1 1 0 0 1 1.11 1.3 8.5 8.5 0 1 0 10.84 10.84 1 1 0 0 1 1.3 1.11A10.5 10.5 0 1 1 14.55 2.2Z"
+                  transform="translate(-3 -3)"
+                ></path>
+              </svg>
+            </span>
+          </button>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </div>
+</header>

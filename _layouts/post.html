@@ -1,0 +1,111 @@
+---
+layout: default
+---
+{% assign reading_time = content | strip_html | number_of_words | divided_by: 220 | plus: 1 %}
+{% assign series = site.data.series[page.series] %}
+{% assign github_profile = site.data.github_profile_cache %}
+{% assign configured_login = site.data.theme.hero.github_contributions.username | default: "" %}
+{% assign fallback_github_url = site.data.profile.github | default: "" %}
+{% if configured_login == "" and fallback_github_url contains 'github.com/' %}
+  {% assign configured_login = fallback_github_url | split: 'github.com/' | last | split: '/' | first | split: '?' | first | split: '#' | first %}
+{% endif %}
+{% assign author_name = site.data.profile.display_name %}
+{% assign author_avatar = site.data.profile.avatar %}
+{% if github_profile and github_profile.enabled and github_profile.login == configured_login %}
+  {% if github_profile.display_name != "" %}
+    {% assign author_name = github_profile.display_name %}
+  {% endif %}
+  {% if github_profile.avatar_url != "" %}
+    {% assign author_avatar = github_profile.avatar_url %}
+  {% endif %}
+{% endif %}
+<article class="post-view">
+  <a class="post-view__back" href="{{ '/' | relative_url }}">글 목록으로 돌아가기</a>
+
+  <header class="post-head">
+    {% if series %}
+      <p class="post-head__series">{{ series.title }}</p>
+    {% endif %}
+    <h1 class="post-head__title">{{ page.title }}</h1>
+    {% if page.description %}
+      <p class="post-head__description">{{ page.description }}</p>
+    {% endif %}
+
+    <div class="post-head__author">
+      {% if author_avatar contains '://' %}
+        <img
+          class="post-head__avatar"
+          src="{{ author_avatar }}"
+          alt="{{ author_name }}"
+          width="48"
+          height="48"
+        >
+      {% else %}
+        <img
+          class="post-head__avatar"
+          src="{{ author_avatar | relative_url }}"
+          alt="{{ author_name }}"
+          width="48"
+          height="48"
+        >
+      {% endif %}
+      <div class="post-head__meta-block">
+        <strong>{{ author_name }}</strong>
+        <span>
+          {{ page.date | date: "%Y년 %-m월 %-d일" }} · {{ reading_time }}분 읽기{% if page.updated_at %} · 수정 {{ page.updated_at | date: "%Y년 %-m월 %-d일" }}{% endif %}
+        </span>
+      </div>
+    </div>
+
+    {% if page.tags and page.tags.size > 0 %}
+      <div class="post-head__tags">
+        {% for tag in page.tags %}
+          <a class="tag-chip" href="{{ '/' | relative_url }}?tag={{ tag | uri_escape }}">{{ tag }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if page.thumbnail %}
+      <div class="post-head__thumbnail">
+        <img src="{{ page.thumbnail | relative_url }}" alt="{{ page.title }}" decoding="async">
+      </div>
+    {% endif %}
+  </header>
+
+  <section class="prose">
+    {{ content }}
+  </section>
+
+  {% if page.previous or page.next %}
+    <nav class="post-navigation" aria-label="이전 다음 글">
+      {% if page.previous %}
+        <a class="post-navigation__item" href="{{ page.previous.url | relative_url }}">
+          <span class="post-navigation__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 11H7.83l5.58-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z" fill="currentColor"></path>
+            </svg>
+          </span>
+          <span class="post-navigation__content">
+            <span class="post-navigation__label">이전 포스트</span>
+            <strong class="post-navigation__title">{{ page.previous.title }}</strong>
+          </span>
+        </a>
+      {% endif %}
+      {% if page.next %}
+        <a class="post-navigation__item post-navigation__item--next" href="{{ page.next.url | relative_url }}">
+          <span class="post-navigation__content">
+            <span class="post-navigation__label">다음 포스트</span>
+            <strong class="post-navigation__title">{{ page.next.title }}</strong>
+          </span>
+          <span class="post-navigation__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 11h12.17l-5.58-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4z" fill="currentColor"></path>
+            </svg>
+          </span>
+        </a>
+      {% endif %}
+    </nav>
+  {% endif %}
+
+  {% include comments.html %}
+</article>

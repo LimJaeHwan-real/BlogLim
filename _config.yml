@@ -1,0 +1,75 @@
+title: Velog Style Jekyll Theme
+description: velog 감성의 개발 블로그를 GitHub Pages와 Jekyll로 구성한 오픈소스 starter theme
+url: "https://woonyong-kr.github.io"
+baseurl: "/jekyll-theme-velog"
+lang: ko-KR
+timezone: Asia/Seoul
+markdown: kramdown
+highlighter: rouge
+permalink: /:title/
+
+analytics:
+  google:
+    measurement_id: ""
+
+comments:
+  provider: ""
+  disqus:
+    shortname: ""
+  giscus:
+    repo: "owner/repository"
+    repo_id: "REPOSITORY_NODE_ID"
+    category: "Announcements"
+    category_id: "CATEGORY_NODE_ID"
+    mapping: "pathname"
+    strict: true
+    reactions_enabled: true
+    emit_metadata: false
+    input_position: "bottom"
+    lang: "ko"
+    loading: "lazy"
+    theme_light: "/assets/css/giscus-velog-light.css"
+    theme_dark: "/assets/css/giscus-velog-dark.css"
+
+search:
+  provider: local
+  algolia:
+    app_id: ""
+    api_key: ""
+    index_name: ""
+    insights: false
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+  - scope:
+      path: "assets"
+    values:
+      layout: null
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - Jenkinsfile
+  - LICENSE
+  - NOTICE.md
+  - README.md
+  - output
+  - scripts
+  - vendor

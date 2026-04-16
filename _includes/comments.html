@@ -1,0 +1,8 @@
+{% assign comments_provider = site.comments.provider | default: "" %}
+{% if page.comments != false %}
+  {% if comments_provider == "giscus" %}
+    {% include giscus-comments.html %}
+  {% elsif comments_provider == "disqus" %}
+    {% include disqus-comments.html %}
+  {% endif %}
+{% endif %}

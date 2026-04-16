@@ -1,0 +1,121 @@
+---
+layout: default
+---
+{% assign theme = site.data.theme %}
+{% assign algolia_provider = site.search.provider | default: "local" %}
+{% assign algolia_app_id = site.search.algolia.app_id | default: "" %}
+{% assign algolia_api_key = site.search.algolia.api_key | default: "" %}
+{% assign algolia_index_name = site.search.algolia.index_name | default: "" %}
+{% assign algolia_insights = site.search.algolia.insights | default: false %}
+{% assign algolia_enabled = false %}
+{% if algolia_provider == "algolia" and algolia_app_id != "" and algolia_api_key != "" and algolia_index_name != "" %}
+  {% assign algolia_enabled = true %}
+{% endif %}
+{% assign page_size = theme.home.initial_post_count | default: 12 %}
+{% assign post_index_url = '/posts.json' | relative_url %}
+{% assign sorted_tags = site.tags | sort %}
+<div class="home-layout">
+  <section class="home-intro">
+    {% include profile.html %}
+  </section>
+
+  <section class="home-content">
+    <aside class="home-sidebar">
+      <aside class="tag-sidebar">
+        <h2 class="tag-sidebar__title">{{ theme.home.tag_list_title }}</h2>
+        <ul class="tag-sidebar__list">
+          <li class="tag-sidebar__item">
+            <a class="tag-sidebar__link" href="{{ '/' | relative_url }}" data-tag-link>
+              {{ theme.home.all_posts_label }}
+              <span class="tag-sidebar__count">({{ site.posts.size }})</span>
+            </a>
+          </li>
+          {% for tag in sorted_tags %}
+            {% assign tag_name = tag[0] %}
+            {% assign tag_posts = tag[1] %}
+            <li class="tag-sidebar__item">
+              <a
+                class="tag-sidebar__link"
+                href="{{ '/' | relative_url }}?tag={{ tag_name | uri_escape }}"
+                data-tag-link
+                data-tag-filter="{{ tag_name }}"
+                data-tag-label="{{ tag_name }}"
+              >
+                {{ tag_name }}
+                <span class="tag-sidebar__count">({{ tag_posts | size }})</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </aside>
+    </aside>
+
+    <main class="home-main">
+      {% include tabs.html active=page.active_tab %}
+
+      <section>
+        <div class="tag-pills">
+          <a class="tag-pill" href="{{ '/' | relative_url }}" data-tag-link>
+            {{ theme.home.all_posts_label }}
+            <span>{{ site.posts.size }}</span>
+          </a>
+          {% for tag in sorted_tags %}
+            {% assign tag_name = tag[0] %}
+            {% assign tag_posts = tag[1] %}
+            <a
+              class="tag-pill"
+              href="{{ '/' | relative_url }}?tag={{ tag_name | uri_escape }}"
+              data-tag-link
+              data-tag-filter="{{ tag_name }}"
+              data-tag-label="{{ tag_name }}"
+            >
+              {{ tag_name }}
+              <span>{{ tag_posts | size }}</span>
+            </a>
+          {% endfor %}
+        </div>
+
+        <div class="posts-panel">
+          <div class="posts-panel__toolbar">
+            {% if algolia_enabled %}
+              <div
+                id="algolia-search"
+                class="posts-search posts-search--algolia"
+                data-algolia-search
+                data-app-id="{{ algolia_app_id }}"
+                data-api-key="{{ algolia_api_key }}"
+                data-index-name="{{ algolia_index_name }}"
+                data-insights="{% if algolia_insights %}true{% else %}false{% endif %}"
+                data-search-base-url="{{ '/' | relative_url }}"
+                data-search-placeholder="{{ theme.home.search_placeholder }}"
+              ></div>
+            {% else %}
+              <form class="posts-search" action="{{ '/' | relative_url }}" method="get" role="search" data-search-form>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13Zm0-2a8.5 8.5 0 1 0 5.326 15.126l4.024 4.024 1.414-1.414-4.024-4.024A8.5 8.5 0 0 0 10.5 2Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+                <input
+                  type="text"
+                  name="q"
+                  placeholder="{{ theme.home.search_placeholder }}"
+                  autocomplete="off"
+                  inputmode="search"
+                  data-post-search
+                >
+              </form>
+            {% endif %}
+          </div>
+
+          <p class="posts-panel__summary" data-post-summary hidden></p>
+          {% include post-list.html posts=site.posts limit=page_size page_size=page_size index_url=post_index_url %}
+          <div class="posts-panel__sentinel" data-post-sentinel hidden aria-hidden="true"></div>
+          <p class="posts-panel__more" data-post-more hidden>{{ theme.home.more_posts_label }}</p>
+          <p class="posts-panel__empty" data-post-empty hidden>{{ theme.home.empty_posts_label }}</p>
+        </div>
+      </section>
+    </main>
+  </section>
+</div>
