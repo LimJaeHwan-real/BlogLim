@@ -1,7 +1,7 @@
-title: Velog Style Jekyll Theme
-description: velog 감성의 개발 블로그를 GitHub Pages와 Jekyll로 구성한 오픈소스 starter theme
-url: "https://woonyong-kr.github.io"
-baseurl: "/jekyll-theme-velog"
+title: ForRest
+description: Auto Programmer
+url: "https://LimJaeHwan-real.github.io"
+baseurl: "/BlogLim"
 lang: ko-KR
 timezone: Asia/Seoul
 markdown: kramdown
