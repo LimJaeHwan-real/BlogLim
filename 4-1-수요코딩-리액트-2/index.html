@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="ko-KR">
+  <head>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff" data-theme-color>
+<meta name="apple-mobile-web-app-status-bar-style" content="default" data-apple-status-bar>
+<title>4/1 수요코딩 리액트(2) | ForRest</title>
+<meta name="generator" content="Jekyll v4.3.3">
+<meta name="description" content="Week 5 미니 React.ver2 구현 정리 이번 과제는 기존 React의 핵심 개념인 Component , State , Hooks 를 직접 구현하고, 이를 바탕으로 실제로 동작하는 웹 페이지를 만드는 것이 목표였다. 우리 프로젝트는 단순히 Re">
+<link rel="canonical" href="https://limjaehwan-real.github.io/BlogLim/4-1-%EC%88%98%EC%9A%94%EC%BD%94%EB%94%A9-%EB%A6%AC%EC%95%A1%ED%8A%B8-2/">
+<meta property="og:title" content="4/1 수요코딩 리액트(2) | ForRest">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:description" content="Week 5 미니 React.ver2 구현 정리 이번 과제는 기존 React의 핵심 개념인 Component , State , Hooks 를 직접 구현하고, 이를 바탕으로 실제로 동작하는 웹 페이지를 만드는 것이 목표였다. 우리 프로젝트는 단순히 Re">
+<meta property="og:url" content="https://limjaehwan-real.github.io/BlogLim/4-1-%EC%88%98%EC%9A%94%EC%BD%94%EB%94%A9-%EB%A6%AC%EC%95%A1%ED%8A%B8-2/">
+<meta property="og:site_name" content="ForRest">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="4/1 수요코딩 리액트(2) | ForRest">
+<meta name="twitter:description" content="Week 5 미니 React.ver2 구현 정리 이번 과제는 기존 React의 핵심 개념인 Component , State , Hooks 를 직접 구현하고, 이를 바탕으로 실제로 동작하는 웹 페이지를 만드는 것이 목표였다. 우리 프로젝트는 단순히 Re">
+
+  <meta property="article:published_time" content="2026-04-05T23:43:41+09:00">
+
+
+  <meta property="article:modified_time" content="2026-04-05T23:48:12+09:00">
+
+<link rel="icon" href="/BlogLim/assets/images/favicon.png?v=1776421121" type="image/png" sizes="256x256">
+<link rel="shortcut icon" href="/BlogLim/assets/images/favicon.png?v=1776421121" type="image/png">
+<link rel="apple-touch-icon" href="/BlogLim/assets/images/favicon.png?v=1776421121">
+<link rel="mask-icon" href="/BlogLim/assets/images/profile.svg?v=1776421121" color="#495057">
+<link rel="alternate" type="application/atom+xml" href="/BlogLim/feed.xml" title="ForRest">
+
+<link rel="stylesheet" href="/BlogLim/assets/css/main.css?v=1776421121">
+<script>
+  (function () {
+    function applyTheme(theme) {
+      var safeTheme = theme === "dark" ? "dark" : "light";
+      var color = safeTheme === "dark" ? "#121212" : "#ffffff";
+      var themeColorMeta = document.querySelector("[data-theme-color]");
+      var appleStatusMeta = document.querySelector("[data-apple-status-bar]");
+
+      document.documentElement.setAttribute("data-theme", safeTheme);
+
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute("content", color);
+      }
+
+      if (appleStatusMeta) {
+        appleStatusMeta.setAttribute("content", safeTheme === "dark" ? "black" : "default");
+      }
+    }
+
+    try {
+      var storedTheme = localStorage.getItem("velog-theme");
+      var hasStoredTheme = storedTheme === "light" || storedTheme === "dark";
+      var theme = hasStoredTheme
+        ? storedTheme
+        : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+
+      applyTheme(theme);
+    } catch (error) {
+      applyTheme(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    }
+  })();
+</script>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "name": "ForRest",
+    "headline": "4/1 수요코딩 리액트(2) | ForRest",
+    "description": "Week 5 미니 React.ver2 구현 정리 이번 과제는 기존 React의 핵심 개념인 Component , State , Hooks 를 직접 구현하고, 이를 바탕으로 실제로 동작하는 웹 페이지를 만드는 것이 목표였다. 우리 프로젝트는 단순히 Re",
+    "url": "https://limjaehwan-real.github.io/BlogLim/4-1-%EC%88%98%EC%9A%94%EC%BD%94%EB%94%A9-%EB%A6%AC%EC%95%A1%ED%8A%B8-2/",
+    "datePublished": "2026-04-05T23:43:41+09:00",
+    "dateModified": "2026-04-05T23:48:12+09:00"
+  }
+</script>
+
+  </head>
+  <body>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <header class="site-header">
+  <div class="site-header__inner">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <a class="header-logo" href="/BlogLim/" aria-label="ForRest">
+      
+        <img
+          class="header-logo__mark header-logo__mark--avatar"
+          src="/BlogLim/assets/images/avatar-placeholder.svg"
+          alt=""
+          width="36"
+          height="36"
+        >
+      
+      <span class="header-logo__text">ForRest</span>
+    </a>
+
+    
+    
+    
+    
+      <nav class="header-actions" aria-label="바로가기">
+        
+          <a
+            class="icon-button"
+            href="https://github.com/your-handle"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.71.08-.71 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.14 1.18a10.9 10.9 0 0 1 5.72 0c2.18-1.49 3.14-1.18 3.14-1.18.62 1.58.23 2.75.12 3.04.73.8 1.17 1.83 1.17 3.09 0 4.42-2.69 5.39-5.25 5.67.41.36.78 1.08.78 2.18 0 1.57-.01 2.84-.01 3.23 0 .31.2.67.8.56A11.52 11.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+              ></path>
+            </svg>
+          </a>
+        
+        
+          <a class="icon-button" href="/BlogLim/feed.xml" aria-label="RSS" title="RSS">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M5 3.5a1.5 1.5 0 0 0 0 3c6.9 0 12.5 5.6 12.5 12.5a1.5 1.5 0 0 0 3 0C20.5 10.44 13.56 3.5 5 3.5Zm0 6a1.5 1.5 0 0 0 0 3c3.58 0 6.5 2.92 6.5 6.5a1.5 1.5 0 0 0 3 0c0-5.24-4.26-9.5-9.5-9.5Zm.5 7.75A2.25 2.25 0 1 0 5.5 21.5a2.25 2.25 0 0 0 0-4.25Z"
+              ></path>
+            </svg>
+          </a>
+        
+        
+          <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="테마 전환" title="테마 전환">
+            <span class="theme-toggle__sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 17.5A5.5 5.5 0 1 0 12 6.5a5.5 5.5 0 0 0 0 11Zm0-15a1 1 0 0 1 1 1v1.5a1 1 0 1 1-2 0V3.5a1 1 0 0 1 1-1Zm0 16a1 1 0 0 1 1 1V21a1 1 0 1 1-2 0v-1.5a1 1 0 0 1 1-1Zm8.5-7.5a1 1 0 1 1 0 2H19a1 1 0 1 1 0-2h1.5ZM5 12a1 1 0 0 1-1 1H2.5a1 1 0 1 1 0-2H4a1 1 0 0 1 1 1Zm11.36 5.95a1 1 0 0 1 1.42 0l1.06 1.06a1 1 0 0 1-1.42 1.42l-1.06-1.06a1 1 0 0 1 0-1.42ZM6.58 7.64a1 1 0 0 1 0-1.42L7.64 5.16a1 1 0 1 1 1.42 1.42L8 7.64a1 1 0 0 1-1.42 0Zm10.2-1.42a1 1 0 1 1 1.42-1.42l1.06 1.06a1 1 0 0 1-1.42 1.42l-1.06-1.06Zm-10.2 10.2a1 1 0 0 1 1.42 0L9.06 17.5a1 1 0 0 1-1.42 1.42L6.58 17.86a1 1 0 0 1 0-1.42Z"
+                ></path>
+              </svg>
+            </span>
+            <span class="theme-toggle__moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M14.55 2.2a1 1 0 0 1 1.11 1.3 8.5 8.5 0 1 0 10.84 10.84 1 1 0 0 1 1.3 1.11A10.5 10.5 0 1 1 14.55 2.2Z"
+                  transform="translate(-3 -3)"
+                ></path>
+              </svg>
+            </span>
+          </button>
+        
+      </nav>
+    
+  </div>
+</header>
+
+    <main>
+      
+
+
+
+
+
+
+
+
+
+<article class="post-view">
+  <a class="post-view__back" href="/BlogLim/">글 목록으로 돌아가기</a>
+
+  <header class="post-head">
+    
+      <p class="post-head__category">
+        <a href="/BlogLim/?category=Jungle%20/%20Everyday">Jungle / Everyday</a>
+      </p>
+    
+    
+    <h1 class="post-head__title">4/1 수요코딩 리액트(2)</h1>
+    
+      <p class="post-head__description">Week 5 미니 React.ver2 구현 정리 이번 과제는 기존 React의 핵심 개념인 Component , State , Hooks 를 직접 구현하고, 이를 바탕으로 실제로 동작하는 웹 페이지를 만드는 것이 목표였다. 우리 프로젝트는 단순히 Re</p>
+    
+
+    <div class="post-head__author">
+      
+        <img
+          class="post-head__avatar"
+          src="/BlogLim/assets/images/avatar-placeholder.svg"
+          alt="Theme Demo"
+          width="48"
+          height="48"
+        >
+      
+      <div class="post-head__meta-block">
+        <strong>Theme Demo</strong>
+        <span>
+          2026년 4월 5일 · 5분 읽기 · 수정 2026년 4월 5일
+        </span>
+      </div>
+    </div>
+
+    
+
+    
+      <div class="post-head__thumbnail">
+        
+          <img src="https://t1.daumcdn.net/tistory_admin/static/images/openGraph/opengraph.png" alt="4/1 수요코딩 리액트(2)" decoding="async">
+        
+      </div>
+    
+  </header>
+
+  <section class="prose">
+    <article>
+<h1>Week 5 미니 React.ver2 구현 정리</h1>
+<p>이번 과제는 기존 React의 핵심 개념인 <b>Component</b>, <b>State</b>, <b>Hooks</b>를 직접 구현하고, 이를 바탕으로 실제로 동작하는 웹 페이지를 만드는 것이 목표였다. 우리 프로젝트는 단순히 React 문법을 흉내 내는 것이 아니라, FunctionComponent 클래스 + hooks 배열 + Virtual DOM diff/patch를 직접 구현한 뒤 Tic-Tac-Toe 데모 페이지를 그 위에서 동작하게 만든 구조다.</p>
+<div><b>한 줄 요약</b><br />루트 컴포넌트 하나가 모든 상태를 관리하고, 자식 컴포넌트는 props만 받아 렌더링하며, 상태 변경 시 새로운 Virtual DOM을 만든 뒤 이전 트리와 비교해서 바뀐 부분만 실제 DOM에 반영하도록 구현했다.</div>
+<h2>1. 요구사항 정리</h2>
+<ul>
+<li>Component는 반드시 함수형 컴포넌트로 구현</li>
+<li>FunctionComponent 클래스를 직접 만들어 <code>hooks 배열</code>, <code>mount()</code>, <code>update()</code>를 구현</li>
+<li>Hook은 최상위 컴포넌트에서만 사용 가능</li>
+<li>State는 루트 컴포넌트에서만 관리</li>
+<li>자식 컴포넌트는 props만 사용하는 Stateless Component로 구현</li>
+<li><code>useState</code>, <code>useEffect</code>, <code>useMemo</code> 직접 구현</li>
+<li>Virtual DOM 생성 후 이전 트리와 비교하고, 변경된 부분만 Patch</li>
+<li>사용자 입력에 따라 화면이 바뀌는 테스트 페이지 제작</li>
+<li>외부 프레임워크 없이 JavaScript, HTML, CSS만 사용</li>
+</ul>
+<h2>2. 프로젝트 전체 구조</h2>
+<pre><code>src/
+  lib/
+    runtime.js      // FunctionComponent, hooks, update scheduling
+    vdom.js         // Virtual DOM 생성, diff, patch
+  tic-tac-toe/
+    model.js        // 게임 상태와 순수 로직
+  demo/
+    main.js         // 데모 페이지 엔트리
+    styles.css      // 데모 페이지 스타일
+tests/
+  runtime.test.js
+  vdom.test.js
+  tic-tac-toe-model.test.js</code></pre>
+<h2>3. Component 구현 방식</h2>
+<p>이 프로젝트의 핵심은 <code>FunctionComponent</code> 클래스다. 일반적인 React에서는 함수형 컴포넌트를 React 내부가 관리하지만, 이번 프로젝트에서는 우리가 직접 이 실행 환경을 만들었다.</p>
+<h3>3-1. FunctionComponent의 역할</h3>
+<ul>
+<li><code>hooks[]</code> 배열로 state, memo, effect 정보를 저장</li>
+<li><code>mount()</code>로 첫 렌더 수행</li>
+<li><code>update()</code>로 상태 변경 후 재렌더 수행</li>
+<li>이전 Virtual DOM 트리와 현재 트리를 비교하여 patch 적용</li>
+<li>렌더 후 <code>useEffect</code> 실행</li>
+</ul>
+<pre><code>class FunctionComponent {
+  constructor(renderFn, props = {}) {
+    this.renderFn = renderFn;
+    this.props = props;
+    this.hooks = [];
+    this.hookIndex = 0;
+    this.container = null;
+    this.currentTree = createRootVNode([]);
+    this.pendingEffects = [];
+    this.updateScheduled = false;
+    this.isMounted = false;
+  }
+
+  mount(container) {
+    this.container = container;
+    this.renderAndCommit();
+  }
+
+  update(nextProps = this.props) {
+    this.props = nextProps;
+    this.renderAndCommit();
+  }
+}</code></pre>
+<h3>3-2. 자식 컴포넌트는 왜 Stateless인가?</h3>
+<p>과제 조건에 따라 Hook과 State는 루트 컴포넌트에서만 사용할 수 있게 설계했다. 그래서 <code>App</code>만 상태를 가지고, <code>Board</code>, <code>Square</code>, <code>MoveHistoryPanel</code> 같은 자식 컴포넌트는 오직 props만 받아 화면을 그린다.</p>
+<pre><code>function App() {
+  const [game, setGame] = useState(createInitialGameState);
+
+  return h(Board, {
+    board: getCurrentBoard(game),
+    onSquareClick: (index) =&gt; setGame((currentGame) =&gt; playMove(currentGame, index)),
+  });
+}
+
+function Board({ board, onSquareClick }) {
+  return h(
+    'section',
+    {},
+    ...board.map((value, index) =&gt;
+      h(Square, {
+        value,
+        onClick: () =&gt; onSquareClick(index),
+      }),
+    ),
+  );
+}</code></pre>
+<h2>4. State 구현 방식</h2>
+<p>상태는 함수 내부 변수에 저장되지 않고, <code>FunctionComponent</code> 인스턴스의 <code>hooks[]</code> 배열에 저장된다. 렌더가 다시 일어나도 이 배열은 유지되기 때문에 상태도 유지된다.</p>
+<h3>4-1. 왜 상태가 유지되는가?</h3>
+<p>렌더 시작 시마다 <code>hookIndex</code>를 0으로 초기화하고, Hook을 호출한 순서대로 같은 슬롯을 재사용한다. 그래서 첫 번째 <code>useState</code>는 항상 같은 위치를 쓴다.</p>
+<pre><code>function getHook(component, name, expectedKind, createHook) {
+  const index = component.hookIndex++;
+  let hook = component.hooks[index];
+
+  if (!hook) {
+    hook = createHook();
+    component.hooks[index] = hook;
+  }
+
+  return hook;
+}</code></pre>
+<h2>5. Hooks 구현 방식</h2>
+<h3>5-1. useState</h3>
+<p><code>useState</code>는 상태 값을 담는 slot을 만들고, 현재 값과 setter를 반환한다. setter는 즉시 렌더하지 않고 queue에 상태 변경 요청을 저장한다.</p>
+<pre><code>export function useState(initialValue) {
+  const component = assertHookAccess('useState');
+  const hook = getHook(component, 'useState', 'state', () =&gt; ({
+    kind: 'state',
+    queue: [],
+    value: resolveInitialValue(initialValue),
+  }));
+
+  flushStateQueue(hook);
+
+  const setState = (nextValue) =&gt; {
+    hook.queue.push(nextValue);
+    component.scheduleUpdate();
+  };
+
+  return [hook.value, setState];
+}</code></pre>
+<h3>5-2. setState는 무엇을 하는가?</h3>
+<ul>
+<li>다음 상태를 queue에 저장</li>
+<li>루트 update를 예약</li>
+<li>다음 렌더에서 queue를 반영</li>
+<li>새 Virtual DOM 생성</li>
+<li>diff 후 patch</li>
+</ul>
+<h3>5-3. batching</h3>
+<p>같은 이벤트 안에서 여러 번 호출된 <code>setState</code>는 하나의 microtask로 묶어 처리한다. 즉 여러 상태 변경을 한 번의 재렌더로 합친다.</p>
+<pre><code>scheduleUpdate() {
+  if (this.updateScheduled || !this.container) {
+    return;
+  }
+
+  this.updateScheduled = true;
+
+  queueMicrotask(() =&gt; {
+    this.updateScheduled = false;
+    this.update(this.props);
+  });
+}</code></pre>
+<h3>5-4. useMemo</h3>
+<p><code>useMemo</code>는 dependency가 바뀌었을 때만 다시 계산된다. 이 프로젝트에서는 승패 계산, 말 개수 계산, 상태 문구 생성에 사용했다.</p>
+<pre><code>const result = useMemo(() =&gt; calculateResult(board), [board]);
+const moveCount = useMemo(() =&gt; getMoveCount(board), [board]);</code></pre>
+<h3>5-5. useEffect</h3>
+<p><code>useEffect</code>는 렌더 중 실행되지 않고 commit 후 실행된다. 또한 다시 실행되기 전 이전 cleanup을 먼저 실행하도록 만들었다.</p>
+<pre><code>export function useEffect(callback, deps) {
+  const component = assertHookAccess('useEffect');
+  const hook = getHook(component, 'useEffect', 'effect', () =&gt; ({
+    kind: 'effect',
+    cleanup: null,
+    deps: undefined,
+  }));
+
+  if (shouldRunHook(hook.deps, deps)) {
+    component.pendingEffects.push({ callback });
+    hook.deps = [...deps];
+  }
+}</code></pre>
+<h2>6. Virtual DOM + Diff + Patch 구현</h2>
+<h3>6-1. Virtual DOM 생성</h3>
+<p>이 프로젝트는 JSX 대신 <code>h()</code> 함수로 Virtual DOM 노드를 생성한다. 실제 DOM을 바로 만드는 것이 아니라, 먼저 UI 구조를 JavaScript 객체로 만든다.</p>
+<pre><code>h('button', { onClick: handleClick }, 'Click')</code></pre>
+<h3>6-2. 초기 렌더</h3>
+<p>첫 렌더에서는 이전 트리가 없으므로 diff 없이 전체 Virtual DOM을 실제 DOM으로 마운트한다.</p>
+<pre><code>if (!this.isMounted) {
+  mountVNode(this.container, nextTree);
+  this.isMounted = true;
+}</code></pre>
+<h3>6-3. update 시 diff / patch</h3>
+<p>상태가 바뀌면 새 트리를 만들고 이전 트리와 비교해서, 변경된 부분만 실제 DOM에 반영한다.</p>
+<ul>
+<li><code>UPDATE_PROPS</code></li>
+<li><code>UPDATE_TEXT</code></li>
+<li><code>INSERT_CHILD</code></li>
+<li><code>REMOVE_CHILD</code></li>
+<li><code>MOVE_CHILD</code></li>
+</ul>
+<pre><code>const operations = patchDom(this.container, this.currentTree, nextTree);</code></pre>
+<h2>7. 테스트 페이지: Tic-Tac-Toe</h2>
+<p>데모 페이지는 사용자 입력에 따라 상태가 확실히 바뀌고, Hook과 Virtual DOM 동작을 설명하기 좋은 Tic-Tac-Toe 게임으로 만들었다.</p>
+<h3>7-1. 상태 변화 흐름</h3>
+<ol>
+<li>사용자가 칸 클릭</li>
+<li><code>Square</code>가 props로 받은 <code>onClick</code> 실행</li>
+<li>루트 <code>App</code>의 <code>setGame()</code> 호출</li>
+<li>새 상태가 queue에 저장</li>
+<li>microtask에서 update 실행</li>
+<li>새 Virtual DOM 생성</li>
+<li>diff</li>
+<li>patch</li>
+<li>effect 실행</li>
+</ol>
+<h3>7-2. 자식 컴포넌트에서 루트로 데이터 전달</h3>
+<p>자식 컴포넌트는 상태를 직접 수정하지 않고, 루트가 내려준 콜백을 호출해서 클릭 정보만 전달한다.</p>
+<pre><code>function Square({ index, onClick, value }) {
+  return h(
+    'button',
+    {
+      onClick,
+      type: 'button',
+    },
+    value || '',
+  );
+}</code></pre>
+<pre><code>function Board({ board, onSquareClick }) {
+  return h(
+    'section',
+    {},
+    ...board.map((value, index) =&gt;
+      h(Square, {
+        value,
+        onClick: () =&gt; onSquareClick(index),
+      }),
+    ),
+  );
+}</code></pre>
+<p>즉, 클릭된 칸 번호 같은 데이터는 이벤트 인자로 부모에게 전달되고, 실제 state 변경은 루트에서만 일어난다.</p>
+<h2>8. Component Lifecycle을 이 프로젝트 기준으로 설명하면</h2>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>생성</td>
+<td><code>new FunctionComponent(App)</code> 시 hooks 배열과 상태 플래그 초기화</td>
+</tr>
+<tr>
+<td>Mount</td>
+<td>첫 render 후 Virtual DOM 생성, 실제 DOM 마운트</td>
+</tr>
+<tr>
+<td>Update</td>
+<td><code>setState</code> 이후 새 트리 생성, diff, patch</td>
+</tr>
+<tr>
+<td>Commit</td>
+<td>실제 DOM 반영 완료</td>
+</tr>
+<tr>
+<td>Effect</td>
+<td>commit 후 <code>useEffect</code> 실행</td>
+</tr>
+<tr>
+<td>Cleanup</td>
+<td>다음 effect 실행 전 이전 cleanup 수행</td>
+</tr>
+</tbody>
+</table>
+<h2>9. 테스트 코드로 검증한 내용</h2>
+<ul>
+<li>루트 state 저장 및 DOM 업데이트</li>
+<li>동일 이벤트 내 여러 <code>setState</code> 호출 시 batching</li>
+<li><code>useMemo</code> 재계산 조건</li>
+<li><code>useEffect</code> 실행 및 cleanup 순서</li>
+<li>자식 컴포넌트의 Hook 사용 금지</li>
+<li>Virtual DOM diff/patch 정상 동작</li>
+<li>key 기반 자식 이동 처리</li>
+<li>Tic-Tac-Toe 상태 전이와 승패 계산</li>
+</ul>
+<h2>10. 실제 React와의 차이점</h2>
+<ul>
+<li>Hook을 루트 컴포넌트에서만 허용</li>
+<li>Fiber 구조 없음</li>
+<li>Concurrent Rendering 없음</li>
+<li>우선순위 기반 스케줄링 없음</li>
+<li>Effect 처리 방식이 단순화됨</li>
+<li>Reconciliation이 최소 기능만 구현됨</li>
+</ul>
+<h2>11. 마무리</h2>
+<p>이번 과제를 통해 React를 단순히 사용하는 수준이 아니라, 상태가 어떻게 유지되고, 렌더가 어떻게 다시 일어나며, DOM이 왜 전체가 아니라 필요한 부분만 갱신되는지를 직접 구현하며 이해할 수 있었다.</p>
+<ul>
+<li>함수는 다시 실행되어도 상태는 hooks 배열에 남아 있어야 한다.</li>
+<li><code>setState</code>는 값 변경이 아니라 재렌더 흐름의 시작점이다.</li>
+<li>Virtual DOM diff/patch는 DOM 업데이트를 효율적으로 만든다.</li>
+</ul>
+<p>결과적으로 이번 프로젝트는 과제 요구사항을 충실히 반영하면서도, 미니 React 런타임의 핵심 개념을 설명할 수 있는 구조로 완성되었다.</p>
+</article>
+
+  </section>
+
+  
+    <nav class="post-navigation" aria-label="이전 다음 글">
+      
+        <a class="post-navigation__item" href="/BlogLim/3-30-%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EB%B9%84%EB%8F%99%EA%B8%B0-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D/">
+          <span class="post-navigation__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 11H7.83l5.58-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z" fill="currentColor"></path>
+            </svg>
+          </span>
+          <span class="post-navigation__content">
+            <span class="post-navigation__label">이전 포스트</span>
+            <strong class="post-navigation__title">3/30 파이썬 비동기 프로그래밍</strong>
+          </span>
+        </a>
+      
+      
+        <a class="post-navigation__item post-navigation__item--next" href="/BlogLim/wil-6%EC%A3%BC/">
+          <span class="post-navigation__content">
+            <span class="post-navigation__label">다음 포스트</span>
+            <strong class="post-navigation__title">[WIL] 6주</strong>
+          </span>
+          <span class="post-navigation__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 11h12.17l-5.58-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4z" fill="currentColor"></path>
+            </svg>
+          </span>
+        </a>
+      
+    </nav>
+  
+
+  
+
+  
+
+
+</article>
+
+    </main>
+    <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p>Copyright &copy; 2026 ForRest</p>
+    <p>Open-source Jekyll theme for developer blogs.</p>
+  </div>
+</footer>
+
+    
+    <script src="/BlogLim/assets/js/site.js?v=1776421121"></script>
+  </body>
+</html>
