@@ -6,12 +6,15 @@ permalink: /posts.json
   "posts": [
     {% for post in site.posts %}
       {% assign series = site.data.series[post.series] %}
-      {% capture search_text %}{{ post.title }} {{ post.description }} {{ post.tags | join: ' ' }} {% if series %}{{ series.title }}{% endif %}{% endcapture %}
+      {% assign category_path = post.categories | join: ' / ' %}
+      {% capture search_text %}{{ post.title }} {{ post.description }} {{ category_path }} {{ post.tags | join: ' ' }} {% if series %}{{ series.title }}{% endif %}{% endcapture %}
       {
         "title": {{ post.title | jsonify }},
         "url": {{ post.url | relative_url | jsonify }},
         "description": {{ post.description | default: "" | jsonify }},
-        "thumbnail": {% if post.thumbnail %}{{ post.thumbnail | relative_url | jsonify }}{% else %}null{% endif %},
+        "thumbnail": {% if post.thumbnail %}{% if post.thumbnail contains '://' %}{{ post.thumbnail | jsonify }}{% else %}{{ post.thumbnail | relative_url | jsonify }}{% endif %}{% else %}null{% endif %},
+        "categories": {{ post.categories | default: empty | jsonify }},
+        "category_path": {{ category_path | jsonify }},
         "tags": {{ post.tags | default: empty | jsonify }},
         "series_key": {{ post.series | default: "" | downcase | jsonify }},
         "series_title": {% if series %}{{ series.title | jsonify }}{% else %}null{% endif %},

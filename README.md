@@ -3,6 +3,8 @@
 velog 스타일의 읽기 흐름을 좋아하는 개발자를 위해 만든 Jekyll starter theme입니다.  
 GitHub Pages 배포, 시리즈 탭, 태그 필터, GitHub 프로필 동기화, 기여 그래프, Giscus/Disqus 댓글, Algolia 검색까지 바로 붙일 수 있게 구성했습니다.
 
+내 블로그: [https://LimJaeHwan-real.github.io/BlogLim/](https://LimJaeHwan-real.github.io/BlogLim/)
+
 라이브 데모: [https://woonyong-kr.github.io/jekyll-theme-velog/](https://woonyong-kr.github.io/jekyll-theme-velog/)
 
 ---

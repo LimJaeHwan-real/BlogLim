@@ -3,6 +3,7 @@ layout: default
 ---
 {% assign reading_time = content | strip_html | number_of_words | divided_by: 220 | plus: 1 %}
 {% assign series = site.data.series[page.series] %}
+{% assign category_path = page.categories | join: ' / ' %}
 {% assign github_profile = site.data.github_profile_cache %}
 {% assign configured_login = site.data.theme.hero.github_contributions.username | default: "" %}
 {% assign fallback_github_url = site.data.profile.github | default: "" %}
@@ -23,6 +24,11 @@ layout: default
   <a class="post-view__back" href="{{ '/' | relative_url }}">글 목록으로 돌아가기</a>
 
   <header class="post-head">
+    {% if category_path != "" %}
+      <p class="post-head__category">
+        <a href="{{ '/' | relative_url }}?category={{ category_path | uri_escape }}">{{ category_path }}</a>
+      </p>
+    {% endif %}
     {% if series %}
       <p class="post-head__series">{{ series.title }}</p>
     {% endif %}
@@ -67,7 +73,11 @@ layout: default
 
     {% if page.thumbnail %}
       <div class="post-head__thumbnail">
-        <img src="{{ page.thumbnail | relative_url }}" alt="{{ page.title }}" decoding="async">
+        {% if page.thumbnail contains '://' %}
+          <img src="{{ page.thumbnail }}" alt="{{ page.title }}" decoding="async">
+        {% else %}
+          <img src="{{ page.thumbnail | relative_url }}" alt="{{ page.title }}" decoding="async">
+        {% endif %}
       </div>
     {% endif %}
   </header>

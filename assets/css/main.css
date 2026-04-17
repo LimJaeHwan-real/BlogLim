@@ -582,6 +582,18 @@ html[data-theme="dark"] .theme-toggle__moon {
   display: none;
 }
 
+.category-pills {
+  display: none;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0 0 1rem;
+  scrollbar-width: none;
+}
+
+.category-pills::-webkit-scrollbar {
+  display: none;
+}
+
 .tag-pill {
   flex-shrink: 0;
   height: 1.75rem;
@@ -601,12 +613,41 @@ html[data-theme="dark"] .theme-toggle__moon {
   color: var(--text3);
 }
 
+.category-pill {
+  flex-shrink: 0;
+  height: 1.75rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  background: var(--bg-element2);
+  color: var(--text1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8125rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.category-pill span {
+  color: var(--text3);
+}
+
 .tag-pill.is-active {
   background: var(--primary1);
   color: var(--button-text);
 }
 
 .tag-pill.is-active span {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.category-pill.is-active {
+  background: var(--primary1);
+  color: var(--button-text);
+}
+
+.category-pill.is-active span {
   color: inherit;
   opacity: 0.85;
 }
@@ -844,6 +885,10 @@ html[data-theme="dark"] {
   letter-spacing: 0.02em;
 }
 
+.filter-section + .filter-section {
+  margin-top: 1.75rem;
+}
+
 .tag-sidebar__list {
   margin: 0;
   padding: 0;
@@ -904,6 +949,13 @@ html[data-theme="dark"] {
 
 .post-card__title-link {
   display: block;
+}
+
+.post-card__category {
+  margin: 0 0 0.5rem;
+  color: var(--text2);
+  font-size: 0.8125rem;
+  font-weight: 700;
 }
 
 .post-card__title {
@@ -1061,6 +1113,17 @@ html[data-theme="dark"] {
   margin: 0 0 1rem;
   color: var(--primary1);
   font-weight: 700;
+}
+
+.post-head__category {
+  margin: 0 0 0.625rem;
+  color: var(--text2);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.post-head__category a:hover {
+  color: var(--primary1);
 }
 
 .post-head__title {
@@ -1546,6 +1609,10 @@ html[data-theme="dark"] {
     padding-top: 0;
   }
 
+  .category-pills {
+    display: flex;
+  }
+
   .posts-panel__toolbar {
     margin-bottom: 1rem;
   }
@@ -1614,6 +1681,10 @@ html[data-theme="dark"] {
   }
 
   .tag-pills {
+    display: flex;
+  }
+
+  .category-pills {
     display: flex;
   }
 

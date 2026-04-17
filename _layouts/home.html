@@ -14,6 +14,8 @@ layout: default
 {% assign page_size = theme.home.initial_post_count | default: 12 %}
 {% assign post_index_url = '/posts.json' | relative_url %}
 {% assign sorted_tags = site.tags | sort %}
+{% capture category_paths_raw %}{% for post in site.posts %}{% assign category_path = post.categories | join: ' / ' %}{% if category_path != "" %}{{ category_path }}|||{% endif %}{% endfor %}{% endcapture %}
+{% assign sorted_category_paths = category_paths_raw | split: '|||' | uniq | sort %}
 <div class="home-layout">
   <section class="home-intro">
     {% include profile.html %}
@@ -22,31 +24,71 @@ layout: default
   <section class="home-content">
     <aside class="home-sidebar">
       <aside class="tag-sidebar">
-        <h2 class="tag-sidebar__title">{{ theme.home.tag_list_title }}</h2>
-        <ul class="tag-sidebar__list">
-          <li class="tag-sidebar__item">
-            <a class="tag-sidebar__link" href="{{ '/' | relative_url }}" data-tag-link>
-              {{ theme.home.all_posts_label }}
-              <span class="tag-sidebar__count">({{ site.posts.size }})</span>
-            </a>
-          </li>
-          {% for tag in sorted_tags %}
-            {% assign tag_name = tag[0] %}
-            {% assign tag_posts = tag[1] %}
+        <section class="filter-section">
+          <h2 class="tag-sidebar__title">카테고리</h2>
+          <ul class="tag-sidebar__list">
             <li class="tag-sidebar__item">
               <a
                 class="tag-sidebar__link"
-                href="{{ '/' | relative_url }}?tag={{ tag_name | uri_escape }}"
-                data-tag-link
-                data-tag-filter="{{ tag_name }}"
-                data-tag-label="{{ tag_name }}"
+                href="{{ '/' | relative_url }}"
+                data-category-link
               >
-                {{ tag_name }}
-                <span class="tag-sidebar__count">({{ tag_posts | size }})</span>
+                전체 카테고리
+                <span class="tag-sidebar__count">({{ site.posts.size }})</span>
               </a>
             </li>
-          {% endfor %}
-        </ul>
+            {% for category_path in sorted_category_paths %}
+              {% if category_path != "" %}
+                {% assign category_count = 0 %}
+                {% for post in site.posts %}
+                  {% assign post_category_path = post.categories | join: ' / ' %}
+                  {% if post_category_path == category_path %}
+                    {% assign category_count = category_count | plus: 1 %}
+                  {% endif %}
+                {% endfor %}
+                <li class="tag-sidebar__item">
+                  <a
+                    class="tag-sidebar__link"
+                    href="{{ '/' | relative_url }}?category={{ category_path | uri_escape }}"
+                    data-category-link
+                    data-category-filter="{{ category_path }}"
+                  >
+                    {{ category_path }}
+                    <span class="tag-sidebar__count">({{ category_count }})</span>
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </section>
+
+        <section class="filter-section">
+          <h2 class="tag-sidebar__title">{{ theme.home.tag_list_title }}</h2>
+          <ul class="tag-sidebar__list">
+            <li class="tag-sidebar__item">
+              <a class="tag-sidebar__link" href="{{ '/' | relative_url }}" data-tag-link>
+                {{ theme.home.all_posts_label }}
+                <span class="tag-sidebar__count">({{ site.posts.size }})</span>
+              </a>
+            </li>
+            {% for tag in sorted_tags %}
+              {% assign tag_name = tag[0] %}
+              {% assign tag_posts = tag[1] %}
+              <li class="tag-sidebar__item">
+                <a
+                  class="tag-sidebar__link"
+                  href="{{ '/' | relative_url }}?tag={{ tag_name | uri_escape }}"
+                  data-tag-link
+                  data-tag-filter="{{ tag_name }}"
+                  data-tag-label="{{ tag_name }}"
+                >
+                  {{ tag_name }}
+                  <span class="tag-sidebar__count">({{ tag_posts | size }})</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
       </aside>
     </aside>
 
@@ -54,6 +96,33 @@ layout: default
       {% include tabs.html active=page.active_tab %}
 
       <section>
+        <div class="category-pills">
+          <a class="category-pill" href="{{ '/' | relative_url }}" data-category-link>
+            전체 카테고리
+            <span>{{ site.posts.size }}</span>
+          </a>
+          {% for category_path in sorted_category_paths %}
+            {% if category_path != "" %}
+              {% assign category_count = 0 %}
+              {% for post in site.posts %}
+                {% assign post_category_path = post.categories | join: ' / ' %}
+                {% if post_category_path == category_path %}
+                  {% assign category_count = category_count | plus: 1 %}
+                {% endif %}
+              {% endfor %}
+              <a
+                class="category-pill"
+                href="{{ '/' | relative_url }}?category={{ category_path | uri_escape }}"
+                data-category-link
+                data-category-filter="{{ category_path }}"
+              >
+                {{ category_path }}
+                <span>{{ category_count }}</span>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+
         <div class="tag-pills">
           <a class="tag-pill" href="{{ '/' | relative_url }}" data-tag-link>
             {{ theme.home.all_posts_label }}

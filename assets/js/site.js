@@ -114,6 +114,12 @@
   function updateUrl(state) {
     var nextUrl = new URL(window.location.href);
 
+    if (state.category) {
+      nextUrl.searchParams.set("category", state.category);
+    } else {
+      nextUrl.searchParams.delete("category");
+    }
+
     if (state.tag) {
       nextUrl.searchParams.set("tag", state.tag);
     } else {
@@ -141,6 +147,10 @@
 
   function buildListUrl(basePath, state) {
     var nextUrl = new URL(basePath, window.location.origin);
+
+    if (state.category) {
+      nextUrl.searchParams.set("category", state.category);
+    }
 
     if (state.tag) {
       nextUrl.searchParams.set("tag", state.tag);
@@ -292,6 +302,7 @@
       var title = card.querySelector(".post-card__title");
       var titleLink = card.querySelector(".post-card__title-link");
       var description = card.querySelector(".post-card__description");
+      var category = card.querySelector(".post-card__category");
       var series = card.querySelector(".post-card__series");
       var thumbnail = card.querySelector(".post-card__thumbnail img");
       var metaItems = Array.prototype.slice.call(card.querySelectorAll(".post-card__meta span"));
@@ -301,6 +312,15 @@
         title: title ? title.textContent.trim() : "",
         url: titleLink ? titleLink.getAttribute("href") : "",
         description: description ? description.textContent.trim() : "",
+        categories: category
+          ? category.textContent
+              .split(" / ")
+              .map(function (item) {
+                return item.trim();
+              })
+              .filter(Boolean)
+          : [],
+        category_path: card.getAttribute("data-category-path") || (category ? category.textContent.trim() : ""),
         thumbnail: thumbnail ? thumbnail.getAttribute("src") : "",
         tags: tags ? tags.split("|").filter(Boolean) : [],
         series_key: card.getAttribute("data-series-key") || "",
@@ -317,6 +337,7 @@
     var title = escapeHtml(post.title);
     var url = escapeHtml(post.url);
     var description = escapeHtml(post.description);
+    var categoryPath = escapeHtml(post.category_path || "");
     var seriesTitle = escapeHtml(post.series_title);
     var tags = Array.isArray(post.tags) ? post.tags : [];
     var thumbnail = post.thumbnail ? escapeHtml(post.thumbnail) : "";
@@ -339,6 +360,7 @@
           title +
           '" loading="lazy" decoding="async"></a>'
         : "") +
+      (categoryPath ? '<p class="post-card__category">' + categoryPath + "</p>" : "") +
       (seriesTitle ? '<p class="post-card__series">' + seriesTitle + "</p>" : "") +
       '<a class="post-card__title-link" href="' +
       url +
@@ -367,11 +389,13 @@
       return;
     }
 
+    var categoryLinks = Array.prototype.slice.call(document.querySelectorAll("[data-category-link]"));
     var tagLinks = Array.prototype.slice.call(document.querySelectorAll("[data-tag-link]"));
     var summary = document.querySelector("[data-post-summary]");
     var empty = document.querySelector("[data-post-empty]");
     var params = new URLSearchParams(window.location.search);
     var state = {
+      category: normalizeValue(params.get("category")),
       tag: normalizeValue(params.get("tag")),
       series: normalizeValue(params.get("series")),
       q: searchInput ? String(params.get("q") || "").trim() : "",
@@ -386,7 +410,7 @@
     var visibleLimit = pageSize;
 
     function hasActiveFilters() {
-      return Boolean(state.tag || state.series || state.q);
+      return Boolean(state.category || state.tag || state.series || state.q);
     }
 
     if (hasActiveFilters()) {
@@ -397,6 +421,21 @@
       searchInput.value = state.q;
     }
 
+    function updateCategoryLinks() {
+      categoryLinks.forEach(function (link) {
+        var rawCategoryFilter = link.getAttribute("data-category-filter") || "";
+        var categoryFilter = normalizeValue(rawCategoryFilter);
+        var isActive = categoryFilter ? categoryFilter === state.category : !state.category;
+
+        link.classList.toggle("is-active", isActive);
+        link.href = buildListUrl(basePath, {
+          category: rawCategoryFilter,
+          tag: state.tag,
+          q: state.q,
+        });
+      });
+    }
+
     function updateTagLinks() {
       tagLinks.forEach(function (link) {
         var rawTagFilter = link.getAttribute("data-tag-filter") || "";
@@ -405,6 +444,7 @@
 
         link.classList.toggle("is-active", isActive);
         link.href = buildListUrl(basePath, {
+          category: state.category,
           tag: rawTagFilter,
           q: state.q,
         });
@@ -461,6 +501,7 @@
       }
 
       updateSummary(matchedPosts.length);
+      updateCategoryLinks();
       updateTagLinks();
       updatePaginationState();
     }
@@ -469,19 +510,21 @@
       var query = normalizeValue(state.q);
 
       return posts.filter(function (post) {
+        var categoryPath = normalizeValue(post.category_path);
         var tagValues = Array.isArray(post.tags) ? post.tags.map(normalizeValue) : [];
         var seriesKey = normalizeValue(post.series_key);
         var searchText = normalizeValue(
           post.search ||
-            [post.title, post.description, Array.isArray(post.tags) ? post.tags.join(" ") : "", post.series_title]
+            [post.title, post.description, post.category_path, Array.isArray(post.tags) ? post.tags.join(" ") : "", post.series_title]
               .join(" ")
               .trim()
         );
+        var matchesCategory = !state.category || categoryPath === state.category;
         var matchesTag = !state.tag || tagValues.indexOf(state.tag) !== -1;
         var matchesSeries = !state.series || seriesKey === state.series;
         var matchesQuery = !query || searchText.indexOf(query) !== -1;
 
-        return matchesTag && matchesSeries && matchesQuery;
+        return matchesCategory && matchesTag && matchesSeries && matchesQuery;
       });
     }
 
@@ -605,6 +648,7 @@
       }
     }
 
+    updateCategoryLinks();
     updateTagLinks();
     updatePaginationState();
 

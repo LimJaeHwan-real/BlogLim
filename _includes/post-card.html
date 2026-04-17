@@ -1,23 +1,32 @@
 {% assign post = include.post %}
 {% assign series = site.data.series[post.series] %}
 {% assign reading_time = post.content | strip_html | number_of_words | divided_by: 220 | plus: 1 %}
-{% capture search_text %}{{ post.title }} {{ post.description }} {{ post.tags | join: ' ' }} {% if series %}{{ series.title }}{% endif %}{% endcapture %}
+{% assign category_path = post.categories | join: ' / ' %}
+{% capture search_text %}{{ post.title }} {{ post.description }} {{ category_path }} {{ post.tags | join: ' ' }} {% if series %}{{ series.title }}{% endif %}{% endcapture %}
 <article
   class="post-card"
   data-post-card
   data-tags="{{ post.tags | join: '|' | downcase | escape }}"
+  data-category-path="{{ category_path | escape }}"
   data-series-key="{{ post.series | default: '' | downcase | escape }}"
   data-series-label="{% if series %}{{ series.title | escape }}{% endif %}"
   data-search="{{ search_text | strip | downcase | escape }}"
 >
   {% if post.thumbnail %}
     <a class="post-card__thumbnail" href="{{ post.url | relative_url }}">
-      <img src="{{ post.thumbnail | relative_url }}" alt="{{ post.title }}" loading="lazy" decoding="async">
+      {% if post.thumbnail contains '://' %}
+        <img src="{{ post.thumbnail }}" alt="{{ post.title }}" loading="lazy" decoding="async">
+      {% else %}
+        <img src="{{ post.thumbnail | relative_url }}" alt="{{ post.title }}" loading="lazy" decoding="async">
+      {% endif %}
     </a>
   {% endif %}
 
   {% if series %}
     <p class="post-card__series">{{ series.title }}</p>
+  {% endif %}
+  {% if category_path != "" %}
+    <p class="post-card__category">{{ category_path }}</p>
   {% endif %}
 
   <a class="post-card__title-link" href="{{ post.url | relative_url }}">
