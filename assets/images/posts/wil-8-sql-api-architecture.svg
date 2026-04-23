@@ -1,90 +1,155 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620" role="img" aria-labelledby="title desc">
-  <title id="title">Thread pool SQL API server architecture</title>
-  <desc id="desc">HTTP clients enter an accept loop, move through a bounded queue and worker thread pool, then execute SQL through a DB server boundary protected by read write locks.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1672" height="935" viewBox="0 0 1672 935" role="img" aria-labelledby="title desc">
+  <title id="title">스레드 풀 기반 SQL API 서버 아키텍처 및 요청 흐름</title>
+  <desc id="desc">Client 요청이 accept loop, bounded queue, worker thread pool, API parser, DB server boundary의 read write lock을 지나 Core DB Engine의 sql_execute와 Table plus B+Tree로 처리되고 JSON response로 돌아가는 흐름</desc>
   <defs>
-    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#f7fbff"/>
-      <stop offset="100%" stop-color="#edf4ec"/>
-    </linearGradient>
-    <linearGradient id="blue" x1="0" x2="1">
-      <stop offset="0%" stop-color="#1e5b8f"/>
-      <stop offset="100%" stop-color="#2f8bc0"/>
-    </linearGradient>
-    <linearGradient id="green" x1="0" x2="1">
-      <stop offset="0%" stop-color="#2f6f4e"/>
-      <stop offset="100%" stop-color="#5a9b65"/>
-    </linearGradient>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#315268"/>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L11,4 z" fill="#1551b8"/>
     </marker>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#17354a" flood-opacity="0.16"/>
+    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L11,4 z" fill="#066a63"/>
+    </marker>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#2d3748" flood-opacity="0.12"/>
     </filter>
     <style>
-      .title { font: 700 30px Georgia, serif; fill: #17354a; }
-      .subtitle { font: 500 15px Georgia, serif; fill: #526b78; }
-      .label { font: 700 18px Georgia, serif; fill: #17354a; }
-      .small { font: 500 13px Georgia, serif; fill: #46616f; }
+      .title { font: 800 46px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #101827; letter-spacing: 1px; }
+      .boxBlue { fill: #f7fbff; stroke: #0f48b0; stroke-width: 2.2; rx: 12; filter: url(#softShadow); }
+      .boxGreen { fill: #f6fff4; stroke: #176018; stroke-width: 2.2; rx: 12; filter: url(#softShadow); }
+      .boxTeal { fill: #f4ffff; stroke: #08726e; stroke-width: 2.2; rx: 12; filter: url(#softShadow); }
+      .boxPurple { fill: #fbf8ff; stroke: #4a2aa0; stroke-width: 2.2; rx: 12; filter: url(#softShadow); }
+      .dashPurple { fill: none; stroke: #4a2aa0; stroke-width: 2.2; stroke-dasharray: 9 8; rx: 16; }
+      .labelBlue { font: 700 28px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #0b2f82; }
+      .labelGreen { font: 700 28px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #145416; }
+      .labelTeal { font: 700 28px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #066a63; }
+      .labelPurple { font: 700 28px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #4a2aa0; }
+      .small { font: 600 22px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #111827; }
+      .tiny { font: 600 18px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #111827; }
+      .red { font: 700 21px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #a01717; }
+      .arrowBlue { stroke: #1551b8; stroke-width: 4; fill: none; marker-end: url(#arrowBlue); }
+      .arrowGreen { stroke: #066a63; stroke-width: 4; fill: none; marker-end: url(#arrowGreen); }
+      .dashReturn { stroke: #066a63; stroke-width: 3; stroke-dasharray: 9 8; fill: none; marker-end: url(#arrowGreen); }
+      .dashBlue { stroke: #1551b8; stroke-width: 4; stroke-dasharray: 9 8; fill: none; marker-end: url(#arrowBlue); }
+      .dashRed { stroke: #c12020; stroke-width: 3; stroke-dasharray: 8 7; fill: none; marker-end: url(#arrowBlue); }
+      .iconStrokeBlue { stroke: #1551b8; stroke-width: 6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .iconStrokeGreen { stroke: #3c7c22; stroke-width: 6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .iconStrokeTeal { stroke: #066a63; stroke-width: 6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
       .white { fill: #ffffff; }
-      .card { fill: #ffffff; stroke: #c7d8df; stroke-width: 2; rx: 22; filter: url(#shadow); }
-      .soft { fill: #f8fbfd; stroke: #d7e5e9; stroke-width: 2; rx: 16; }
-      .pill { fill: #e7f1f5; stroke: #c3d7df; stroke-width: 1.5; rx: 18; }
-      .arrow { stroke: #315268; stroke-width: 3; fill: none; marker-end: url(#arrow); }
     </style>
   </defs>
-  <rect width="1120" height="620" fill="url(#bg)"/>
-  <text x="56" y="62" class="title">Mini DBMS SQL API Server</text>
-  <text x="58" y="90" class="subtitle">HTTP requests are parallelized at the server boundary while one shared Table is protected by locks.</text>
 
-  <rect x="54" y="142" width="170" height="310" class="card"/>
-  <text x="88" y="188" class="label">Clients</text>
-  <rect x="84" y="220" width="110" height="42" class="pill"/>
-  <text x="104" y="247" class="small">POST /query</text>
-  <rect x="84" y="286" width="110" height="42" class="pill"/>
-  <text x="106" y="313" class="small">SELECT</text>
-  <rect x="84" y="352" width="110" height="42" class="pill"/>
-  <text x="108" y="379" class="small">INSERT</text>
+  <rect width="1672" height="935" fill="#ffffff"/>
+  <text x="34" y="78" class="title">스레드 풀 기반 SQL API 서버 아키텍처 및 요청 흐름</text>
 
-  <rect x="292" y="134" width="210" height="92" class="card"/>
-  <text x="330" y="173" class="label">Accept Loop</text>
-  <text x="326" y="201" class="small">main thread accepts sockets</text>
+  <rect x="34" y="234" width="160" height="362" class="boxBlue"/>
+  <text x="81" y="291" class="labelBlue">client</text>
+  <rect x="69" y="343" width="91" height="67" class="iconStrokeBlue"/>
+  <line x1="114" y1="410" x2="114" y2="427" class="iconStrokeBlue"/>
+  <line x1="91" y1="427" x2="137" y2="427" class="iconStrokeBlue"/>
+  <rect x="93" y="467" width="42" height="75" class="iconStrokeBlue"/>
+  <circle cx="114" cy="532" r="4" fill="#1551b8"/>
 
-  <rect x="292" y="292" width="210" height="118" class="card"/>
-  <text x="335" y="329" class="label">Bounded Queue</text>
-  <text x="329" y="358" class="small">capacity: --queue 16</text>
-  <text x="321" y="382" class="small">full: 503 queue_full</text>
+  <rect x="262" y="237" width="150" height="357" class="boxBlue"/>
+  <text x="284" y="293" class="labelBlue">accept loop</text>
+  <path d="M303 388 A39 39 0 0 1 374 364" class="iconStrokeBlue"/>
+  <path d="M374 364 L374 345 L393 365" class="iconStrokeBlue"/>
+  <path d="M371 442 A39 39 0 0 1 300 418" class="iconStrokeBlue"/>
+  <path d="M300 418 L300 437 L281 417" class="iconStrokeBlue"/>
 
-  <rect x="574" y="112" width="210" height="368" class="card"/>
-  <text x="615" y="154" class="label">Worker Pool</text>
-  <text x="628" y="181" class="small">--workers 4</text>
-  <rect x="610" y="216" width="138" height="42" class="soft"/>
-  <text x="639" y="243" class="small">worker 1</text>
-  <rect x="610" y="276" width="138" height="42" class="soft"/>
-  <text x="639" y="303" class="small">worker 2</text>
-  <rect x="610" y="336" width="138" height="42" class="soft"/>
-  <text x="639" y="363" class="small">worker 3</text>
-  <rect x="610" y="396" width="138" height="42" class="soft"/>
-  <text x="639" y="423" class="small">worker 4</text>
+  <rect x="476" y="237" width="175" height="357" class="boxBlue"/>
+  <text x="492" y="293" class="labelBlue">bounded queue</text>
+  <rect x="490" y="391" width="37" height="43" class="iconStrokeBlue"/>
+  <rect x="527" y="391" width="37" height="43" class="iconStrokeBlue"/>
+  <rect x="564" y="391" width="37" height="43" class="iconStrokeBlue"/>
+  <path d="M601 391 H626 Q635 391 635 400 V434" class="iconStrokeBlue"/>
+  <line x1="602" y1="434" x2="620" y2="434" class="iconStrokeBlue"/>
+  <rect x="489" y="520" width="148" height="51" fill="#fffdf8" stroke="#c12020" stroke-width="2.2" rx="8"/>
+  <text x="506" y="553" class="red">queue_full 503</text>
+  <path d="M612 520 V454" class="dashRed"/>
 
-  <rect x="856" y="102" width="214" height="388" class="card"/>
-  <text x="895" y="144" class="label">DBServer</text>
-  <rect x="886" y="176" width="154" height="58" fill="url(#blue)" rx="16"/>
-  <text x="918" y="200" class="white" style="font: 700 14px Georgia, serif;">RW Lock</text>
-  <text x="904" y="220" class="white" style="font: 500 12px Georgia, serif;">read: SELECT / write: INSERT</text>
-  <rect x="886" y="260" width="154" height="58" fill="url(#green)" rx="16"/>
-  <text x="905" y="284" class="white" style="font: 700 14px Georgia, serif;">Shared Table *</text>
-  <text x="912" y="304" class="white" style="font: 500 12px Georgia, serif;">rows + B+Tree index</text>
-  <rect x="886" y="344" width="154" height="58" class="soft"/>
-  <text x="906" y="368" class="small">Metrics Mutex</text>
-  <text x="912" y="388" class="small">requests, errors, timeouts</text>
-  <rect x="886" y="428" width="154" height="36" class="pill"/>
-  <text x="912" y="451" class="small">JSON Response</text>
+  <rect x="689" y="180" width="285" height="448" class="boxGreen"/>
+  <text x="728" y="225" class="labelGreen">worker thread pool</text>
+  <g transform="translate(708 257)">
+    <rect x="0" y="0" width="246" height="76" fill="#ffffff" stroke="#2c7a24" stroke-width="2" rx="9"/>
+    <path d="M45 16 l7 11 13 -2 4 12 -10 8 4 13 -12 7 -10 -8 -11 8 -12 -7 4 -13 -10 -8 4 -12 13 2 7 -11z" fill="#4c8a2f"/>
+    <circle cx="41" cy="43" r="16" fill="#ffffff"/>
+    <text x="90" y="48" class="small">worker thread 1</text>
+  </g>
+  <g transform="translate(708 345)">
+    <rect x="0" y="0" width="246" height="76" fill="#ffffff" stroke="#2c7a24" stroke-width="2" rx="9"/>
+    <path d="M45 16 l7 11 13 -2 4 12 -10 8 4 13 -12 7 -10 -8 -11 8 -12 -7 4 -13 -10 -8 4 -12 13 2 7 -11z" fill="#4c8a2f"/>
+    <circle cx="41" cy="43" r="16" fill="#ffffff"/>
+    <text x="90" y="48" class="small">worker thread 2</text>
+  </g>
+  <g transform="translate(708 433)">
+    <rect x="0" y="0" width="246" height="76" fill="#ffffff" stroke="#2c7a24" stroke-width="2" rx="9"/>
+    <path d="M45 16 l7 11 13 -2 4 12 -10 8 4 13 -12 7 -10 -8 -11 8 -12 -7 4 -13 -10 -8 4 -12 13 2 7 -11z" fill="#4c8a2f"/>
+    <circle cx="41" cy="43" r="16" fill="#ffffff"/>
+    <text x="90" y="48" class="small">worker thread 3</text>
+  </g>
+  <g transform="translate(708 521)">
+    <rect x="0" y="0" width="246" height="76" fill="#ffffff" stroke="#2c7a24" stroke-width="2" rx="9"/>
+    <path d="M45 16 l7 11 13 -2 4 12 -10 8 4 13 -12 7 -10 -8 -11 8 -12 -7 4 -13 -10 -8 4 -12 13 2 7 -11z" fill="#4c8a2f"/>
+    <circle cx="41" cy="43" r="16" fill="#ffffff"/>
+    <text x="90" y="48" class="small">worker thread 4</text>
+  </g>
 
-  <path d="M224 296 H292" class="arrow"/>
-  <path d="M397 226 V292" class="arrow"/>
-  <path d="M502 351 H574" class="arrow"/>
-  <path d="M784 296 H856" class="arrow"/>
-  <path d="M963 490 C963 548 158 548 158 452" class="arrow"/>
+  <rect x="1015" y="238" width="153" height="360" class="boxTeal"/>
+  <text x="1043" y="294" class="labelTeal">API parser</text>
+  <path d="M1056 374 H1100 L1127 402 V481 H1056 Z" class="iconStrokeTeal"/>
+  <path d="M1100 374 V402 H1127" class="iconStrokeTeal"/>
+  <text x="1067" y="459" class="labelTeal">{ }</text>
 
-  <text x="66" y="546" class="subtitle">Backpressure: queue full returns 503. Lock timeout returns 503 before SQL execution.</text>
+  <rect x="1195" y="145" width="218" height="538" class="dashPurple"/>
+  <text x="1214" y="193" class="labelPurple">DB server boundary</text>
+  <rect x="1220" y="326" width="163" height="194" class="boxPurple"/>
+  <text x="1235" y="374" class="labelPurple">read/write lock</text>
+  <rect x="1269" y="442" width="58" height="51" fill="#5e35b1" rx="7"/>
+  <path d="M1279 442 V422 Q1279 404 1298 404 Q1317 404 1317 422 V442" stroke="#5e35b1" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="1298" cy="463" r="8" fill="#ffffff"/>
+  <line x1="1298" y1="471" x2="1298" y2="484" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  <rect x="1220" y="582" width="170" height="56" fill="#fffdf8" stroke="#c12020" stroke-width="2.2" rx="8"/>
+  <text x="1234" y="617" class="red">lock_timeout 503</text>
+  <path d="M1305 582 V522" class="dashRed"/>
+
+  <rect x="1437" y="237" width="216" height="423" class="boxGreen"/>
+  <text x="1472" y="284" class="labelGreen">Core DB Engine</text>
+  <rect x="1454" y="307" width="179" height="82" fill="#f6fff4" stroke="#176018" stroke-width="2.2" rx="10"/>
+  <text x="1475" y="359" class="labelGreen">sql_execute()</text>
+  <path d="M1544 390 V439" class="arrowGreen"/>
+  <rect x="1454" y="442" width="179" height="214" fill="#f6fff4" stroke="#176018" stroke-width="2.2" rx="10"/>
+  <text x="1473" y="486" class="labelGreen">Table + B+Tree</text>
+  <rect x="1533" y="510" width="22" height="21" fill="#2d7620"/>
+  <path d="M1544 531 L1507 575 M1544 531 L1581 575" class="iconStrokeGreen"/>
+  <rect x="1495" y="574" width="22" height="21" fill="#2d7620"/>
+  <rect x="1569" y="574" width="22" height="21" fill="#2d7620"/>
+  <path d="M1506 595 L1478 620 M1506 595 L1524 620 M1580 595 L1559 620 M1580 595 L1608 620" class="iconStrokeGreen"/>
+  <rect x="1465" y="615" width="31" height="28" fill="#ffffff" stroke="#2d7620" stroke-width="3"/>
+  <rect x="1511" y="615" width="31" height="28" fill="#ffffff" stroke="#2d7620" stroke-width="3"/>
+  <rect x="1550" y="615" width="31" height="28" fill="#ffffff" stroke="#2d7620" stroke-width="3"/>
+  <rect x="1596" y="615" width="31" height="28" fill="#ffffff" stroke="#2d7620" stroke-width="3"/>
+  <line x1="1496" y1="629" x2="1511" y2="629" class="iconStrokeGreen"/>
+  <line x1="1542" y1="629" x2="1550" y2="629" class="iconStrokeGreen"/>
+  <line x1="1581" y1="629" x2="1596" y2="629" class="iconStrokeGreen"/>
+
+  <rect x="713" y="746" width="260" height="86" class="boxTeal"/>
+  <text x="729" y="803" class="labelTeal">{ }</text>
+  <text x="809" y="802" class="labelTeal">JSON response</text>
+
+  <path d="M194 410 H262" class="arrowBlue"/>
+  <path d="M412 410 H476" class="arrowBlue"/>
+  <path d="M651 410 H689" class="arrowBlue"/>
+  <path d="M954 295 H1015" class="arrowGreen"/>
+  <path d="M954 383 H1015" class="arrowGreen"/>
+  <path d="M954 471 H1015" class="arrowGreen"/>
+  <path d="M954 559 H1015" class="arrowGreen"/>
+  <path d="M1168 414 H1220" class="arrowBlue"/>
+  <path d="M1383 414 H1437" class="arrowBlue"/>
+
+  <path d="M114 746 V596" class="dashBlue"/>
+  <path d="M337 594 V785" class="dashReturn"/>
+  <path d="M563 594 V785" class="dashReturn"/>
+  <path d="M1092 598 V785" class="dashReturn"/>
+  <path d="M1305 683 V785" class="dashReturn"/>
+  <path d="M1544 660 V746 Q1544 785 1505 785 H973" class="arrowGreen"/>
+  <path d="M713 785 H114 Q111 785 111 746" class="dashReturn"/>
 </svg>
