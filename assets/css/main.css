@@ -939,12 +939,13 @@ html[data-theme="dark"] {
   margin-bottom: 1rem;
   border-radius: 1.125rem;
   overflow: hidden;
+  background: #ffffff;
 }
 
 .post-card__thumbnail img {
   width: 100%;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .post-card__title-link {
@@ -1178,7 +1179,8 @@ html[data-theme="dark"] {
 .post-head__thumbnail img {
   width: 100%;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
+  object-fit: contain;
+  background: #ffffff;
   border-radius: 1rem;
 }
 
