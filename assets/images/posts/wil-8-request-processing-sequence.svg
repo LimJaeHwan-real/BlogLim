@@ -1,94 +1,215 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="600" viewBox="0 0 1120 600" role="img" aria-labelledby="title desc">
-  <title id="title">SELECT and INSERT request processing sequence</title>
-  <desc id="desc">SELECT requests acquire shared read locks while INSERT requests acquire an exclusive write lock before touching the shared table and B+Tree.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1792" height="1024" viewBox="0 0 1792 1024" role="img" aria-labelledby="title desc">
+  <title id="title">요청 처리 시퀀스: SELECT vs INSERT</title>
+  <desc id="desc">같은 POST query 요청이 공통 진입 구간을 지나 DB 경계에서 SELECT read lock 흐름과 INSERT write lock 흐름으로 나뉘어 처리되는 과정</desc>
   <defs>
-    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#fffaf1"/>
-      <stop offset="100%" stop-color="#eef6fb"/>
-    </linearGradient>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#2e4b5d"/>
+    <marker id="arrowBlue" markerWidth="14" markerHeight="14" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L13,5 z" fill="#2f63e6"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="14" markerHeight="14" refX="12" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,10 L13,5 z" fill="#7a35ee"/>
     </marker>
     <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#3f3421" flood-opacity="0.14"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#1f2937" flood-opacity="0.10"/>
     </filter>
     <style>
-      .title { font: 700 30px Georgia, serif; fill: #233b4a; }
-      .subtitle { font: 500 15px Georgia, serif; fill: #5f6f78; }
-      .label { font: 700 17px Georgia, serif; fill: #233b4a; }
-      .small { font: 500 13px Georgia, serif; fill: #51656f; }
-      .lane { stroke: #b8cbd4; stroke-width: 2; stroke-dasharray: 8 8; }
-      .box { fill: #ffffff; stroke: #c8d7dd; stroke-width: 2; rx: 16; filter: url(#shadow); }
-      .read { fill: #e8f4ec; stroke: #8bb79a; stroke-width: 2; rx: 16; }
-      .write { fill: #fff0df; stroke: #d09a5f; stroke-width: 2; rx: 16; }
-      .db { fill: #edf4fb; stroke: #8baec9; stroke-width: 2; rx: 16; }
-      .arrow { stroke: #2e4b5d; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .page { fill: #f8fbff; }
+      .title { font: 900 47px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #111827; letter-spacing: 1px; }
+      .subtitle { font: 600 21px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #526173; }
+      .sectionTitle { font: 900 26px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #111827; }
+      .body { font: 700 16px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #667386; }
+      .bodyDark { font: 800 15px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #4b5563; letter-spacing: 1px; }
+      .label { font: 900 22px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #111827; letter-spacing: 1px; }
+      .small { font: 700 15px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #4b5563; }
+      .tiny { font: 700 13px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #4b5563; }
+      .whiteLabel { font: 900 29px 'Noto Sans KR', 'Malgun Gothic', sans-serif; fill: #ffffff; letter-spacing: 2px; }
+      .box { fill: #ffffff; stroke: #d8e0eb; stroke-width: 2; rx: 20; filter: url(#shadow); }
+      .common { fill: #ffffff; stroke: #d8e0eb; stroke-width: 2; rx: 24; }
+      .selectPanel { fill: #f1f7ff; stroke: #bdd8ff; stroke-width: 2; rx: 28; }
+      .insertPanel { fill: #f8f4ff; stroke: #d8c7ff; stroke-width: 2; rx: 28; }
+      .stepBlue { fill: #ffffff; stroke: #2f63e6; stroke-width: 2.5; rx: 14; filter: url(#shadow); }
+      .stepPurple { fill: #ffffff; stroke: #7a35ee; stroke-width: 2.5; rx: 14; filter: url(#shadow); }
+      .badgeBlue { fill: #2f63e6; }
+      .badgePurple { fill: #7a35ee; }
+      .arrowBlue { stroke: #2f63e6; stroke-width: 5; fill: none; marker-end: url(#arrowBlue); }
+      .arrowPurple { stroke: #7a35ee; stroke-width: 5; fill: none; marker-end: url(#arrowPurple); }
+      .dashBlue { stroke: #2f63e6; stroke-width: 2.5; stroke-dasharray: 9 8; fill: none; }
+      .dashPurple { stroke: #7a35ee; stroke-width: 2.5; stroke-dasharray: 9 8; fill: none; }
+      .bottom { fill: #111827; rx: 12; }
     </style>
   </defs>
-  <rect width="1120" height="600" fill="url(#bg)"/>
-  <text x="56" y="60" class="title">Request Processing Sequence</text>
-  <text x="58" y="88" class="subtitle">The API path is the same, but SELECT and INSERT diverge at the lock boundary.</text>
 
-  <text x="88" y="140" class="label">Client</text>
-  <text x="286" y="140" class="label">Worker</text>
-  <text x="500" y="140" class="label">DBServer</text>
-  <text x="724" y="140" class="label">RW Lock</text>
-  <text x="930" y="140" class="label">Table + B+Tree</text>
+  <rect width="1792" height="1024" class="page"/>
+  <text x="69" y="77" class="title">요청 처리 시퀀스: SELECT vs INSERT</text>
+  <text x="71" y="116" class="subtitle">같은 POST /query 요청도 DB 경계에서 read lock과 write lock으로 나뉘어 처리된다.</text>
 
-  <line x1="110" y1="160" x2="110" y2="538" class="lane"/>
-  <line x1="315" y1="160" x2="315" y2="538" class="lane"/>
-  <line x1="535" y1="160" x2="535" y2="538" class="lane"/>
-  <line x1="765" y1="160" x2="765" y2="538" class="lane"/>
-  <line x1="980" y1="160" x2="980" y2="538" class="lane"/>
+  <rect x="70" y="152" width="1660" height="113" class="common"/>
+  <text x="108" y="196" class="sectionTitle">공통 진입 구간</text>
+  <text x="108" y="222" class="body">Client 요청을 accept loop가 받고,</text>
+  <text x="108" y="247" class="body">bounded queue가 worker에게 전달한다.</text>
 
-  <rect x="54" y="188" width="112" height="42" class="box"/>
-  <text x="78" y="214" class="small">SELECT</text>
-  <path d="M166 209 H260" class="arrow"/>
-  <rect x="260" y="188" width="110" height="42" class="box"/>
-  <text x="281" y="214" class="small">handle</text>
-  <path d="M370 209 H480" class="arrow"/>
-  <rect x="480" y="188" width="110" height="42" class="box"/>
-  <text x="501" y="214" class="small">classify</text>
-  <path d="M590 209 H704" class="arrow"/>
-  <rect x="704" y="188" width="122" height="42" class="read"/>
-  <text x="724" y="214" class="small">read lock</text>
-  <path d="M826 209 H916" class="arrow"/>
-  <rect x="916" y="188" width="128" height="42" class="db"/>
-  <text x="940" y="214" class="small">read rows</text>
+  <g transform="translate(610 180)">
+    <circle cx="26" cy="0" r="18" fill="#374151"/>
+    <text x="21" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">1</text>
+    <rect x="0" y="0" width="152" height="72" class="box"/>
+    <text x="47" y="34" class="label">client</text>
+    <text x="39" y="58" class="small">POST /query</text>
+  </g>
+  <path d="M770 216 H818" class="arrowBlue"/>
+  <g transform="translate(824 180)">
+    <circle cx="26" cy="0" r="18" fill="#374151"/>
+    <text x="21" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">2</text>
+    <rect x="0" y="0" width="152" height="72" class="box"/>
+    <text x="43" y="34" class="label">accept()</text>
+    <text x="38" y="58" class="small">main thread</text>
+  </g>
+  <path d="M984 216 H1032" class="arrowBlue"/>
+  <g transform="translate(1040 180)">
+    <circle cx="26" cy="0" r="18" fill="#374151"/>
+    <text x="21" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">3</text>
+    <rect x="0" y="0" width="152" height="72" class="box"/>
+    <text x="43" y="34" class="label">queue</text>
+    <text x="32" y="58" class="small">bounded push</text>
+  </g>
+  <path d="M1200 216 H1248" class="arrowBlue"/>
+  <g transform="translate(1256 180)">
+    <circle cx="26" cy="0" r="18" fill="#374151"/>
+    <text x="21" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">4</text>
+    <rect x="0" y="0" width="152" height="72" class="box"/>
+    <text x="39" y="34" class="label">worker</text>
+    <text x="38" y="58" class="small">pop socket</text>
+  </g>
+  <path d="M1416 216 H1464" class="arrowBlue"/>
+  <g transform="translate(1470 180)">
+    <circle cx="26" cy="0" r="18" fill="#374151"/>
+    <text x="21" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">5</text>
+    <rect x="0" y="0" width="170" height="72" class="box"/>
+    <text x="48" y="34" class="label">HTTP read</text>
+    <text x="48" y="58" class="small">query 추출</text>
+  </g>
 
-  <rect x="54" y="280" width="112" height="42" class="box"/>
-  <text x="78" y="306" class="small">SELECT</text>
-  <path d="M166 301 H260" class="arrow"/>
-  <rect x="260" y="280" width="110" height="42" class="box"/>
-  <text x="281" y="306" class="small">handle</text>
-  <path d="M370 301 H480" class="arrow"/>
-  <rect x="480" y="280" width="110" height="42" class="box"/>
-  <text x="501" y="306" class="small">classify</text>
-  <path d="M590 301 H704" class="arrow"/>
-  <rect x="704" y="280" width="122" height="42" class="read"/>
-  <text x="717" y="306" class="small">read lock ok</text>
-  <path d="M826 301 H916" class="arrow"/>
-  <rect x="916" y="280" width="128" height="42" class="db"/>
-  <text x="935" y="306" class="small">parallel read</text>
+  <rect x="70" y="317" width="1660" height="277" class="selectPanel"/>
+  <rect x="100" y="347" width="252" height="58" fill="#2f63e6" rx="13"/>
+  <text x="124" y="384" class="whiteLabel">SELECT 요청</text>
+  <text x="373" y="383" class="bodyDark">읽기 요청은 read lock을 잡고, 다른 SELECT와 동시에 실행될 수 있다.</text>
 
-  <rect x="54" y="394" width="112" height="42" class="box"/>
-  <text x="78" y="420" class="small">INSERT</text>
-  <path d="M166 415 H260" class="arrow"/>
-  <rect x="260" y="394" width="110" height="42" class="box"/>
-  <text x="281" y="420" class="small">handle</text>
-  <path d="M370 415 H480" class="arrow"/>
-  <rect x="480" y="394" width="110" height="42" class="box"/>
-  <text x="501" y="420" class="small">classify</text>
-  <path d="M590 415 H704" class="arrow"/>
-  <rect x="704" y="394" width="122" height="42" class="write"/>
-  <text x="721" y="420" class="small">write lock</text>
-  <path d="M826 415 H916" class="arrow"/>
-  <rect x="916" y="394" width="128" height="42" class="db"/>
-  <text x="933" y="420" class="small">mutate index</text>
+  <g transform="translate(170 430)">
+    <circle cx="24" cy="0" r="18" class="badgeBlue"/>
+    <text x="19" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">6</text>
+    <rect x="0" y="0" width="220" height="94" class="stepBlue"/>
+    <text x="49" y="37" class="label">db_server</text>
+    <text x="58" y="62" class="small">execute()</text>
+    <text x="49" y="82" class="small">SELECT로 분류</text>
+  </g>
+  <path d="M390 477 H430" class="arrowBlue"/>
+  <g transform="translate(440 430)">
+    <circle cx="30" cy="0" r="18" class="badgeBlue"/>
+    <text x="25" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">7</text>
+    <rect x="0" y="0" width="172" height="94" class="stepBlue"/>
+    <text x="48" y="39" class="label">read lock</text>
+    <text x="31" y="65" class="small">여러 reader 허용</text>
+  </g>
+  <path d="M612 477 H681" class="arrowBlue"/>
+  <g transform="translate(690 430)">
+    <circle cx="30" cy="0" r="18" class="badgeBlue"/>
+    <text x="25" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">8</text>
+    <rect x="0" y="0" width="172" height="94" class="stepBlue"/>
+    <text x="43" y="39" class="label">sql_execute()</text>
+    <text x="59" y="65" class="small">core 호출</text>
+  </g>
+  <path d="M862 477 H931" class="arrowBlue"/>
+  <g transform="translate(940 430)">
+    <circle cx="30" cy="0" r="18" class="badgeBlue"/>
+    <text x="25" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">9</text>
+    <rect x="0" y="0" width="190" height="94" class="stepBlue"/>
+    <text x="36" y="39" class="label">Table/B+Tree</text>
+    <text x="73" y="65" class="small">조회</text>
+  </g>
+  <path d="M1130 477 H1201" class="arrowBlue"/>
+  <g transform="translate(1210 430)">
+    <circle cx="30" cy="0" r="18" class="badgeBlue"/>
+    <text x="19" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">10</text>
+    <rect x="0" y="0" width="150" height="94" class="stepBlue"/>
+    <text x="44" y="39" class="label">unlock</text>
+    <text x="34" y="65" class="small">read 해제</text>
+  </g>
+  <path d="M1360 477 H1431" class="arrowBlue"/>
+  <g transform="translate(1440 430)">
+    <circle cx="30" cy="0" r="18" class="badgeBlue"/>
+    <text x="19" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">11</text>
+    <rect x="0" y="0" width="172" height="94" class="stepBlue"/>
+    <text x="61" y="35" class="label">JSON</text>
+    <text x="58" y="58" class="small">response</text>
+    <text x="53" y="79" class="small">HTTP 응답</text>
+  </g>
+  <rect x="405" y="546" width="392" height="36" fill="#eef5ff" stroke="#2f63e6" stroke-width="2" stroke-dasharray="8 7" rx="8"/>
+  <text x="428" y="570" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="18" font-weight="900" fill="#2f63e6">SELECT + SELECT는 동시 실행 가능</text>
 
-  <path d="M980 230 C1018 254 1018 369 980 394" stroke="#d09a5f" stroke-width="3" fill="none"/>
-  <text x="843" y="362" class="small">INSERT waits until readers release lock</text>
+  <rect x="70" y="640" width="1660" height="308" class="insertPanel"/>
+  <rect x="100" y="671" width="252" height="58" fill="#7a35ee" rx="13"/>
+  <text x="124" y="708" class="whiteLabel">INSERT 요청</text>
+  <text x="373" y="707" class="bodyDark">쓰기 요청은 write lock을 잡고, Table row와 B+Tree index 갱신을 독점 실행한다.</text>
 
-  <rect x="76" y="506" width="968" height="46" fill="#ffffff" stroke="#d3e0e5" stroke-width="2" rx="18"/>
-  <text x="112" y="535" class="subtitle">Timeout rule: try lock repeatedly, sleep 1ms on failure, return 503 lock_timeout when the configured limit is exceeded.</text>
+  <g transform="translate(110 760)">
+    <circle cx="31" cy="0" r="18" class="badgePurple"/>
+    <text x="26" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">6</text>
+    <rect x="0" y="0" width="220" height="94" class="stepPurple"/>
+    <text x="49" y="37" class="label">db_server</text>
+    <text x="58" y="62" class="small">execute()</text>
+    <text x="49" y="82" class="small">INSERT로 분류</text>
+  </g>
+  <path d="M330 807 H360" class="arrowPurple"/>
+  <g transform="translate(370 760)">
+    <circle cx="30" cy="0" r="18" class="badgePurple"/>
+    <text x="25" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">7</text>
+    <rect x="0" y="0" width="172" height="94" class="stepPurple"/>
+    <text x="43" y="39" class="label">write lock</text>
+    <text x="58" y="65" class="small">writer 독점</text>
+  </g>
+  <path d="M542 807 H601" class="arrowPurple"/>
+  <g transform="translate(610 760)">
+    <circle cx="30" cy="0" r="18" class="badgePurple"/>
+    <text x="25" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">8</text>
+    <rect x="0" y="0" width="172" height="94" class="stepPurple"/>
+    <text x="43" y="39" class="label">sql_execute()</text>
+    <text x="59" y="65" class="small">core 호출</text>
+  </g>
+  <path d="M782 807 H841" class="arrowPurple"/>
+  <g transform="translate(850 760)">
+    <circle cx="30" cy="0" r="18" class="badgePurple"/>
+    <text x="25" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">9</text>
+    <rect x="0" y="0" width="172" height="94" class="stepPurple"/>
+    <text x="36" y="39" class="label">Table row</text>
+    <text x="74" y="65" class="small">추가</text>
+  </g>
+  <path d="M1022 807 H1081" class="arrowPurple"/>
+  <g transform="translate(1090 760)">
+    <circle cx="30" cy="0" r="18" class="badgePurple"/>
+    <text x="19" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">10</text>
+    <rect x="0" y="0" width="190" height="94" class="stepPurple"/>
+    <text x="59" y="39" class="label">B+Tree</text>
+    <text x="73" y="62" class="small">index</text>
+    <text x="73" y="82" class="small">갱신</text>
+  </g>
+  <path d="M1280 807 H1341" class="arrowPurple"/>
+  <g transform="translate(1350 760)">
+    <circle cx="30" cy="0" r="18" class="badgePurple"/>
+    <text x="19" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">11</text>
+    <rect x="0" y="0" width="150" height="94" class="stepPurple"/>
+    <text x="44" y="39" class="label">unlock</text>
+    <text x="34" y="65" class="small">write 해제</text>
+  </g>
+  <path d="M1500 807 H1561" class="arrowPurple"/>
+  <g transform="translate(1570 760)">
+    <circle cx="30" cy="0" r="18" class="badgePurple"/>
+    <text x="19" y="7" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="20" font-weight="900" fill="#ffffff">12</text>
+    <rect x="0" y="0" width="172" height="94" class="stepPurple"/>
+    <text x="61" y="35" class="label">JSON</text>
+    <text x="58" y="58" class="small">response</text>
+    <text x="53" y="79" class="small">HTTP 응답</text>
+  </g>
+  <rect x="352" y="876" width="402" height="36" fill="#f7f1ff" stroke="#7a35ee" stroke-width="2" stroke-dasharray="8 7" rx="8"/>
+  <text x="383" y="900" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="18" font-weight="900" fill="#7a35ee">INSERT 중에는 SELECT/INSERT 대기</text>
+
+  <rect x="70" y="973" width="1660" height="44" fill="#111827" rx="12"/>
+  <text x="104" y="1003" font-family="'Noto Sans KR', 'Malgun Gothic', sans-serif" font-size="24" font-weight="900" fill="#ffffff">핵심: thread pool은 요청을 병렬로 받게 하고, read/write lock은 공유 Table과 B+Tree를 안전하게 보호한다.</text>
 </svg>
