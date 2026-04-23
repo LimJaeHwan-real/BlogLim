@@ -1342,6 +1342,9 @@ html[data-theme="dark"] {
 }
 
 .prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
   margin: 3rem auto;
   border-radius: 1rem;
 }
@@ -1410,6 +1413,10 @@ html[data-theme="dark"] {
 
 .prose figure {
   margin: 3rem 0;
+}
+
+.prose figure img {
+  margin: 0 auto;
 }
 
 .prose figcaption {
