@@ -5,6 +5,24 @@
       
       
       {
+        "title": "[WIL] 8주",
+        "url": "/BlogLim/wil-8%EC%A3%BC/",
+        "description": "8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다.",
+        "thumbnail": "/BlogLim/assets/images/blog-icon.svg",
+        "categories": ["Jungle","WIL(Weekly I Learned)"],
+        "category_path": "Jungle / WIL(Weekly I Learned)",
+        "tags": "",
+        "series_key": "",
+        "series_title": null,
+        "date_label": "2026년 4월 23일",
+        "reading_time_label": "5분 읽기",
+        "search": "[wil] 8주 8주차는 cs:app 11장을 중심으로 네트워크 프로그래밍, http, tiny web server, tcp 연결 과정, 동시성 서버 구조를 학습하고, b+tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다. jungle / wil(weekly i learned)"
+      },
+    
+      
+      
+      
+      {
         "title": "[WIL] 7주",
         "url": "/BlogLim/wil-7%EC%A3%BC/",
         "description": "[주간 회고] 7주차: 가상 메모리의 심장, Malloc Lab 구현과 OS의 이해 이번 7주차는 Malloc Lab 프로젝트를 통해 C언어로 직접 동적 메모리 할당기를 구현하며 시스템 프로그래밍의 깊은 곳을 탐험한 시간이었습니다. 단순히 코드를 짜는",
