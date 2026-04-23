@@ -24,12 +24,13 @@ home:
 hero:
   show_stats: true
   github_contributions:
-    enabled: false
-    username: ""
+    enabled: true
+    title: GitHub Contributions
+    username: LimJaeHwan-real
 
 profile:
   github_sync:
-    enabled: false
+    enabled: true
 
 footer:
   tagline: Open-source Jekyll theme for developer blogs.

@@ -17,7 +17,7 @@ comments:
   disqus:
     shortname: ""
   giscus:
-    repo: "owner/repository"
+    repo: "LimJaeHwan-real/BlogLim"
     repo_id: "REPOSITORY_NODE_ID"
     category: "Announcements"
     category_id: "CATEGORY_NODE_ID"
