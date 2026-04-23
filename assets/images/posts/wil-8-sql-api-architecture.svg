@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620" role="img" aria-labelledby="title desc">
+  <title id="title">Thread pool SQL API server architecture</title>
+  <desc id="desc">HTTP clients enter an accept loop, move through a bounded queue and worker thread pool, then execute SQL through a DB server boundary protected by read write locks.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f7fbff"/>
+      <stop offset="100%" stop-color="#edf4ec"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" x2="1">
+      <stop offset="0%" stop-color="#1e5b8f"/>
+      <stop offset="100%" stop-color="#2f8bc0"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" x2="1">
+      <stop offset="0%" stop-color="#2f6f4e"/>
+      <stop offset="100%" stop-color="#5a9b65"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#315268"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#17354a" flood-opacity="0.16"/>
+    </filter>
+    <style>
+      .title { font: 700 30px Georgia, serif; fill: #17354a; }
+      .subtitle { font: 500 15px Georgia, serif; fill: #526b78; }
+      .label { font: 700 18px Georgia, serif; fill: #17354a; }
+      .small { font: 500 13px Georgia, serif; fill: #46616f; }
+      .white { fill: #ffffff; }
+      .card { fill: #ffffff; stroke: #c7d8df; stroke-width: 2; rx: 22; filter: url(#shadow); }
+      .soft { fill: #f8fbfd; stroke: #d7e5e9; stroke-width: 2; rx: 16; }
+      .pill { fill: #e7f1f5; stroke: #c3d7df; stroke-width: 1.5; rx: 18; }
+      .arrow { stroke: #315268; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1120" height="620" fill="url(#bg)"/>
+  <text x="56" y="62" class="title">Mini DBMS SQL API Server</text>
+  <text x="58" y="90" class="subtitle">HTTP requests are parallelized at the server boundary while one shared Table is protected by locks.</text>
+
+  <rect x="54" y="142" width="170" height="310" class="card"/>
+  <text x="88" y="188" class="label">Clients</text>
+  <rect x="84" y="220" width="110" height="42" class="pill"/>
+  <text x="104" y="247" class="small">POST /query</text>
+  <rect x="84" y="286" width="110" height="42" class="pill"/>
+  <text x="106" y="313" class="small">SELECT</text>
+  <rect x="84" y="352" width="110" height="42" class="pill"/>
+  <text x="108" y="379" class="small">INSERT</text>
+
+  <rect x="292" y="134" width="210" height="92" class="card"/>
+  <text x="330" y="173" class="label">Accept Loop</text>
+  <text x="326" y="201" class="small">main thread accepts sockets</text>
+
+  <rect x="292" y="292" width="210" height="118" class="card"/>
+  <text x="335" y="329" class="label">Bounded Queue</text>
+  <text x="329" y="358" class="small">capacity: --queue 16</text>
+  <text x="321" y="382" class="small">full: 503 queue_full</text>
+
+  <rect x="574" y="112" width="210" height="368" class="card"/>
+  <text x="615" y="154" class="label">Worker Pool</text>
+  <text x="628" y="181" class="small">--workers 4</text>
+  <rect x="610" y="216" width="138" height="42" class="soft"/>
+  <text x="639" y="243" class="small">worker 1</text>
+  <rect x="610" y="276" width="138" height="42" class="soft"/>
+  <text x="639" y="303" class="small">worker 2</text>
+  <rect x="610" y="336" width="138" height="42" class="soft"/>
+  <text x="639" y="363" class="small">worker 3</text>
+  <rect x="610" y="396" width="138" height="42" class="soft"/>
+  <text x="639" y="423" class="small">worker 4</text>
+
+  <rect x="856" y="102" width="214" height="388" class="card"/>
+  <text x="895" y="144" class="label">DBServer</text>
+  <rect x="886" y="176" width="154" height="58" fill="url(#blue)" rx="16"/>
+  <text x="918" y="200" class="white" style="font: 700 14px Georgia, serif;">RW Lock</text>
+  <text x="904" y="220" class="white" style="font: 500 12px Georgia, serif;">read: SELECT / write: INSERT</text>
+  <rect x="886" y="260" width="154" height="58" fill="url(#green)" rx="16"/>
+  <text x="905" y="284" class="white" style="font: 700 14px Georgia, serif;">Shared Table *</text>
+  <text x="912" y="304" class="white" style="font: 500 12px Georgia, serif;">rows + B+Tree index</text>
+  <rect x="886" y="344" width="154" height="58" class="soft"/>
+  <text x="906" y="368" class="small">Metrics Mutex</text>
+  <text x="912" y="388" class="small">requests, errors, timeouts</text>
+  <rect x="886" y="428" width="154" height="36" class="pill"/>
+  <text x="912" y="451" class="small">JSON Response</text>
+
+  <path d="M224 296 H292" class="arrow"/>
+  <path d="M397 226 V292" class="arrow"/>
+  <path d="M502 351 H574" class="arrow"/>
+  <path d="M784 296 H856" class="arrow"/>
+  <path d="M963 490 C963 548 158 548 158 452" class="arrow"/>
+
+  <text x="66" y="546" class="subtitle">Backpressure: queue full returns 503. Lock timeout returns 503 before SQL execution.</text>
+</svg>

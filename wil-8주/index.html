@@ -34,11 +34,11 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default" data-apple-status-bar>
 <title>[WIL] 8주 | 임재환</title>
 <meta name="generator" content="Jekyll v4.3.3">
-<meta name="description" content="8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다.">
+<meta name="description" content="8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 thread pool 기반 Mini DBMS SQL API Server를 설명 가능한 형태로 정리한 한 주였다.">
 <link rel="canonical" href="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/">
 <meta property="og:title" content="[WIL] 8주 | 임재환">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:description" content="8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다.">
+<meta property="og:description" content="8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 thread pool 기반 Mini DBMS SQL API Server를 설명 가능한 형태로 정리한 한 주였다.">
 <meta property="og:url" content="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/">
 <meta property="og:site_name" content="임재환">
 <meta property="og:type" content="article">
@@ -49,20 +49,20 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="[WIL] 8주 | 임재환">
-<meta name="twitter:description" content="8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다.">
+<meta name="twitter:description" content="8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 thread pool 기반 Mini DBMS SQL API Server를 설명 가능한 형태로 정리한 한 주였다.">
 
   <meta property="article:published_time" content="2026-04-23T09:00:00+09:00">
 
 
   <meta property="article:modified_time" content="2026-04-23T10:00:00+09:00">
 
-<link rel="icon" href="/BlogLim/assets/images/favicon.png?v=1776929263" type="image/png" sizes="256x256">
-<link rel="shortcut icon" href="/BlogLim/assets/images/favicon.png?v=1776929263" type="image/png">
-<link rel="apple-touch-icon" href="/BlogLim/assets/images/favicon.png?v=1776929263">
-<link rel="mask-icon" href="/BlogLim/assets/images/profile.svg?v=1776929263" color="#495057">
+<link rel="icon" href="/BlogLim/assets/images/favicon.png?v=1776940212" type="image/png" sizes="256x256">
+<link rel="shortcut icon" href="/BlogLim/assets/images/favicon.png?v=1776940212" type="image/png">
+<link rel="apple-touch-icon" href="/BlogLim/assets/images/favicon.png?v=1776940212">
+<link rel="mask-icon" href="/BlogLim/assets/images/profile.svg?v=1776940212" color="#495057">
 <link rel="alternate" type="application/atom+xml" href="/BlogLim/feed.xml" title="임재환">
 
-<link rel="stylesheet" href="/BlogLim/assets/css/main.css?v=1776929263">
+<link rel="stylesheet" href="/BlogLim/assets/css/main.css?v=1776940212">
 <script>
   (function () {
     function applyTheme(theme) {
@@ -104,7 +104,7 @@
     "@type": "BlogPosting",
     "name": "임재환",
     "headline": "[WIL] 8주 | 임재환",
-    "description": "8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다.",
+    "description": "8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 thread pool 기반 Mini DBMS SQL API Server를 설명 가능한 형태로 정리한 한 주였다.",
     "url": "https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/",
     "datePublished": "2026-04-23T09:00:00+09:00",
     "dateModified": "2026-04-23T10:00:00+09:00"
@@ -224,7 +224,7 @@
     
     <h1 class="post-head__title">[WIL] 8주</h1>
     
-      <p class="post-head__description">8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다.</p>
+      <p class="post-head__description">8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 thread pool 기반 Mini DBMS SQL API Server를 설명 가능한 형태로 정리한 한 주였다.</p>
     
 
     <div class="post-head__author">
@@ -240,7 +240,7 @@
       <div class="post-head__meta-block">
         <strong>임재환</strong>
         <span>
-          2026년 4월 23일 · 5분 읽기 · 수정 2026년 4월 23일
+          2026년 4월 23일 · 8분 읽기 · 수정 2026년 4월 23일
         </span>
       </div>
     </div>
@@ -327,13 +327,201 @@
 
 <p>이번 주 피드백을 통해 느낀 점은 구현 자체보다 구현을 설명하는 방식도 중요하다는 것이다. 어려운 용어를 쓸 수밖에 없다면 그림이나 다이어그램으로 보완해야 하고, 어떤 공유 자원에 락을 걸었는지, 어떤 데이터 포맷으로 스레드와 메인 흐름이 소통하는지까지 명확히 보여줘야 한다.</p>
 
+<h2 id="6-mini-dbms-sql-api-server-thread-pool-queue-lock">6. Mini DBMS SQL API Server: Thread Pool, Queue, Lock</h2>
+
+<p>이번 주에 정리한 또 하나의 구현은 C 기반 in-memory SQL 엔진과 B+Tree를 HTTP API 서버로 감싼 Mini DBMS SQL API Server였다. 핵심은 SQL 엔진 자체를 멀티스레드용으로 크게 뜯어고친 것이 아니라, 서버 경계인 <code class="language-plaintext highlighter-rouge">src/server/</code>에서 요청 분산, 큐잉, 락, timeout, metrics를 관리하도록 만든 점이다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-8-sql-api-architecture.svg" alt="Thread pool 기반 SQL API 서버 아키텍처와 요청 흐름" />
+  <figcaption>Thread pool 기반 SQL API 서버 아키텍처와 요청 흐름</figcaption>
+</figure>
+
+<p>구조를 나누면 다음과 같다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>영역</th>
+      <th>역할</th>
+      <th>대표 파일</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Core DB Engine</td>
+      <td>SQL 파싱/실행, <code class="language-plaintext highlighter-rouge">users</code> 테이블, B+Tree index 처리</td>
+      <td><code class="language-plaintext highlighter-rouge">src/core/sql.c</code>, <code class="language-plaintext highlighter-rouge">src/core/table.c</code>, <code class="language-plaintext highlighter-rouge">src/core/bptree.c</code></td>
+    </tr>
+    <tr>
+      <td>HTTP Server</td>
+      <td>socket accept, bounded queue, worker thread pool, HTTP 응답</td>
+      <td><code class="language-plaintext highlighter-rouge">src/server/http_server.c</code></td>
+    </tr>
+    <tr>
+      <td>DB Server Boundary</td>
+      <td>공유 <code class="language-plaintext highlighter-rouge">Table *</code> 보관, SQL별 lock 선택, metrics 기록</td>
+      <td><code class="language-plaintext highlighter-rouge">src/server/db_server.c</code>, <code class="language-plaintext highlighter-rouge">src/server/db_server.h</code></td>
+    </tr>
+    <tr>
+      <td>Platform Wrapper</td>
+      <td>pthread mutex, cond, rwlock, thread API 감싸기</td>
+      <td><code class="language-plaintext highlighter-rouge">src/server/platform.c</code>, <code class="language-plaintext highlighter-rouge">src/server/platform.h</code></td>
+    </tr>
+    <tr>
+      <td>API Layer</td>
+      <td>HTTP request 파싱, JSON response 생성</td>
+      <td><code class="language-plaintext highlighter-rouge">src/server/api.c</code>, <code class="language-plaintext highlighter-rouge">src/server/api.h</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>서버는 요청이 올 때마다 thread를 새로 만들지 않는다. 시작할 때 정해진 수의 worker thread를 만들고, main accept thread는 client socket을 queue에 넣기만 한다. 기본 옵션은 <code class="language-plaintext highlighter-rouge">--workers 4</code>, <code class="language-plaintext highlighter-rouge">--queue 16</code>, <code class="language-plaintext highlighter-rouge">--lock-timeout-ms 1000</code>으로 잡았다. 그래서 동시에 처리 가능한 요청 수와 대기 가능한 요청 수를 서버 설정으로 제어할 수 있다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">HTTPRequestQueue</code>는 bounded 원형 큐로 동작한다. main thread는 <code class="language-plaintext highlighter-rouge">http_request_queue_push()</code>로 새 socket을 넣고, worker thread는 <code class="language-plaintext highlighter-rouge">http_request_queue_pop()</code>으로 socket을 꺼낸다. queue가 비어 있으면 worker는 condition variable에서 대기하고, 새 요청이 들어오면 깨어난다. 반대로 queue가 가득 차면 요청을 무한히 쌓지 않고 즉시 <code class="language-plaintext highlighter-rouge">503 queue_full</code>을 반환한다. 이것이 이 서버에서의 backpressure이다.</p>
+
+<p>공유 자원은 크게 두 가지로 나눴다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>공유 자원</th>
+      <th>보호 방식</th>
+      <th>이유</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">server-&gt;table</code></td>
+      <td><code class="language-plaintext highlighter-rouge">PlatformRWLock db_lock</code></td>
+      <td>SQL 실행 중 Table/B+Tree 구조가 깨지지 않도록 보호</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">server-&gt;metrics</code></td>
+      <td><code class="language-plaintext highlighter-rouge">PlatformMutex metrics_mutex</code></td>
+      <td>여러 thread가 counter를 동시에 증가시키는 race condition 방지</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">src/core/</code>의 SQL 엔진, Table, B+Tree는 자체적으로 lock을 알지 못한다. 따라서 여러 worker가 같은 <code class="language-plaintext highlighter-rouge">Table *</code>에 직접 접근하면 <code class="language-plaintext highlighter-rouge">INSERT</code>와 <code class="language-plaintext highlighter-rouge">SELECT</code>가 충돌하거나, B+Tree split 중 잘못된 포인터를 읽는 문제가 생길 수 있다. 이 프로젝트에서는 그 위험을 <code class="language-plaintext highlighter-rouge">db_server_execute()</code>에서 한 번에 통제한다.</p>
+
+<p>SQL 문자열은 먼저 읽기와 쓰기로 분류한다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>SQL 종류</th>
+      <th>내부 분류</th>
+      <th>Lock</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SELECT ...</code></td>
+      <td><code class="language-plaintext highlighter-rouge">DB_SERVER_QUERY_KIND_READ</code></td>
+      <td>read lock</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">INSERT ...</code></td>
+      <td><code class="language-plaintext highlighter-rouge">DB_SERVER_QUERY_KIND_WRITE</code></td>
+      <td>write lock</td>
+    </tr>
+    <tr>
+      <td>그 외</td>
+      <td><code class="language-plaintext highlighter-rouge">DB_SERVER_QUERY_KIND_NONE</code></td>
+      <td>DB lock 없이 core가 오류 판정</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>정책은 단순하다. <code class="language-plaintext highlighter-rouge">SELECT</code>끼리는 read lock을 공유하므로 동시에 실행할 수 있고, <code class="language-plaintext highlighter-rouge">INSERT</code>는 Table row 배열, <code class="language-plaintext highlighter-rouge">next_id</code>, B+Tree index를 바꾸기 때문에 write lock으로 독점 실행한다. mutex 하나만 써도 안전성은 얻을 수 있지만, 그렇게 하면 읽기 요청끼리도 모두 순차 실행된다. read/write lock을 쓴 이유는 읽기 중심 workload에서 SELECT 병렬성을 살리기 위해서였다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-8-request-processing-sequence.svg" alt="SELECT와 INSERT 요청 처리 시퀀스" />
+  <figcaption>SELECT와 INSERT 요청은 같은 API 경로로 들어오지만 lock 단계에서 다르게 처리된다</figcaption>
+</figure>
+
+<p>lock을 기다릴 때도 무한 대기하지 않는다. 현재 구현은 blocking lock을 한 번 호출하는 대신 <code class="language-plaintext highlighter-rouge">try lock → 실패하면 1ms sleep → 다시 try lock</code>을 반복한다. <code class="language-plaintext highlighter-rouge">--lock-timeout-ms</code>를 넘으면 SQL을 실행하지 않고 <code class="language-plaintext highlighter-rouge">503 lock_timeout</code>을 반환하며, metrics에는 <code class="language-plaintext highlighter-rouge">total_lock_timeouts</code>를 증가시킨다. 이 덕분에 worker thread가 DB lock 앞에서 무한히 묶이는 상황을 줄이고, 클라이언트도 서버가 멈춘 것처럼 기다리는 대신 명확한 실패 응답을 받는다.</p>
+
+<p>metrics counter도 별도 mutex로 보호한다. <code class="language-plaintext highlighter-rouge">counter++</code>는 C에서 atomic 연산이 아니기 때문에 여러 worker가 동시에 증가시키면 값이 유실될 수 있다. 그래서 DB 자체를 보호하는 <code class="language-plaintext highlighter-rouge">db_lock</code>과 관측 지표를 보호하는 <code class="language-plaintext highlighter-rouge">metrics_mutex</code>를 분리했다. 이 분리 덕분에 metrics 갱신 때문에 DB read/write lock을 오래 잡지 않아도 된다.</p>
+
+<p>이 설계를 발표에서 설명한다면 다음 한 문장이 핵심이다.</p>
+
+<blockquote>
+  <p>이 프로젝트는 기존 SQL 엔진을 thread-safe하게 직접 수정하지 않고, 서버 경계에서 thread pool, bounded queue, read/write lock을 적용해 외부 HTTP 요청을 안전하게 병렬 처리하도록 만든 구조입니다.</p>
+</blockquote>
+
+<p>정리하면 이 프로젝트의 동시성 설계는 세 단계로 나눌 수 있다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>단계</th>
+      <th>해결하는 문제</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Thread pool</td>
+      <td>요청마다 thread를 만들지 않고 제한된 worker로 병렬 처리</td>
+    </tr>
+    <tr>
+      <td>Bounded queue</td>
+      <td>서버가 감당 못 할 요청을 무한히 쌓지 않고 <code class="language-plaintext highlighter-rouge">503 queue_full</code>로 제어</td>
+    </tr>
+    <tr>
+      <td>Read/write lock</td>
+      <td>공유 DB는 안전하게 보호하면서 SELECT끼리는 병렬 실행</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>주의할 점도 있다. README 일부 설명에는 <code class="language-plaintext highlighter-rouge">phase gate</code>라는 표현이 있지만, 현재 코드 기준으로는 별도의 writer 우선 phase gate 구조체가 구현되어 있지는 않다. 실제 구현은 <code class="language-plaintext highlighter-rouge">pthread_rwlock_tryrdlock()</code>, <code class="language-plaintext highlighter-rouge">pthread_rwlock_trywrlock()</code>을 wrapper로 감싼 뒤 timeout loop를 도는 방식이다. 따라서 “별도 phase gate로 writer starvation을 직접 방지한다”는 표현보다는 “read/write lock과 try-lock timeout으로 공유 Table 접근을 제어한다”는 표현이 더 정확하다.</p>
+
+<p>면접이나 발표에서 예상되는 질문도 몇 가지로 정리할 수 있다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>질문</th>
+      <th>답변 요지</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>왜 thread pool을 사용했나요?</td>
+      <td>요청마다 thread를 만들면 생성 비용이 크고 요청 폭주 시 thread 수가 제한 없이 늘어날 수 있다. worker 수를 고정하면 동시 처리량과 자원 사용량을 제어할 수 있다.</td>
+    </tr>
+    <tr>
+      <td>queue가 왜 필요한가요?</td>
+      <td>accept한 socket을 worker에게 전달하는 중간 버퍼가 필요하다. bounded queue를 쓰면 처리 한계를 넘는 요청에 <code class="language-plaintext highlighter-rouge">503 queue_full</code>로 backpressure를 줄 수 있다.</td>
+    </tr>
+    <tr>
+      <td>mutex 하나로 처리하면 안 되나요?</td>
+      <td>가능하지만 모든 SQL이 순차 실행된다. SELECT끼리는 데이터를 변경하지 않으므로 read/write lock으로 SELECT 병렬성과 INSERT 안전성을 함께 얻었다.</td>
+    </tr>
+    <tr>
+      <td>INSERT는 왜 write lock인가요?</td>
+      <td>INSERT는 <code class="language-plaintext highlighter-rouge">Table.rows</code>, <code class="language-plaintext highlighter-rouge">next_id</code>, B+Tree index를 변경한다. 동시에 실행되면 id 증가나 index 갱신이 충돌할 수 있어 독점 실행해야 한다.</td>
+    </tr>
+    <tr>
+      <td>lock timeout은 왜 필요한가요?</td>
+      <td>lock을 무한 대기하면 worker가 계속 묶여 서버가 멈춘 것처럼 보일 수 있다. timeout을 두면 일정 시간 이후 <code class="language-plaintext highlighter-rouge">503 lock_timeout</code>으로 실패하고 metrics로 관찰할 수 있다.</td>
+    </tr>
+    <tr>
+      <td>core SQL 엔진은 thread-safe한가요?</td>
+      <td>core 자체가 thread-safe하게 설계된 것은 아니다. 대신 <code class="language-plaintext highlighter-rouge">DBServer</code> 경계에서 같은 <code class="language-plaintext highlighter-rouge">Table *</code>에 접근하기 전에 lock을 잡도록 만들어 thread-safe하게 사용한다.</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2 id="이번-주에-배운-점">이번 주에 배운 점</h2>
 
 <p>이번 주의 핵심은 웹 서버를 “마법처럼 동작하는 프로그램”이 아니라, 파일 디스크립터와 문자열 프로토콜, 프로세스, 스레드, 큐, 락이 조합된 시스템으로 보는 관점을 얻은 것이다.</p>
 
 <p>CS:APP 11장을 따라가면서 네트워크 요청이 코드에서 어떤 함수 호출로 표현되는지 이해했고, Tiny Server를 통해 HTTP 요청이 실제 서버 함수들 사이를 어떻게 흐르는지 정리했다. TCP handshake와 DNS까지 연결하니 브라우저에서 주소를 입력하는 행동도 더 이상 추상적인 일이 아니었다.</p>
 
-<p>동시에, 구현을 잘하는 것과 설명을 잘하는 것은 다르다는 점도 느꼈다. B+Tree 인덱스나 스레드풀처럼 구조가 있는 구현은 성능 수치만 보여주는 것보다, 어떤 문제를 해결하려고 도입했고 어떤 흐름으로 동작하는지 보여주는 것이 더 중요했다.</p>
+<p>동시에, 구현을 잘하는 것과 설명을 잘하는 것은 다르다는 점도 느꼈다. B+Tree 인덱스나 thread pool 기반 SQL API 서버처럼 구조가 있는 구현은 성능 수치만 보여주는 것보다, 어떤 문제를 해결하려고 도입했고 어떤 흐름으로 동작하는지 보여주는 것이 더 중요했다.</p>
 
 <h2 id="아쉬웠던-점과-다음-액션">아쉬웠던 점과 다음 액션</h2>
 
@@ -380,6 +568,6 @@
 </footer>
 
     
-    <script src="/BlogLim/assets/js/site.js?v=1776929263"></script>
+    <script src="/BlogLim/assets/js/site.js?v=1776940212"></script>
   </body>
 </html>

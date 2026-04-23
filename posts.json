@@ -7,7 +7,7 @@
       {
         "title": "[WIL] 8주",
         "url": "/BlogLim/wil-8%EC%A3%BC/",
-        "description": "8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다.",
+        "description": "8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 thread pool 기반 Mini DBMS SQL API Server를 설명 가능한 형태로 정리한 한 주였다.",
         "thumbnail": "/BlogLim/assets/images/posts/journey-starts-here-cover.png",
         "categories": ["Jungle","WIL(Weekly I Learned)"],
         "category_path": "Jungle / WIL(Weekly I Learned)",
@@ -15,8 +15,8 @@
         "series_key": "",
         "series_title": null,
         "date_label": "2026년 4월 23일",
-        "reading_time_label": "5분 읽기",
-        "search": "[wil] 8주 8주차는 cs:app 11장을 중심으로 네트워크 프로그래밍, http, tiny web server, tcp 연결 과정, 동시성 서버 구조를 학습하고, b+tree 인덱스와 수요코딩 피드백을 통해 구현을 설명 가능한 형태로 정리한 한 주였다. jungle / wil(weekly i learned)"
+        "reading_time_label": "8분 읽기",
+        "search": "[wil] 8주 8주차는 cs:app 11장을 중심으로 네트워크 프로그래밍, http, tiny web server, tcp 연결 과정, 동시성 서버 구조를 학습하고, b+tree 인덱스와 thread pool 기반 mini dbms sql api server를 설명 가능한 형태로 정리한 한 주였다. jungle / wil(weekly i learned)"
       },
     
       
