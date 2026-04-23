@@ -1,8 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://limjaehwan-real.github.io/BlogLim/feed.xml" rel="self" type="application/atom+xml" /><link href="https://limjaehwan-real.github.io/BlogLim/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2026-04-23T15:14:05+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/feed.xml</id><title type="html">ForRest</title><subtitle>Auto Programmer</subtitle><entry><title type="html">[WIL] 8주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 8주" /><published>2026-04-23T09:00:00+09:00</published><updated>2026-04-23T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/"><![CDATA[<h2 id="8주차-주간-회고-네트워크와-웹-서버의-흐름을-코드로-따라간-한-주">8주차 주간 회고: 네트워크와 웹 서버의 흐름을 코드로 따라간 한 주</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://limjaehwan-real.github.io/BlogLim/feed.xml" rel="self" type="application/atom+xml" /><link href="https://limjaehwan-real.github.io/BlogLim/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2026-04-23T15:24:29+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/feed.xml</id><title type="html">ForRest</title><subtitle>Auto Programmer</subtitle><entry><title type="html">[WIL] 8주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 8주" /><published>2026-04-23T09:00:00+09:00</published><updated>2026-04-23T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/"><![CDATA[<h2 id="8주차-주간-회고-네트워크와-웹-서버의-흐름을-코드로-따라간-한-주">8주차 주간 회고: 네트워크와 웹 서버의 흐름을 코드로 따라간 한 주</h2>
 
 <p>8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍과 웹 서버 구현을 집중적으로 학습한 주였다. 8주차 발제에서 잡은 방향도 명확했다. 단순히 네트워크 이론을 넓게 훑는 것이 아니라, 서버를 단계적으로 구현하면서 웹 서버가 실제로 어떻게 요청을 받고 응답하는지 이해하는 것이 핵심이었다.</p>
 
 <p>이번 주의 큰 흐름은 <code class="language-plaintext highlighter-rouge">클라이언트-서버 모델 → 소켓 인터페이스 → HTTP → Tiny Web Server → TCP 연결 과정 → 동시성 서버</code>로 이어졌다. 여기에 수요코딩에서 다룬 B+Tree 인덱스와 피드백까지 더해지면서, 단순 구현보다 “내가 만든 구조를 어떻게 설명하고 개선할 것인가”를 많이 고민하게 됐다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-8-web-request-flow.svg" alt="브라우저 URL 입력부터 DNS, TCP 연결, HTTP 요청, 서버 응답까지 이어지는 웹 요청 실제 흐름" />
+  <figcaption>브라우저에서 URL을 입력한 뒤 화면이 보이기까지의 전체 흐름</figcaption>
+</figure>
 
 <h2 id="1-csapp-11장과-네트워크-프로그래밍">1. CS:APP 11장과 네트워크 프로그래밍</h2>
 
@@ -27,11 +32,21 @@
   <li><code class="language-plaintext highlighter-rouge">serve_dynamic()</code>은 CGI 프로그램을 실행해 동적 응답을 만든다.</li>
 </ul>
 
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-8-tiny-server-flow.svg" alt="Tiny Web Server에서 main, accept, doit, read_requesthdrs, parse_uri, serve_static, serve_dynamic으로 이어지는 요청 처리 흐름" />
+  <figcaption>Tiny Web Server에서 요청 한 건이 처리되는 함수 흐름</figcaption>
+</figure>
+
 <p>Tiny가 작은 예제임에도 웹 서버의 핵심 구조를 거의 다 담고 있다는 점이 인상적이었다. 정적 컨텐츠는 서버가 직접 파일을 읽어 보내고, 동적 컨텐츠는 <code class="language-plaintext highlighter-rouge">fork</code>, <code class="language-plaintext highlighter-rouge">execve</code>, <code class="language-plaintext highlighter-rouge">dup2</code>, 환경변수를 이용해 CGI 프로그램의 실행 결과를 클라이언트에게 전달한다. 이 흐름을 이해하니 FastCGI, Flask, Tomcat 같은 구조가 왜 등장했는지도 조금 더 자연스럽게 연결됐다.</p>
 
 <h2 id="3-tcp-연결-과정과-웹-요청의-실제-흐름">3. TCP 연결 과정과 웹 요청의 실제 흐름</h2>
 
 <p>TCP 3-way handshake는 “연결이 됐다”는 말을 더 구체적으로 이해하게 해준 주제였다. 클라이언트가 <code class="language-plaintext highlighter-rouge">SYN</code>을 보내고, 서버가 <code class="language-plaintext highlighter-rouge">SYN + ACK</code>로 응답하고, 클라이언트가 다시 <code class="language-plaintext highlighter-rouge">ACK</code>를 보내야 비로소 양방향 통신이 가능한 상태가 된다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-8-tcp-flow.svg" alt="TCP 3-way handshake, 데이터 전송, FIN ACK 기반 연결 종료 흐름" />
+  <figcaption>TCP 연결은 handshake, data transfer, teardown 단계로 이어진다</figcaption>
+</figure>
 
 <p>이 과정의 목적은 단순히 인사를 나누는 것이 아니었다. 양쪽이 서로 데이터를 보낼 수 있는지 확인하고, 시퀀스 번호를 동기화하며, 과거에 지연된 패킷 때문에 잘못된 연결이 생기는 것을 막는다. 이후 데이터 전송과 연결 종료까지 생각하면, 웹 브라우저에서 주소를 입력하는 단순한 행동 뒤에 생각보다 많은 시스템 단계가 숨어 있다는 것을 알 수 있었다.</p>
 

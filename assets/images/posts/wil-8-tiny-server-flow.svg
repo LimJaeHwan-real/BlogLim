@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Week 8 Tiny Web Server flow</title>
+  <desc id="desc">Tiny Web Server request processing flow from accept to static or dynamic content response.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071014"/>
+      <stop offset="1" stop-color="#102832"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2 2L10 6L2 10Z" fill="#63f7d5"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" rx="34" fill="url(#bg)"/>
+  <text x="66" y="82" fill="#ffffff" font-family="Arial, sans-serif" font-size="38" font-weight="800">Tiny Web Server request path</text>
+  <text x="66" y="118" fill="#a7bac4" font-family="Arial, sans-serif" font-size="18">How one HTTP request moves through the CS:APP Tiny server</text>
+
+  <g font-family="Arial, sans-serif" font-size="18">
+    <g fill="#0c1921" stroke="#284855" stroke-width="2">
+      <rect x="78" y="178" width="190" height="92" rx="20"/>
+      <rect x="330" y="178" width="190" height="92" rx="20"/>
+      <rect x="582" y="178" width="190" height="92" rx="20"/>
+      <rect x="834" y="178" width="260" height="92" rx="20"/>
+      <rect x="330" y="356" width="190" height="92" rx="20"/>
+      <rect x="582" y="356" width="190" height="92" rx="20"/>
+      <rect x="206" y="540" width="250" height="92" rx="20"/>
+      <rect x="742" y="540" width="250" height="92" rx="20"/>
+    </g>
+
+    <g fill="#ffffff" font-weight="800">
+      <text x="118" y="216">main()</text>
+      <text x="104" y="244" fill="#a7bac4" font-size="16" font-weight="400">open_listenfd</text>
+      <text x="374" y="216">accept()</text>
+      <text x="360" y="244" fill="#a7bac4" font-size="16" font-weight="400">create connfd</text>
+      <text x="633" y="216">doit()</text>
+      <text x="610" y="244" fill="#a7bac4" font-size="16" font-weight="400">handle one request</text>
+      <text x="870" y="216">read_requesthdrs()</text>
+      <text x="870" y="244" fill="#a7bac4" font-size="16" font-weight="400">consume HTTP headers</text>
+      <text x="368" y="394">parse_uri()</text>
+      <text x="354" y="422" fill="#a7bac4" font-size="16" font-weight="400">static or dynamic?</text>
+      <text x="612" y="394">stat + check</text>
+      <text x="608" y="422" fill="#a7bac4" font-size="16" font-weight="400">file exists, permission</text>
+      <text x="252" y="578">serve_static()</text>
+      <text x="238" y="606" fill="#a7bac4" font-size="16" font-weight="400">headers + file bytes</text>
+      <text x="782" y="578">serve_dynamic()</text>
+      <text x="766" y="606" fill="#a7bac4" font-size="16" font-weight="400">fork, dup2, execve CGI</text>
+    </g>
+
+    <path d="M268 224H320" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M520 224H572" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M772 224H824" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M964 270C942 328 839 398 782 404" fill="none" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M582 404H530" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M520 448C510 508 440 548 456 586" fill="none" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M772 448C794 504 842 510 854 530" fill="none" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <rect x="528" y="518" width="144" height="72" rx="18" fill="#102832" stroke="#08ce7b"/>
+    <text x="558" y="548" fill="#ffffff" font-size="20" font-weight="800">URI split</text>
+    <text x="546" y="574" fill="#a7bac4" font-size="15">static / CGI</text>
+    <path d="M520 404C554 442 570 482 590 512" fill="none" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M672 554H732" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+    <path d="M528 554H466" stroke="#63f7d5" stroke-width="4" marker-end="url(#arrow)"/>
+
+    <text x="448" y="668" fill="#a7bac4" font-size="18">Both paths end by writing an HTTP response to connfd.</text>
+  </g>
+</svg>

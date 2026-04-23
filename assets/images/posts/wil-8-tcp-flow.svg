@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Week 8 TCP connection flow</title>
+  <desc id="desc">TCP handshake, data transfer, and connection teardown between a client and a server.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080d13"/>
+      <stop offset="1" stop-color="#14242b"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2 2L10 6L2 10Z" fill="#ffffff"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="700" rx="34" fill="url(#bg)"/>
+  <text x="70" y="82" fill="#ffffff" font-family="Arial, sans-serif" font-size="38" font-weight="800">TCP connection lifecycle</text>
+  <text x="70" y="118" fill="#9fb1bc" font-family="Arial, sans-serif" font-size="18">Handshake, data transfer, and teardown as one continuous flow</text>
+
+  <g font-family="Arial, sans-serif">
+    <text x="220" y="172" fill="#5ff4d0" font-size="30" font-weight="800">CLIENT</text>
+    <text x="890" y="172" fill="#ff75bd" font-size="30" font-weight="800">SERVER</text>
+    <line x1="260" y1="198" x2="260" y2="640" stroke="#dbe7ee" stroke-width="4"/>
+    <line x1="940" y1="198" x2="940" y2="640" stroke="#dbe7ee" stroke-width="4"/>
+
+    <text x="80" y="244" fill="#5ff4d0" font-size="20" font-weight="800">HANDSHAKE</text>
+    <line x1="300" y1="235" x2="900" y2="275" stroke="#ffffff" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="560" y="228" fill="#ffffff" font-size="24" font-weight="800">SYN</text>
+    <text x="560" y="256" fill="#9fb1bc" font-size="16">client asks to open a connection</text>
+
+    <line x1="900" y1="322" x2="300" y2="356" stroke="#ffffff" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="520" y="318" fill="#ffffff" font-size="24" font-weight="800">SYN + ACK</text>
+    <text x="482" y="346" fill="#9fb1bc" font-size="16">server accepts and syncs sequence numbers</text>
+
+    <line x1="300" y1="405" x2="900" y2="435" stroke="#ffffff" stroke-width="4" marker-end="url(#arrow)"/>
+    <text x="560" y="398" fill="#ffffff" font-size="24" font-weight="800">ACK</text>
+    <text x="498" y="426" fill="#9fb1bc" font-size="16">connection established</text>
+
+    <rect x="430" y="462" width="340" height="62" rx="18" fill="#0d1c22" stroke="#08ce7b"/>
+    <text x="478" y="500" fill="#ffffff" font-size="22" font-weight="800">DATA TRANSFER</text>
+    <text x="462" y="548" fill="#9fb1bc" font-size="17">HTTP request and response move over the stream</text>
+
+    <text x="82" y="606" fill="#ffbd6b" font-size="20" font-weight="800">TEARDOWN</text>
+    <line x1="300" y1="584" x2="900" y2="555" stroke="#ffffff" stroke-width="4" marker-end="url(#arrow)" opacity="0.82"/>
+    <text x="566" y="578" fill="#ffffff" font-size="22" font-weight="800">FIN / ACK</text>
+    <line x1="900" y1="626" x2="300" y2="646" stroke="#ffffff" stroke-width="4" marker-end="url(#arrow)" opacity="0.82"/>
+    <text x="552" y="632" fill="#ffffff" font-size="22" font-weight="800">FIN / ACK</text>
+  </g>
+</svg>
