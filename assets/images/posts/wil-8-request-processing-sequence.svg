@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="600" viewBox="0 0 1120 600" role="img" aria-labelledby="title desc">
+  <title id="title">SELECT and INSERT request processing sequence</title>
+  <desc id="desc">SELECT requests acquire shared read locks while INSERT requests acquire an exclusive write lock before touching the shared table and B+Tree.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#fffaf1"/>
+      <stop offset="100%" stop-color="#eef6fb"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2e4b5d"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#3f3421" flood-opacity="0.14"/>
+    </filter>
+    <style>
+      .title { font: 700 30px Georgia, serif; fill: #233b4a; }
+      .subtitle { font: 500 15px Georgia, serif; fill: #5f6f78; }
+      .label { font: 700 17px Georgia, serif; fill: #233b4a; }
+      .small { font: 500 13px Georgia, serif; fill: #51656f; }
+      .lane { stroke: #b8cbd4; stroke-width: 2; stroke-dasharray: 8 8; }
+      .box { fill: #ffffff; stroke: #c8d7dd; stroke-width: 2; rx: 16; filter: url(#shadow); }
+      .read { fill: #e8f4ec; stroke: #8bb79a; stroke-width: 2; rx: 16; }
+      .write { fill: #fff0df; stroke: #d09a5f; stroke-width: 2; rx: 16; }
+      .db { fill: #edf4fb; stroke: #8baec9; stroke-width: 2; rx: 16; }
+      .arrow { stroke: #2e4b5d; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1120" height="600" fill="url(#bg)"/>
+  <text x="56" y="60" class="title">Request Processing Sequence</text>
+  <text x="58" y="88" class="subtitle">The API path is the same, but SELECT and INSERT diverge at the lock boundary.</text>
+
+  <text x="88" y="140" class="label">Client</text>
+  <text x="286" y="140" class="label">Worker</text>
+  <text x="500" y="140" class="label">DBServer</text>
+  <text x="724" y="140" class="label">RW Lock</text>
+  <text x="930" y="140" class="label">Table + B+Tree</text>
+
+  <line x1="110" y1="160" x2="110" y2="538" class="lane"/>
+  <line x1="315" y1="160" x2="315" y2="538" class="lane"/>
+  <line x1="535" y1="160" x2="535" y2="538" class="lane"/>
+  <line x1="765" y1="160" x2="765" y2="538" class="lane"/>
+  <line x1="980" y1="160" x2="980" y2="538" class="lane"/>
+
+  <rect x="54" y="188" width="112" height="42" class="box"/>
+  <text x="78" y="214" class="small">SELECT</text>
+  <path d="M166 209 H260" class="arrow"/>
+  <rect x="260" y="188" width="110" height="42" class="box"/>
+  <text x="281" y="214" class="small">handle</text>
+  <path d="M370 209 H480" class="arrow"/>
+  <rect x="480" y="188" width="110" height="42" class="box"/>
+  <text x="501" y="214" class="small">classify</text>
+  <path d="M590 209 H704" class="arrow"/>
+  <rect x="704" y="188" width="122" height="42" class="read"/>
+  <text x="724" y="214" class="small">read lock</text>
+  <path d="M826 209 H916" class="arrow"/>
+  <rect x="916" y="188" width="128" height="42" class="db"/>
+  <text x="940" y="214" class="small">read rows</text>
+
+  <rect x="54" y="280" width="112" height="42" class="box"/>
+  <text x="78" y="306" class="small">SELECT</text>
+  <path d="M166 301 H260" class="arrow"/>
+  <rect x="260" y="280" width="110" height="42" class="box"/>
+  <text x="281" y="306" class="small">handle</text>
+  <path d="M370 301 H480" class="arrow"/>
+  <rect x="480" y="280" width="110" height="42" class="box"/>
+  <text x="501" y="306" class="small">classify</text>
+  <path d="M590 301 H704" class="arrow"/>
+  <rect x="704" y="280" width="122" height="42" class="read"/>
+  <text x="717" y="306" class="small">read lock ok</text>
+  <path d="M826 301 H916" class="arrow"/>
+  <rect x="916" y="280" width="128" height="42" class="db"/>
+  <text x="935" y="306" class="small">parallel read</text>
+
+  <rect x="54" y="394" width="112" height="42" class="box"/>
+  <text x="78" y="420" class="small">INSERT</text>
+  <path d="M166 415 H260" class="arrow"/>
+  <rect x="260" y="394" width="110" height="42" class="box"/>
+  <text x="281" y="420" class="small">handle</text>
+  <path d="M370 415 H480" class="arrow"/>
+  <rect x="480" y="394" width="110" height="42" class="box"/>
+  <text x="501" y="420" class="small">classify</text>
+  <path d="M590 415 H704" class="arrow"/>
+  <rect x="704" y="394" width="122" height="42" class="write"/>
+  <text x="721" y="420" class="small">write lock</text>
+  <path d="M826 415 H916" class="arrow"/>
+  <rect x="916" y="394" width="128" height="42" class="db"/>
+  <text x="933" y="420" class="small">mutate index</text>
+
+  <path d="M980 230 C1018 254 1018 369 980 394" stroke="#d09a5f" stroke-width="3" fill="none"/>
+  <text x="843" y="362" class="small">INSERT waits until readers release lock</text>
+
+  <rect x="76" y="506" width="968" height="46" fill="#ffffff" stroke="#d3e0e5" stroke-width="2" rx="18"/>
+  <text x="112" y="535" class="subtitle">Timeout rule: try lock repeatedly, sleep 1ms on failure, return 503 lock_timeout when the configured limit is exceeded.</text>
+</svg>
