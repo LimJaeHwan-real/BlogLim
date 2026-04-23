@@ -3,7 +3,7 @@ title: "3/27 DP(Dynamic Programming)"
 description: "큰 문제를 작은 부분 문제로 나누어 해결 부분 문제의 결과를 저장하여 재사용 중복 계산을 제거하여 효율성 향상 피보나치 수열 [재귀 O(2^n)] -> [DP O(n)] 으로 극적인 성능 향상! 메모이제이션 - 계산 결과를 memo에 저장 - 같은 값"
 date: 2026-03-28 00:19:49 +09:00
 updated_at: 2026-03-31 11:00:05 +09:00
-thumbnail: "https://t1.daumcdn.net/tistory_admin/static/images/openGraph/opengraph.png"
+thumbnail: "/assets/images/blog-icon.svg"
 categories:
   - "Jungle"
   - "Everyday"
