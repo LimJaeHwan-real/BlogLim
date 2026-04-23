@@ -1,12 +1,66 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
-  <title>ForRest blog icon</title>
-  <rect width="256" height="256" fill="#ffffff"/>
-  <path
-    d="M86 29H141L185 61L203 113L185 194L141 227H86L40 194L22 113L40 61Z
-       M91 42L53 70L37 113L53 187L91 214H136L173 187L188 113L173 70L136 42Z"
-    fill="#08ce7b"
-    fill-rule="evenodd"
-  />
-  <path d="M78 161L103 105L130 125L147 65Z" fill="#08ce7b"/>
-  <path d="M103 121L120 124L97 139Z" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">ForRest post cover</title>
+  <desc id="desc">A dark cinematic cover with glowing mint text that says your journey starts here.</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1519"/>
+      <stop offset="0.46" stop-color="#17272d"/>
+      <stop offset="1" stop-color="#071014"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f1ece6"/>
+      <stop offset="0.34" stop-color="#8d8780"/>
+      <stop offset="0.35" stop-color="#1b2a30"/>
+      <stop offset="1" stop-color="#0a1115"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#03a879"/>
+      <stop offset="0.45" stop-color="#58f2d4"/>
+      <stop offset="1" stop-color="#0fb88f"/>
+    </linearGradient>
+    <filter id="softGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.05 0 0 0 0 0.95 0 0 0 0 0.75 0 0 0 .55 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="17"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.18"/>
+      </feComponentTransfer>
+    </filter>
+    <radialGradient id="spotlight" cx="42%" cy="54%" r="70%">
+      <stop offset="0" stop-color="#66ffe0" stop-opacity="0.18"/>
+      <stop offset="0.45" stop-color="#22c7aa" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="#0b1114"/>
+  <path d="M-120 222 624 -88H1720V1020H-120Z" fill="url(#edge)"/>
+  <path d="M-52 273 661 -22H1660V960H-52Z" fill="url(#paper)"/>
+  <path d="M-52 273 661 -22H1660V960H-52Z" fill="url(#spotlight)"/>
+  <path d="M-90 736 284 926H-90Z" fill="#05090b" opacity="0.65"/>
+  <path d="M104 134 686 -108H1660V42L615 162Z" fill="#ffffff" opacity="0.06"/>
+
+  <g transform="translate(398 126) rotate(25) skewX(-10)" font-family="Arial, Helvetica, sans-serif" font-weight="800" filter="url(#softGlow)">
+    <text x="376" y="52" font-size="142" letter-spacing="4" fill="url(#mint)">your</text>
+    <text x="208" y="226" font-size="144" letter-spacing="3" fill="url(#mint)">journey</text>
+    <text x="76" y="402" font-size="144" letter-spacing="3" fill="url(#mint)">starts</text>
+    <text x="-104" y="578" font-size="144" letter-spacing="4" fill="url(#mint)">here.</text>
+  </g>
+
+  <g transform="translate(398 126) rotate(25) skewX(-10)" font-family="Arial, Helvetica, sans-serif" font-weight="800" opacity="0.23">
+    <text x="376" y="52" font-size="142" letter-spacing="4" fill="#d5fff5">your</text>
+    <text x="208" y="226" font-size="144" letter-spacing="3" fill="#d5fff5">journey</text>
+    <text x="76" y="402" font-size="144" letter-spacing="3" fill="#d5fff5">starts</text>
+    <text x="-104" y="578" font-size="144" letter-spacing="4" fill="#d5fff5">here.</text>
+  </g>
+
+  <rect width="1600" height="900" fill="url(#grain)" opacity="0.42"/>
+  <rect width="1600" height="900" fill="#000000" opacity="0.18"/>
 </svg>
