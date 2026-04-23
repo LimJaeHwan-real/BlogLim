@@ -3,7 +3,7 @@ title: "Explicit Free List"
 description: "Explicit Free List: Unordered vs. Address-Ordered Explicit Free List(명시적 가용 리스트)는 가용 블록(Free Block) 내에 next와 prev 포인터를 포함시켜, 가용 블록들끼리만 연결 리스"
 date: 2026-04-16 19:42:22 +09:00
 updated_at: 2026-04-16 19:42:22 +09:00
-thumbnail: "/assets/images/blog-icon.svg"
+thumbnail: "/assets/images/posts/journey-starts-here-cover.png"
 categories:
   - "프로그래밍 언어"
   - "C언어"
