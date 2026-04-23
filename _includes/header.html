@@ -14,7 +14,7 @@
       {% if github_profile.profile_url != "" %}
         {% assign resolved_github_url = github_profile.profile_url %}
       {% endif %}
-      {% if github_profile.avatar_url != "" %}
+      {% if github_profile.avatar_url != "" and (header_avatar == "" or header_avatar contains 'avatar-placeholder') %}
         {% assign header_avatar = github_profile.avatar_url %}
       {% endif %}
       {% if github_profile.display_name != "" %}

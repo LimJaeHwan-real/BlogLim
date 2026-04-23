@@ -24,7 +24,7 @@
   {% elsif profile_intro == "" or profile_intro contains 'GitHub 프로필을 연결하면' %}
     {% assign profile_intro = '@' | append: github_profile.login %}
   {% endif %}
-  {% if github_profile.avatar_url != "" %}
+  {% if github_profile.avatar_url != "" and (profile_avatar == "" or profile_avatar contains 'avatar-placeholder') %}
     {% assign profile_avatar = github_profile.avatar_url %}
   {% endif %}
 {% endif %}
