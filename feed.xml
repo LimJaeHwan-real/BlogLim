@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://limjaehwan-real.github.io/BlogLim/feed.xml" rel="self" type="application/atom+xml" /><link href="https://limjaehwan-real.github.io/BlogLim/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2026-04-23T19:35:59+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/feed.xml</id><title type="html">ForRest</title><subtitle>Auto Programmer</subtitle><entry><title type="html">[WIL] 8주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 8주" /><published>2026-04-23T09:00:00+09:00</published><updated>2026-04-23T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/"><![CDATA[<h2 id="8주차-주간-회고-네트워크와-웹-서버의-흐름을-코드로-따라간-한-주">8주차 주간 회고: 네트워크와 웹 서버의 흐름을 코드로 따라간 한 주</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://limjaehwan-real.github.io/BlogLim/feed.xml" rel="self" type="application/atom+xml" /><link href="https://limjaehwan-real.github.io/BlogLim/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2026-04-23T19:43:19+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/feed.xml</id><title type="html">ForRest</title><subtitle>Auto Programmer</subtitle><entry><title type="html">[WIL] 8주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 8주" /><published>2026-04-23T09:00:00+09:00</published><updated>2026-04-23T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/"><![CDATA[<h2 id="8주차-주간-회고-네트워크와-웹-서버의-흐름을-코드로-따라간-한-주">8주차 주간 회고: 네트워크와 웹 서버의 흐름을 코드로 따라간 한 주</h2>
 
 <p>8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍과 웹 서버 구현을 집중적으로 학습한 주였다. 8주차 발제에서 잡은 방향도 명확했다. 단순히 네트워크 이론을 넓게 훑는 것이 아니라, 서버를 단계적으로 구현하면서 웹 서버가 실제로 어떻게 요청을 받고 응답하는지 이해하는 것이 핵심이었다.</p>
 
@@ -73,7 +73,7 @@
 <p>이번 주에 정리한 또 하나의 구현은 C 기반 in-memory SQL 엔진과 B+Tree를 HTTP API 서버로 감싼 Mini DBMS SQL API Server였다. 핵심은 SQL 엔진 자체를 멀티스레드용으로 크게 뜯어고친 것이 아니라, 서버 경계인 <code class="language-plaintext highlighter-rouge">src/server/</code>에서 요청 분산, 큐잉, 락, timeout, metrics를 관리하도록 만든 점이다.</p>
 
 <figure>
-  <img src="/BlogLim/assets/images/posts/wil-8-sql-api-architecture.svg" alt="Thread pool 기반 SQL API 서버 아키텍처와 요청 흐름" />
+  <img src="/BlogLim/assets/images/posts/wil-8-sql-api-architecture.png" alt="Thread pool 기반 SQL API 서버 아키텍처와 요청 흐름" />
   <figcaption>Thread pool 기반 SQL API 서버 아키텍처와 요청 흐름</figcaption>
 </figure>
 
