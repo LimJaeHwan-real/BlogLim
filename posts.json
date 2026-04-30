@@ -5,6 +5,24 @@
       
       
       {
+        "title": "[WIL] 9주",
+        "url": "/BlogLim/wil-9%EC%A3%BC/",
+        "description": "9주차는 Pintos Project 1 Threads를 시작하며 Alarm Clock, priority scheduling, priority donation, MLFQS를 팀 단위로 학습하고, 운영체제의 추상화와 보호 개념을 실제 커널 코드와 테스트로 연결해 본 한 주였다.",
+        "thumbnail": "/BlogLim/assets/images/posts/journey-starts-here-cover.png",
+        "categories": ["Jungle","WIL(Weekly I Learned)"],
+        "category_path": "Jungle / WIL(Weekly I Learned)",
+        "tags": "",
+        "series_key": "",
+        "series_title": null,
+        "date_label": "2026년 4월 30일",
+        "reading_time_label": "6분 읽기",
+        "search": "[wil] 9주 9주차는 pintos project 1 threads를 시작하며 alarm clock, priority scheduling, priority donation, mlfqs를 팀 단위로 학습하고, 운영체제의 추상화와 보호 개념을 실제 커널 코드와 테스트로 연결해 본 한 주였다. jungle / wil(weekly i learned)"
+      },
+    
+      
+      
+      
+      {
         "title": "[WIL] 8주",
         "url": "/BlogLim/wil-8%EC%A3%BC/",
         "description": "8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍, HTTP, Tiny Web Server, TCP 연결 과정, 동시성 서버 구조를 학습하고, B+Tree 인덱스와 thread pool 기반 Mini DBMS SQL API Server를 설명 가능한 형태로 정리한 한 주였다.",

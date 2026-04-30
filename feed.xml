@@ -1,4 +1,223 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://limjaehwan-real.github.io/BlogLim/feed.xml" rel="self" type="application/atom+xml" /><link href="https://limjaehwan-real.github.io/BlogLim/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2026-04-30T15:12:39+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/feed.xml</id><title type="html">ForRest</title><subtitle>Auto Programmer</subtitle><entry><title type="html">[WIL] 8주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 8주" /><published>2026-04-23T09:00:00+09:00</published><updated>2026-04-23T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/"><![CDATA[<h2 id="8주차-주간-회고-네트워크와-웹-서버의-흐름을-코드로-따라간-한-주">8주차 주간 회고: 네트워크와 웹 서버의 흐름을 코드로 따라간 한 주</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://limjaehwan-real.github.io/BlogLim/feed.xml" rel="self" type="application/atom+xml" /><link href="https://limjaehwan-real.github.io/BlogLim/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2026-04-30T19:46:56+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/feed.xml</id><title type="html">ForRest</title><subtitle>Auto Programmer</subtitle><entry><title type="html">[WIL] 9주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-9%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 9주" /><published>2026-04-30T09:00:00+09:00</published><updated>2026-04-30T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-9%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-9%EC%A3%BC/"><![CDATA[<h2 id="9주차-주간-회고-pintos로-운영체제를-코드-안에서-만난-한-주">9주차 주간 회고: Pintos로 운영체제를 코드 안에서 만난 한 주</h2>
+
+<p>9주차부터는 4주 동안 진행되는 Pintos 프로젝트가 시작됐다. 이번 주의 범위는 Project 1 Threads였다. 앞으로 <code class="language-plaintext highlighter-rouge">threads</code>, <code class="language-plaintext highlighter-rouge">user programs</code>, <code class="language-plaintext highlighter-rouge">virtual memory</code>까지 이어지기 때문에 첫 주에 방향을 잘 잡는 것이 중요했다. 발제에서도 “진도를 다 빼는 것보다 팀원 전체가 이해하는 것이 우선”이라는 말이 강조됐다.</p>
+
+<p>이번 주의 큰 흐름은 <code class="language-plaintext highlighter-rouge">Pintos 구조 파악 → Alarm Clock → Priority Scheduling → Synchronization Waiters → Priority Donation → MLFQS → 발표 정리</code>로 이어졌다. 이전 주차까지는 네트워크와 서버를 주로 봤다면, 이번 주부터는 운영체제가 CPU를 누구에게 줄지, 스레드를 언제 재울지, 공유 자원 앞에서 어떤 순서를 보장할지를 직접 코드로 다루게 됐다.</p>
+
+<h2 id="1-pintos-project-1의-전체-지도">1. Pintos Project 1의 전체 지도</h2>
+
+<p>Pintos는 작은 교육용 OS지만, 막상 코드를 열어보면 실제 운영체제의 핵심 고민이 거의 다 들어 있다. 이번 주에는 특히 <code class="language-plaintext highlighter-rouge">threads/</code> 아래의 <code class="language-plaintext highlighter-rouge">timer.c</code>, <code class="language-plaintext highlighter-rouge">thread.c</code>, <code class="language-plaintext highlighter-rouge">synch.c</code>, <code class="language-plaintext highlighter-rouge">thread.h</code>, <code class="language-plaintext highlighter-rouge">synch.h</code>를 중심으로 봤다.</p>
+
+<p>Project 1에서 구현해야 할 내용은 크게 네 단계로 나눌 수 있었다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>단계</th>
+      <th>핵심 목표</th>
+      <th>대표 테스트</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Alarm Clock</td>
+      <td>busy waiting 없이 스레드를 재웠다가 깨우기</td>
+      <td><code class="language-plaintext highlighter-rouge">alarm-single</code>, <code class="language-plaintext highlighter-rouge">alarm-multiple</code>, <code class="language-plaintext highlighter-rouge">alarm-simultaneous</code></td>
+    </tr>
+    <tr>
+      <td>Priority Scheduling</td>
+      <td>높은 priority 스레드가 먼저 실행되게 하기</td>
+      <td><code class="language-plaintext highlighter-rouge">priority-change</code>, <code class="language-plaintext highlighter-rouge">priority-preempt</code>, <code class="language-plaintext highlighter-rouge">priority-fifo</code></td>
+    </tr>
+    <tr>
+      <td>Sync Waiters</td>
+      <td>semaphore/condition variable에서도 priority 순서 유지</td>
+      <td><code class="language-plaintext highlighter-rouge">priority-sema</code>, <code class="language-plaintext highlighter-rouge">priority-condvar</code>, <code class="language-plaintext highlighter-rouge">alarm-priority</code></td>
+    </tr>
+    <tr>
+      <td>Priority Donation</td>
+      <td>lock 대기 중 발생하는 priority inversion 해결</td>
+      <td><code class="language-plaintext highlighter-rouge">priority-donate-one</code>, <code class="language-plaintext highlighter-rouge">priority-donate-nest</code>, <code class="language-plaintext highlighter-rouge">priority-donate-chain</code></td>
+    </tr>
+    <tr>
+      <td>MLFQS</td>
+      <td><code class="language-plaintext highlighter-rouge">nice</code>, <code class="language-plaintext highlighter-rouge">recent_cpu</code>, <code class="language-plaintext highlighter-rouge">load_avg</code> 기반 고급 스케줄러 구현</td>
+      <td><code class="language-plaintext highlighter-rouge">mlfqs-load-avg</code>, <code class="language-plaintext highlighter-rouge">mlfqs-recent-1</code>, <code class="language-plaintext highlighter-rouge">mlfqs-fair-*</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>팀 일정도 이 순서에 맞춰 잡았다. 4/24에는 구조 이해와 협업 룰을 정리하고, 4/25에는 Alarm Clock, 4/27에는 Priority 기본과 Sync Waiters, 4/28에는 Donation, 4/29에는 MLFQS와 발표 초안을 목표로 삼았다. 작업을 카드 단위로 나누고, 테스트 이름을 기준으로 실패 원인을 좁히는 방식이 중요했다.</p>
+
+<h2 id="2-alarm-clock과-busy-waiting-제거">2. Alarm Clock과 Busy Waiting 제거</h2>
+
+<p>처음 마주한 문제는 <code class="language-plaintext highlighter-rouge">timer_sleep()</code>이었다. 기존 방식은 아래처럼 시간이 지났는지 계속 확인하면서 CPU를 양보하는 구조였다.</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while</span> <span class="p">(</span><span class="n">timer_elapsed</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ticks</span><span class="p">)</span>
+    <span class="n">thread_yield</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>이 코드는 겉으로는 “잠자는” 것처럼 보이지만 실제로는 계속 깨어나서 조건을 확인한다. 그래서 CPU를 불필요하게 사용한다. 이번 주에 정리한 핵심은 sleeping list를 두고, 스레드를 진짜로 blocked 상태로 만든 뒤 timer interrupt에서 깨우는 구조였다.</p>
+
+<p>흐름은 다음과 같이 볼 수 있다.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>timer_sleep()
+-&gt; 현재 thread에 wakeup_tick 기록
+-&gt; sleeping_list에 삽입
+-&gt; thread_block()
+-&gt; timer_interrupt()에서 깨어날 시간이 된 thread를 thread_unblock()
+</code></pre></div></div>
+
+<p>여기서 특히 조심해야 했던 부분은 interrupt on/off 구간이었다. <code class="language-plaintext highlighter-rouge">thread_block()</code>은 현재 스레드의 상태를 <code class="language-plaintext highlighter-rouge">THREAD_BLOCKED</code>로 바꾸고 <code class="language-plaintext highlighter-rouge">schedule()</code>을 호출한다. 그런데 그 사이에 timer interrupt가 끼어들면 커널은 이미 blocked로 표시된 스레드를 여전히 running 중인 것처럼 다루게 될 수 있다. 그래서 리스트 조작, block/unblock, schedule 주변에서는 interrupt를 끄고 상태 전환을 원자적으로 다뤄야 한다는 점이 중요했다.</p>
+
+<h2 id="3-priority-scheduling과-sync-waiters">3. Priority Scheduling과 Sync Waiters</h2>
+
+<p>Alarm Clock 다음은 ready list와 동기화 객체의 waiters를 priority 기준으로 관리하는 일이었다. 단순히 <code class="language-plaintext highlighter-rouge">ready_list</code>만 정렬하면 끝나는 문제가 아니었다. 높은 priority 스레드가 새로 ready 상태가 되었을 때 현재 스레드가 CPU를 양보해야 하고, semaphore나 condition variable에서 깨어나는 순서도 priority를 따라야 했다.</p>
+
+<p>이번 주에 자주 확인한 지점은 다음 함수들이었다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>함수/구조</th>
+      <th>확인한 이유</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">thread_unblock()</code></td>
+      <td>blocked 스레드를 ready list에 넣을 때 priority 순서가 유지되는지 확인</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">thread_yield()</code></td>
+      <td>현재 스레드가 CPU를 양보할 때 ready list 순서가 깨지지 않는지 확인</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sema_up()</code></td>
+      <td>semaphore waiters 중 높은 priority 스레드를 먼저 깨우는지 확인</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cond_signal()</code></td>
+      <td>condition variable waiters에서도 priority 순서가 반영되는지 확인</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>조건변수를 따로 정리하면서도 <code class="language-plaintext highlighter-rouge">if</code>가 아니라 <code class="language-plaintext highlighter-rouge">while</code>로 조건을 다시 확인해야 한다는 점을 배웠다. 스레드가 깨어났다고 해서 조건이 여전히 참이라는 보장은 없다. 다른 스레드가 먼저 자원을 가져갔을 수도 있고, 가짜 깨어남처럼 보이는 상황도 생길 수 있다. 그래서 조건변수는 항상 mutex와 함께 쓰고, 깨어난 뒤에도 조건을 다시 확인하는 패턴이 필요하다.</p>
+
+<h2 id="4-priority-inversion과-donation">4. Priority Inversion과 Donation</h2>
+
+<p>이번 주에 가장 설명하기 어려웠고, 동시에 가장 운영체제답게 느껴졌던 주제는 priority inversion이었다. 낮은 priority 스레드가 lock을 잡고 있고, 높은 priority 스레드가 그 lock을 기다리는 상황에서 중간 priority 스레드가 CPU를 계속 사용하면 높은 priority 스레드가 오히려 오래 기다리게 된다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-9-priority-inversion.png" alt="우선순위 역전과 priority inheritance 해결 과정" />
+  <figcaption>낮은 priority 스레드가 가진 lock 때문에 높은 priority 스레드가 지연되는 priority inversion 상황</figcaption>
+</figure>
+
+<p>예를 들어 <code class="language-plaintext highlighter-rouge">L</code>, <code class="language-plaintext highlighter-rouge">M</code>, <code class="language-plaintext highlighter-rouge">H</code> 세 스레드가 있다고 하자. <code class="language-plaintext highlighter-rouge">L</code>은 낮은 priority지만 lock을 가지고 있고, <code class="language-plaintext highlighter-rouge">H</code>는 높은 priority지만 그 lock이 필요해서 blocked 된다. 이때 lock이 필요 없는 <code class="language-plaintext highlighter-rouge">M</code>이 계속 CPU를 차지하면 <code class="language-plaintext highlighter-rouge">L</code>이 lock을 풀 기회를 얻지 못하고, 결과적으로 <code class="language-plaintext highlighter-rouge">H</code>도 계속 기다린다. 문제의 원인은 <code class="language-plaintext highlighter-rouge">H</code>가 약해서가 아니라, <code class="language-plaintext highlighter-rouge">L</code>이 CPU를 받지 못해 lock을 풀 수 없다는 점이다.</p>
+
+<p>해결 방법은 priority donation이다. <code class="language-plaintext highlighter-rouge">H</code>가 <code class="language-plaintext highlighter-rouge">L</code>이 가진 lock을 기다릴 때, <code class="language-plaintext highlighter-rouge">H</code>의 priority를 잠시 <code class="language-plaintext highlighter-rouge">L</code>에게 빌려준다. 그러면 scheduler는 <code class="language-plaintext highlighter-rouge">L</code>을 더 높은 priority로 보고 CPU를 먼저 주고, <code class="language-plaintext highlighter-rouge">L</code>은 작업을 끝내 lock을 해제한다. lock이 해제되면 <code class="language-plaintext highlighter-rouge">H</code>가 바로 실행될 수 있고, <code class="language-plaintext highlighter-rouge">L</code>은 원래 priority로 돌아간다.</p>
+
+<p>구현 관점에서는 <code class="language-plaintext highlighter-rouge">base_priority</code>와 <code class="language-plaintext highlighter-rouge">effective_priority</code>를 나눠 생각하는 것이 중요했다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>개념</th>
+      <th>의미</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">base_priority</code></td>
+      <td>스레드가 원래 가지고 있던 priority</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">effective_priority</code></td>
+      <td>donation을 반영해 실제 스케줄링에 사용하는 priority</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">waiting_lock</code></td>
+      <td>현재 스레드가 기다리고 있는 lock</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">lock-&gt;holder</code></td>
+      <td>해당 lock을 들고 있는 스레드</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Donation은 단순히 한 번 값을 올리는 것으로 끝나지 않는다. <code class="language-plaintext highlighter-rouge">A</code>가 <code class="language-plaintext highlighter-rouge">B</code>를 기다리고, <code class="language-plaintext highlighter-rouge">B</code>가 <code class="language-plaintext highlighter-rouge">C</code>를 기다리는 nested donation이나 chain donation도 생긴다. 그래서 <code class="language-plaintext highlighter-rouge">waiting_lock</code>을 따라 priority를 전파하고, <code class="language-plaintext highlighter-rouge">lock_release()</code> 시점에는 해당 lock과 관련된 donation만 제거한 뒤 priority를 다시 계산해야 한다.</p>
+
+<h2 id="5-mlfqs와-테스트를-읽는-법">5. MLFQS와 테스트를 읽는 법</h2>
+
+<p>MLFQS는 수식이 많아서 처음에는 구현보다 개념을 잡는 데 시간이 걸렸다. <code class="language-plaintext highlighter-rouge">load_avg</code>, <code class="language-plaintext highlighter-rouge">recent_cpu</code>, <code class="language-plaintext highlighter-rouge">nice</code> 값을 fixed-point arithmetic으로 계산하고, 일정 tick마다 priority를 다시 계산해야 한다. 여기서는 정확한 수식 구현도 중요하지만, 어떤 테스트가 무엇을 보는지 먼저 아는 것이 훨씬 도움이 됐다.</p>
+
+<p>Pintos 테스트는 <code class="language-plaintext highlighter-rouge">.c</code>, <code class="language-plaintext highlighter-rouge">.ck</code>, <code class="language-plaintext highlighter-rouge">Make.tests</code>를 함께 봐야 한다. <code class="language-plaintext highlighter-rouge">.c</code>는 실제 테스트 프로그램이고, <code class="language-plaintext highlighter-rouge">.ck</code>는 출력 순서와 내용을 검사한다. 기능이 얼추 맞아 보여도 출력 순서가 다르면 실패할 수 있기 때문에 scheduling 테스트에서는 테스트가 요구하는 순서를 이해하는 것이 핵심이었다.</p>
+
+<p>이번 주에 정리한 테스트 읽기 순서는 다음과 같다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>프로젝트 단계</th>
+      <th>먼저 볼 테스트</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Alarm Clock</td>
+      <td><code class="language-plaintext highlighter-rouge">alarm-single</code> → <code class="language-plaintext highlighter-rouge">alarm-multiple</code> → <code class="language-plaintext highlighter-rouge">alarm-simultaneous</code></td>
+    </tr>
+    <tr>
+      <td>Priority 기본</td>
+      <td><code class="language-plaintext highlighter-rouge">priority-change</code> → <code class="language-plaintext highlighter-rouge">priority-preempt</code> → <code class="language-plaintext highlighter-rouge">priority-fifo</code></td>
+    </tr>
+    <tr>
+      <td>Sync Waiters</td>
+      <td><code class="language-plaintext highlighter-rouge">priority-sema</code>, <code class="language-plaintext highlighter-rouge">priority-condvar</code>, <code class="language-plaintext highlighter-rouge">alarm-priority</code></td>
+    </tr>
+    <tr>
+      <td>Donation</td>
+      <td><code class="language-plaintext highlighter-rouge">priority-donate-one</code> → <code class="language-plaintext highlighter-rouge">priority-donate-multiple</code> → <code class="language-plaintext highlighter-rouge">priority-donate-nest</code> → <code class="language-plaintext highlighter-rouge">priority-donate-chain</code></td>
+    </tr>
+    <tr>
+      <td>MLFQS</td>
+      <td><code class="language-plaintext highlighter-rouge">mlfqs-load-*</code> → <code class="language-plaintext highlighter-rouge">mlfqs-recent-1</code> → <code class="language-plaintext highlighter-rouge">mlfqs-fair-*</code> → <code class="language-plaintext highlighter-rouge">mlfqs-nice-*</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>실패한 테스트 이름은 꽤 많은 정보를 준다. 예를 들어 <code class="language-plaintext highlighter-rouge">alarm-simultaneous</code>가 실패하면 같은 tick에 여러 스레드를 모두 깨우는지 먼저 보면 되고, <code class="language-plaintext highlighter-rouge">priority-sema</code>가 실패하면 ready list보다 semaphore waiters의 정렬을 먼저 의심할 수 있다.</p>
+
+<h2 id="6-운영체제-강의와-pintos가-연결된-지점">6. 운영체제 강의와 Pintos가 연결된 지점</h2>
+
+<p>운영체제 강의에서는 OS를 application과 hardware 사이에 있는 계층으로 봤다. OS의 핵심 역할은 추상화, 보호, 공유다. Pintos를 만지면서 이 말이 훨씬 구체적으로 느껴졌다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-9-os-abstraction.png" alt="운영체제의 추상화와 보호, 파일 시스템, 멀티코어 난제, 하드웨어 기반 격리 개념 정리" />
+  <figcaption>운영체제는 하드웨어의 복잡성을 추상화하고, 프로세스와 자원을 보호하며, 제한된 자원을 공유하게 만든다</figcaption>
+</figure>
+
+<p>CPU는 스레드와 scheduler로 추상화되고, 메모리는 가상 주소 공간과 page table로 추상화된다. 저장소는 파일, 경로, offset으로 추상화된다. 동시에 OS는 user mode와 kernel mode를 나눠 애플리케이션이 커널 영역을 침범하지 못하게 막고, timer interrupt를 통해 무한 루프를 도는 프로그램에서도 제어권을 다시 가져온다.</p>
+
+<p>Pintos는 싱글코어 환경이지만, 그래도 interrupt, lock, semaphore, condition variable이 얽히는 순간 충분히 어렵다. 실제 하드웨어의 복잡성을 모두 다루지는 않더라도, OS가 왜 이런 장치를 제공해야 하는지 이해하기에는 아주 좋은 실습이었다.</p>
+
+<h2 id="이번-주에-배운-점">이번 주에 배운 점</h2>
+
+<p>이번 주의 핵심은 “스레드는 함수처럼 실행되는 코드 조각이 아니라, 상태와 우선순위와 대기 이유를 가진 스케줄링 대상”이라는 점이었다. <code class="language-plaintext highlighter-rouge">THREAD_READY</code>, <code class="language-plaintext highlighter-rouge">THREAD_RUNNING</code>, <code class="language-plaintext highlighter-rouge">THREAD_BLOCKED</code> 같은 상태가 단순 enum이 아니라, 커널이 CPU를 누구에게 줄지 판단하는 기준이라는 것을 체감했다.</p>
+
+<p>또 하나는 테스트 중심으로 코드를 읽는 습관이다. Pintos는 구현해야 할 기능이 많지만, 테스트 이름과 checker를 보면 지금 무엇이 깨졌는지 방향을 잡을 수 있다. <code class="language-plaintext highlighter-rouge">make check</code> 결과만 보는 것이 아니라, 어떤 테스트가 어떤 상황을 만들고 어떤 출력 순서를 기대하는지 읽어야 디버깅이 빨라진다.</p>
+
+<p>마지막으로 팀 프로젝트에서 중요한 것은 혼자 빨리 가는 것이 아니라, 같은 지도를 보고 움직이는 것이라는 점을 배웠다. 아침 sprint 회의, 오후 PR, 저녁 merge 흐름을 잡고, 실패한 테스트와 의심되는 함수를 기록하는 방식이 다음 주차까지 이어질 기반이 될 것 같다.</p>
+
+<h2 id="아쉬웠던-점과-다음-액션">아쉬웠던 점과 다음 액션</h2>
+
+<p>아쉬운 점은 Pintos의 전체 구조를 아직 완전히 내 언어로 설명할 정도로 익숙해지지는 못했다는 것이다. 특히 donation과 MLFQS는 구현 흐름은 따라갈 수 있어도, 발표에서 질문이 들어왔을 때 <code class="language-plaintext highlighter-rouge">lock-&gt;holder</code>가 왜 필요한지, semaphore와 lock과 condition variable이 어떻게 다른지 더 정확한 용어로 답해야 한다.</p>
+
+<p>다음 액션은 세 가지다. 첫째, Project 1에서 통과한 테스트를 기능별로 다시 묶어 설명할 수 있게 정리한다. 둘째, 발표 자료의 그림은 실제 코드 구조와 용어에 맞춰 직접 그린다. 셋째, 다음 주 user program으로 넘어가기 전에 <code class="language-plaintext highlighter-rouge">thread.c</code>, <code class="language-plaintext highlighter-rouge">synch.c</code>, <code class="language-plaintext highlighter-rouge">timer.c</code>의 핵심 함수 흐름을 다시 읽고, interrupt를 꺼야 하는 구간과 priority를 다시 계산해야 하는 시점을 명확히 정리한다.</p>
+
+<p>9주차는 운영체제를 교재의 개념이 아니라, 실패하는 테스트와 꼬이는 스레드 상태로 만난 주였다. 어렵지만 재미있는 쪽으로 제대로 들어온 느낌이 든다.</p>]]></content><author><name></name></author><category term="Jungle" /><category term="WIL(Weekly I Learned)" /><summary type="html"><![CDATA[9주차는 Pintos Project 1 Threads를 시작하며 Alarm Clock, priority scheduling, priority donation, MLFQS를 팀 단위로 학습하고, 운영체제의 추상화와 보호 개념을 실제 커널 코드와 테스트로 연결해 본 한 주였다.]]></summary></entry><entry><title type="html">[WIL] 8주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 8주" /><published>2026-04-23T09:00:00+09:00</published><updated>2026-04-23T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-8%EC%A3%BC/"><![CDATA[<h2 id="8주차-주간-회고-네트워크와-웹-서버의-흐름을-코드로-따라간-한-주">8주차 주간 회고: 네트워크와 웹 서버의 흐름을 코드로 따라간 한 주</h2>
 
 <p>8주차는 CS:APP 11장을 중심으로 네트워크 프로그래밍과 웹 서버 구현을 집중적으로 학습한 주였다. 8주차 발제에서 잡은 방향도 명확했다. 단순히 네트워크 이론을 넓게 훑는 것이 아니라, 서버를 단계적으로 구현하면서 웹 서버가 실제로 어떻게 요청을 받고 응답하는지 이해하는 것이 핵심이었다.</p>
 
@@ -986,11 +1205,4 @@ columns=id,department,student_number,name,age</code></pre>
 <h3>마치며</h3>
 <p>AI는 우리의 <strong>'가속기'</strong>가 되어야지, <strong>'엔진'</strong> 자체를 대체하게 두어서는 안 됩니다. </p>
 <p>지금 문제를 붙잡고 씨름하며 느끼는 그 막막함과 고통은, 당신의 능력이 확장되고 있다는 아주 건강한 신호입니다. 정답을 빨리 찾는 것보다, '정답에 이르는 사고의 경로'를 내 것으로 만드는 데 집중해 보세요. </p>
-<p><strong>결국 마지막에 웃는 사람은 AI를 잘 쓰는 사람이 아니라, AI 없이도 문제를 해결할 줄 아는 능력을 갖춘 채 AI를 도구로 부리는 사람일 테니까요.</strong></p>]]></content><author><name></name></author><category term="AI" /><summary type="html"><![CDATA[[에세이] AI 시대, 정답보다 '고민의 시간'이 더 가치 있는 이유 AI에게 물어보면 10초 만에 코드가 나오고 답이 나오는 시대입니다. 상황이 이렇다 보니, 가끔 이런 회의감이 들곤 합니다. "어차피 AI가 다 해주는데, 굳이 내가 머리 싸매며 고]]></summary></entry><entry><title type="html">4/6 커피챗</title><link href="https://limjaehwan-real.github.io/BlogLim/4-6-%EC%BB%A4%ED%94%BC%EC%B1%97/" rel="alternate" type="text/html" title="4/6 커피챗" /><published>2026-04-06T17:30:59+09:00</published><updated>2026-04-06T17:30:59+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/4-6-%EC%BB%A4%ED%94%BC%EC%B1%97</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/4-6-%EC%BB%A4%ED%94%BC%EC%B1%97/"><![CDATA[<p>이동석코치님과 커피챗을 진행했다. </p>
-<p>같은 동기 한명과 진행했고, 요약해보자면</p>
-
-<p>1. c언어는 portability가 약하고, 요즘은 rust를 많이 사용한다고한다. 다만 미국 이야기이고 한국은 아직이라고한다.</p>
-<p>2. c언어는 매크로를 많이 사용하여 오픈소스 읽기가 힘들고, 여러가지 규칙이 있어서 이것을 먼저 아는 것이 이해하는데 도움이 된다고한다.</p>
-<p>3. c언어의 성능이 느린부분을 어셈블리어로 교체하는 작업을 하는데, 함수마다 성능을 측정하는 것을 프로파일링이라고한다.</p>
-<p>    프로파일링툴이 많으며 이것으로 성능을 측정하여 느리부분을 어셈블리어로 교체하여 성능을 개선한다.</p>
-<p>4. 좋은 코드란 확장성과 다른사람이 읽기 쉬운 코드이다</p>]]></content><author><name></name></author><category term="Jungle" /><category term="Everyday" /><summary type="html"><![CDATA[이동석코치님과 커피챗을 진행했다. 같은 동기 한명과 진행했고, 요약해보자면 1. c언어는 portability가 약하고, 요즘은 rust를 많이 사용한다고한다. 다만 미국 이야기이고 한국은 아직이라고한다. 2. c언어는 매크로를 많이 사용하여 오픈소스]]></summary></entry></feed>
+<p><strong>결국 마지막에 웃는 사람은 AI를 잘 쓰는 사람이 아니라, AI 없이도 문제를 해결할 줄 아는 능력을 갖춘 채 AI를 도구로 부리는 사람일 테니까요.</strong></p>]]></content><author><name></name></author><category term="AI" /><summary type="html"><![CDATA[[에세이] AI 시대, 정답보다 '고민의 시간'이 더 가치 있는 이유 AI에게 물어보면 10초 만에 코드가 나오고 답이 나오는 시대입니다. 상황이 이렇다 보니, 가끔 이런 회의감이 들곤 합니다. "어차피 AI가 다 해주는데, 굳이 내가 머리 싸매며 고]]></summary></entry></feed>
