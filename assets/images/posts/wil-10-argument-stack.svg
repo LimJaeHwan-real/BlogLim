@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="720" viewBox="0 0 1120 720" role="img" aria-labelledby="title desc">
+  <title id="title">Argument passing stack layout</title>
+  <desc id="desc">A Pintos user stack layout for args-multiple some arguments for you.</desc>
+  <defs>
+    <style>
+      .bg { fill: #fbfdf8; }
+      .card { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .stack { fill: #f1f5f9; stroke: #334155; stroke-width: 2; }
+      .cell { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+      .str { fill: #e0f2fe; stroke: #0284c7; stroke-width: 1.5; }
+      .ptr { fill: #ecfdf5; stroke: #059669; stroke-width: 1.5; }
+      .align { fill: #fff7ed; stroke: #ea580c; stroke-width: 1.5; }
+      .arrow { stroke: #334155; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .soft { stroke: #64748b; stroke-width: 2; fill: none; stroke-dasharray: 6 6; marker-end: url(#arrow-soft); }
+      .title { font: 700 30px Arial, "Noto Sans KR", sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 17px Arial, "Noto Sans KR", sans-serif; fill: #475569; }
+      .label { font: 700 18px Arial, "Noto Sans KR", sans-serif; fill: #0f172a; }
+      .small { font: 500 15px Arial, "Noto Sans KR", sans-serif; fill: #334155; }
+      .code { font: 600 15px "Consolas", "Courier New", monospace; fill: #0f172a; }
+      .addr { font: 600 13px "Consolas", "Courier New", monospace; fill: #64748b; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-soft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1120" height="720" rx="24"/>
+  <text class="title" x="56" y="64">Argument Passing: 유저 스택에 argc/argv 만들기</text>
+  <text class="subtitle" x="56" y="94">문자열은 스택 아래쪽에 복사되고, argv 포인터 배열은 시작 주소부터 증가 방향으로 읽힌다.</text>
+
+  <rect class="card" x="70" y="132" width="390" height="164" rx="16"/>
+  <text class="label" x="98" y="170">실행 문자열</text>
+  <text class="code" x="98" y="208">args-multiple some arguments for you!</text>
+  <text class="small" x="98" y="246">토큰 5개로 분리한 뒤 스택에 문자열과 주소를 배치한다.</text>
+
+  <rect class="card" x="70" y="338" width="390" height="236" rx="16"/>
+  <text class="label" x="98" y="376">유저 main이 기대하는 값</text>
+  <text class="code" x="98" y="414">argc = 5</text>
+  <text class="code" x="98" y="442">argv[0] = "args-multiple"</text>
+  <text class="code" x="98" y="470">argv[1] = "some"</text>
+  <text class="code" x="98" y="498">argv[2] = "arguments"</text>
+  <text class="code" x="98" y="526">argv[3] = "for"</text>
+  <text class="code" x="98" y="554">argv[4] = "you!"</text>
+
+  <rect class="stack" x="574" y="132" width="382" height="510" rx="16"/>
+  <text class="label" x="604" y="170">User stack</text>
+  <text class="addr" x="832" y="170">높은 주소</text>
+
+  <rect class="cell" x="620" y="204" width="290" height="42" rx="8"/>
+  <text class="code" x="646" y="230">fake return address</text>
+  <rect class="ptr" x="620" y="252" width="290" height="42" rx="8"/>
+  <text class="code" x="646" y="278">argc = 5  -> rdi</text>
+  <rect class="ptr" x="620" y="300" width="290" height="42" rx="8"/>
+  <text class="code" x="646" y="326">argv address -> rsi</text>
+  <rect class="ptr" x="620" y="348" width="290" height="42" rx="8"/>
+  <text class="code" x="646" y="374">argv[0] pointer</text>
+  <rect class="ptr" x="620" y="396" width="290" height="42" rx="8"/>
+  <text class="code" x="646" y="422">argv[1] pointer</text>
+  <rect class="ptr" x="620" y="444" width="290" height="42" rx="8"/>
+  <text class="code" x="646" y="470">argv[2] pointer</text>
+  <rect class="ptr" x="620" y="492" width="290" height="42" rx="8"/>
+  <text class="code" x="646" y="518">argv[3] pointer</text>
+  <rect class="ptr" x="620" y="540" width="290" height="42" rx="8"/>
+  <text class="code" x="646" y="566">argv[4] pointer</text>
+  <rect class="align" x="620" y="588" width="290" height="32" rx="8"/>
+  <text class="code" x="646" y="609">NULL + 16-byte alignment</text>
+
+  <path class="arrow" d="M950 195 L950 614"/>
+  <text class="small" x="968" y="404">스택은 낮은 주소 방향으로 성장</text>
+
+  <rect class="str" x="604" y="646" width="92" height="34" rx="8"/>
+  <text class="code" x="620" y="668">args...</text>
+  <rect class="str" x="704" y="646" width="76" height="34" rx="8"/>
+  <text class="code" x="720" y="668">some</text>
+  <rect class="str" x="788" y="646" width="104" height="34" rx="8"/>
+  <text class="code" x="804" y="668">arguments</text>
+  <rect class="str" x="900" y="646" width="58" height="34" rx="8"/>
+  <text class="code" x="915" y="668">for</text>
+  <rect class="str" x="966" y="646" width="70" height="34" rx="8"/>
+  <text class="code" x="980" y="668">you!</text>
+
+  <path class="soft" d="M620 369 C534 370, 526 646, 604 663"/>
+  <path class="soft" d="M620 417 C548 426, 620 644, 704 663"/>
+  <path class="soft" d="M620 465 C578 494, 692 636, 788 663"/>
+
+  <text class="addr" x="832" y="632">낮은 주소</text>
+</svg>

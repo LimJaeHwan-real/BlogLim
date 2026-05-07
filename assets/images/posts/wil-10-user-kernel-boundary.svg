@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620" role="img" aria-labelledby="title desc">
+  <title id="title">Pintos Project 2 user-kernel boundary</title>
+  <desc id="desc">User program calls syscall, kernel validates arguments, runs kernel service, and returns or exits the process.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .user { fill: #e0f2fe; stroke: #0284c7; stroke-width: 2; }
+      .kernel { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+      .danger { fill: #fff7ed; stroke: #ea580c; stroke-width: 2; }
+      .line { stroke: #334155; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .return { stroke: #64748b; stroke-width: 3; fill: none; stroke-dasharray: 8 8; marker-end: url(#arrow-soft); }
+      .title { font: 700 30px Arial, "Noto Sans KR", sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 17px Arial, "Noto Sans KR", sans-serif; fill: #475569; }
+      .label { font: 700 19px Arial, "Noto Sans KR", sans-serif; fill: #0f172a; }
+      .small { font: 500 15px Arial, "Noto Sans KR", sans-serif; fill: #334155; }
+      .code { font: 600 15px "Consolas", "Courier New", monospace; fill: #0f172a; }
+      .badge { fill: #0f172a; }
+      .badgeText { font: 700 14px Arial, "Noto Sans KR", sans-serif; fill: #ffffff; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-soft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1120" height="620" rx="24"/>
+  <text class="title" x="56" y="64">User Program과 Kernel 사이의 신뢰 경계</text>
+  <text class="subtitle" x="56" y="94">Project 2의 핵심은 유저 요청을 그대로 믿지 않고, 검증된 요청만 커널 서비스로 넘기는 것이다.</text>
+
+  <rect class="panel" x="54" y="136" width="1012" height="388" rx="18"/>
+  <rect class="user" x="94" y="190" width="220" height="112" rx="14"/>
+  <rect class="kernel" x="450" y="190" width="220" height="112" rx="14"/>
+  <rect class="danger" x="806" y="190" width="220" height="112" rx="14"/>
+  <rect class="kernel" x="450" y="374" width="220" height="112" rx="14"/>
+  <rect class="user" x="94" y="374" width="220" height="112" rx="14"/>
+
+  <circle class="badge" cx="118" cy="214" r="16"/>
+  <text class="badgeText" x="113" y="219">1</text>
+  <text class="label" x="142" y="222">User program</text>
+  <text class="code" x="122" y="254">write(1, buf, size)</text>
+  <text class="code" x="122" y="278">exec("child arg")</text>
+
+  <circle class="badge" cx="474" cy="214" r="16"/>
+  <text class="badgeText" x="469" y="219">2</text>
+  <text class="label" x="498" y="222">syscall_handler()</text>
+  <text class="small" x="478" y="254">rax에서 syscall 번호 확인</text>
+  <text class="small" x="478" y="278">레지스터에서 인자 읽기</text>
+
+  <circle class="badge" cx="830" cy="214" r="16"/>
+  <text class="badgeText" x="825" y="219">3</text>
+  <text class="label" x="854" y="222">검증 경계</text>
+  <text class="small" x="834" y="254">NULL / 커널 주소 / 미매핑 주소</text>
+  <text class="small" x="834" y="278">잘못된 포인터면 exit(-1)</text>
+
+  <circle class="badge" cx="474" cy="398" r="16"/>
+  <text class="badgeText" x="469" y="403">4</text>
+  <text class="label" x="498" y="406">Kernel service</text>
+  <text class="small" x="478" y="438">filesys, process, thread 호출</text>
+  <text class="small" x="478" y="462">결과를 rax에 저장</text>
+
+  <circle class="badge" cx="118" cy="398" r="16"/>
+  <text class="badgeText" x="113" y="403">5</text>
+  <text class="label" x="142" y="406">Return to user</text>
+  <text class="small" x="122" y="438">성공/실패값 반환</text>
+  <text class="small" x="122" y="462">또는 프로세스 종료</text>
+
+  <path class="line" d="M316 246 C360 246, 398 246, 444 246"/>
+  <path class="line" d="M672 246 C716 246, 758 246, 800 246"/>
+  <path class="line" d="M916 304 C916 350, 752 430, 676 430"/>
+  <path class="return" d="M450 430 C386 430, 370 430, 320 430"/>
+
+  <rect x="110" y="548" width="900" height="34" rx="17" fill="#e2e8f0"/>
+  <text class="small" x="148" y="570">핵심 규칙: 잘못된 유저 메모리 주소는 커널 panic이 아니라 해당 유저 프로세스의 exit(-1)로 끝나야 한다.</text>
+</svg>

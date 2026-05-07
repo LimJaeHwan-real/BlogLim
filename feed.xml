@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://limjaehwan-real.github.io/BlogLim/feed.xml" rel="self" type="application/atom+xml" /><link href="https://limjaehwan-real.github.io/BlogLim/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2026-05-07T18:28:34+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/feed.xml</id><title type="html">ForRest</title><subtitle>Auto Programmer</subtitle><entry><title type="html">[WIL] 10주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-10%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 10주" /><published>2026-05-07T09:00:00+09:00</published><updated>2026-05-07T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-10%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-10%EC%A3%BC/"><![CDATA[<h2 id="10주차-주간-회고-유저-프로그램과-커널의-경계를-구현한-한-주">10주차 주간 회고: 유저 프로그램과 커널의 경계를 구현한 한 주</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://limjaehwan-real.github.io/BlogLim/feed.xml" rel="self" type="application/atom+xml" /><link href="https://limjaehwan-real.github.io/BlogLim/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2026-05-07T18:35:08+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/feed.xml</id><title type="html">ForRest</title><subtitle>Auto Programmer</subtitle><entry><title type="html">[WIL] 10주</title><link href="https://limjaehwan-real.github.io/BlogLim/wil-10%EC%A3%BC/" rel="alternate" type="text/html" title="[WIL] 10주" /><published>2026-05-07T09:00:00+09:00</published><updated>2026-05-07T09:00:00+09:00</updated><id>https://limjaehwan-real.github.io/BlogLim/wil-10%EC%A3%BC</id><content type="html" xml:base="https://limjaehwan-real.github.io/BlogLim/wil-10%EC%A3%BC/"><![CDATA[<h2 id="10주차-주간-회고-유저-프로그램과-커널의-경계를-구현한-한-주">10주차 주간 회고: 유저 프로그램과 커널의 경계를 구현한 한 주</h2>
 
 <p>10주차는 Pintos Project 2 User Programs에 본격적으로 들어간 주였다. 9주차에는 스레드, 스케줄링, 락, 세마포어처럼 커널 내부의 실행 흐름을 주로 봤다면, 이번 주부터는 유저 프로그램이 커널에게 무엇을 요청하고, 커널이 그 요청을 어디까지 믿을 수 있는지를 다뤘다.</p>
 
@@ -52,6 +52,11 @@
 </table>
 
 <p>이 글들을 묶어 보면 이번 주의 흐름은 <code class="language-plaintext highlighter-rouge">Project 1 발표 피드백 → User Program 개념 이해 → Argument Passing → Syscall Dispatch → User Pointer 검증 → FD/File Syscall → fork/exec/wait → ROX와 통합 테스트 → 발표 개선</code>으로 이어졌다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-10-user-kernel-boundary.svg" alt="Pintos Project 2에서 유저 프로그램이 syscall로 커널에 진입하고, 커널이 포인터와 인자를 검증한 뒤 커널 서비스를 실행하는 흐름" />
+  <figcaption>Project 2의 핵심은 유저 프로그램과 커널 사이의 신뢰 경계를 안전하게 통과시키는 것이다</figcaption>
+</figure>
 
 <h2 id="1-project-1-발표-피드백에서-출발한-점">1. Project 1 발표 피드백에서 출발한 점</h2>
 
@@ -153,6 +158,11 @@ argv[5] = NULL
 </code></pre></div></div>
 
 <p>여기서 16바이트 정렬도 신경 써야 한다. x86-64 ABI 규약에서는 함수 호출 시 스택 정렬이 중요하다. 정렬이 틀리면 당장 모든 테스트가 깨지지는 않더라도, ABI 관점에서 올바른 실행 환경을 만든 것이 아니다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-10-argument-stack.svg" alt="args-multiple some arguments for you 실행 문자열을 argc와 argv 형태로 유저 스택에 배치하는 argument passing 구조" />
+  <figcaption>argument passing은 문자열을 복사하는 일과 argv 포인터 배열을 올바른 순서로 만드는 일을 함께 맞춰야 한다</figcaption>
+</figure>
 
 <h2 id="5-syscall-dispatch와-기본-시스템-콜">5. Syscall Dispatch와 기본 시스템 콜</h2>
 
@@ -496,6 +506,11 @@ copy_in_string(uaddr)
 </table>
 
 <p>테스트는 파일명 순서로 푸는 것보다 의존성 순서로 보는 것이 훨씬 좋다. <code class="language-plaintext highlighter-rouge">args-*</code>가 깨지면 <code class="language-plaintext highlighter-rouge">exec-arg</code>와 <code class="language-plaintext highlighter-rouge">multi-recurse</code>도 흔들리고, fd table이 불안정하면 <code class="language-plaintext highlighter-rouge">fork-read</code>, <code class="language-plaintext highlighter-rouge">fork-close</code>, <code class="language-plaintext highlighter-rouge">multi-child-fd</code>가 같이 흔들린다.</p>
+
+<figure>
+  <img src="/BlogLim/assets/images/posts/wil-10-test-dependency.svg" alt="Pintos Project 2 테스트를 argument passing, basic syscall, pointer 검증, file syscall, wait, fork, exec, rox, stress 순서로 읽는 의존성 다이어그램" />
+  <figcaption>Project 2 테스트는 기능이 쌓이는 순서로 읽어야 실패한 층을 빠르게 좁힐 수 있다</figcaption>
+</figure>
 
 <h2 id="10-팀-작업-분담과-인터페이스-합의">10. 팀 작업 분담과 인터페이스 합의</h2>
 

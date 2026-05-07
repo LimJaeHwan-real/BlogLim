@@ -15,7 +15,7 @@
         "series_key": "",
         "series_title": null,
         "date_label": "2026년 5월 7일",
-        "reading_time_label": "11분 읽기",
+        "reading_time_label": "12분 읽기",
         "search": "[wil] 10주 10주차는 pintos project 2 user programs를 중심으로 argument passing, syscall, user pointer 검증, file descriptor, fork/exec/wait, 실행 파일 write deny까지 정리하며 유저 프로그램과 커널이 만나는 경계를 학습한 한 주였다. jungle / wil(weekly i learned)"
       },
     
