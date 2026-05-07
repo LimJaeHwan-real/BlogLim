@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650" role="img" aria-labelledby="title desc">
+  <title id="title">Pintos Project 2 test dependency order</title>
+  <desc id="desc">Recommended dependency order for Pintos Project 2 user program tests.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .node { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .green { fill: #ecfdf5; stroke: #059669; }
+      .blue { fill: #e0f2fe; stroke: #0284c7; }
+      .amber { fill: #fffbeb; stroke: #d97706; }
+      .red { fill: #fff1f2; stroke: #e11d48; }
+      .line { stroke: #475569; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .title { font: 700 30px Arial, "Noto Sans KR", sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 17px Arial, "Noto Sans KR", sans-serif; fill: #475569; }
+      .label { font: 700 18px Arial, "Noto Sans KR", sans-serif; fill: #0f172a; }
+      .small { font: 500 14px Arial, "Noto Sans KR", sans-serif; fill: #334155; }
+      .code { font: 600 13px "Consolas", "Courier New", monospace; fill: #0f172a; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1120" height="650" rx="24"/>
+  <text class="title" x="56" y="64">Project 2 테스트는 의존성 순서로 읽기</text>
+  <text class="subtitle" x="56" y="94">파일명 순서보다 기능이 쌓이는 순서로 보면 실패 원인을 더 빨리 좁힐 수 있다.</text>
+
+  <rect class="node green" x="70" y="150" width="210" height="92" rx="14"/>
+  <text class="label" x="96" y="184">1. Argument</text>
+  <text class="small" x="96" y="210">스택에 argc/argv 배치</text>
+  <text class="code" x="96" y="232">args-*</text>
+
+  <rect class="node green" x="340" y="150" width="210" height="92" rx="14"/>
+  <text class="label" x="366" y="184">2. Basic syscall</text>
+  <text class="small" x="366" y="210">진입점과 종료 흐름</text>
+  <text class="code" x="366" y="232">halt, exit, write</text>
+
+  <rect class="node blue" x="610" y="150" width="210" height="92" rx="14"/>
+  <text class="label" x="636" y="184">3. Pointer</text>
+  <text class="small" x="636" y="210">유저 주소 검증</text>
+  <text class="code" x="636" y="232">*-bad-ptr, boundary</text>
+
+  <rect class="node blue" x="850" y="150" width="210" height="92" rx="14"/>
+  <text class="label" x="876" y="184">4. File syscall</text>
+  <text class="small" x="876" y="210">fd table과 filesys</text>
+  <text class="code" x="876" y="232">open/read/write/close</text>
+
+  <rect class="node amber" x="190" y="338" width="210" height="92" rx="14"/>
+  <text class="label" x="216" y="372">5. Wait</text>
+  <text class="small" x="216" y="398">자식 종료 상태 회수</text>
+  <text class="code" x="216" y="420">wait-*</text>
+
+  <rect class="node amber" x="460" y="338" width="210" height="92" rx="14"/>
+  <text class="label" x="486" y="372">6. Fork</text>
+  <text class="small" x="486" y="398">주소공간과 fd 복제</text>
+  <text class="code" x="486" y="420">fork-*</text>
+
+  <rect class="node amber" x="730" y="338" width="210" height="92" rx="14"/>
+  <text class="label" x="756" y="372">7. Exec</text>
+  <text class="small" x="756" y="398">현재 프로그램 교체</text>
+  <text class="code" x="756" y="420">exec-*</text>
+
+  <rect class="node red" x="320" y="520" width="210" height="92" rx="14"/>
+  <text class="label" x="346" y="554">8. ROX</text>
+  <text class="small" x="346" y="580">실행 파일 write deny</text>
+  <text class="code" x="346" y="602">rox-*</text>
+
+  <rect class="node red" x="590" y="520" width="210" height="92" rx="14"/>
+  <text class="label" x="616" y="554">9. Stress</text>
+  <text class="small" x="616" y="580">기능 조합과 자원 회수</text>
+  <text class="code" x="616" y="602">multi-*, OOM</text>
+
+  <path class="line" d="M280 196 H334"/>
+  <path class="line" d="M550 196 H604"/>
+  <path class="line" d="M820 196 H844"/>
+  <path class="line" d="M955 244 C955 292, 835 310, 835 332"/>
+  <path class="line" d="M715 244 C715 292, 565 310, 565 332"/>
+  <path class="line" d="M445 244 C445 292, 295 310, 295 332"/>
+  <path class="line" d="M400 384 H454"/>
+  <path class="line" d="M670 384 H724"/>
+  <path class="line" d="M835 432 C835 486, 694 488, 694 514"/>
+  <path class="line" d="M565 432 C565 484, 425 488, 425 514"/>
+  <path class="line" d="M530 566 H584"/>
+</svg>
