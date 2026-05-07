@@ -5,6 +5,24 @@
       
       
       {
+        "title": "[WIL] 10주",
+        "url": "/BlogLim/wil-10%EC%A3%BC/",
+        "description": "10주차는 Pintos Project 2 User Programs를 중심으로 argument passing, syscall, user pointer 검증, file descriptor, fork/exec/wait, 실행 파일 write deny까지 정리하며 유저 프로그램과 커널이 만나는 경계를 학습한 한 주였다.",
+        "thumbnail": "/BlogLim/assets/images/posts/journey-starts-here-cover.png",
+        "categories": ["Jungle","WIL(Weekly I Learned)"],
+        "category_path": "Jungle / WIL(Weekly I Learned)",
+        "tags": "",
+        "series_key": "",
+        "series_title": null,
+        "date_label": "2026년 5월 7일",
+        "reading_time_label": "11분 읽기",
+        "search": "[wil] 10주 10주차는 pintos project 2 user programs를 중심으로 argument passing, syscall, user pointer 검증, file descriptor, fork/exec/wait, 실행 파일 write deny까지 정리하며 유저 프로그램과 커널이 만나는 경계를 학습한 한 주였다. jungle / wil(weekly i learned)"
+      },
+    
+      
+      
+      
+      {
         "title": "[WIL] 9주",
         "url": "/BlogLim/wil-9%EC%A3%BC/",
         "description": "9주차는 Pintos Project 1 Threads를 시작하며 Alarm Clock, priority scheduling, priority donation, MLFQS를 팀 단위로 학습하고, 운영체제의 추상화와 보호 개념을 실제 커널 코드와 테스트로 연결해 본 한 주였다.",
