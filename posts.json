@@ -5,6 +5,24 @@
       
       
       {
+        "title": "[WIL] 13주차",
+        "url": "/BlogLim/wil-13%EC%A3%BC/",
+        "description": "13주차에는 PyTorch나 TensorFlow 없이 NumPy만으로 MNIST 손글씨 숫자 분류 신경망을 직접 구현하며 Forward, Loss, Backward, Optimizer Update가 어떻게 연결되는지 코드 수준에서 학습했다.",
+        "thumbnail": "/BlogLim/assets/images/posts/wil-13-mnist-mlp.svg",
+        "categories": ["Jungle","WIL(Weekly I Learned)"],
+        "category_path": "Jungle / WIL(Weekly I Learned)",
+        "tags": "",
+        "series_key": "",
+        "series_title": null,
+        "date_label": "2026년 5월 28일",
+        "reading_time_label": "6분 읽기",
+        "search": "[wil] 13주차 13주차에는 pytorch나 tensorflow 없이 numpy만으로 mnist 손글씨 숫자 분류 신경망을 직접 구현하며 forward, loss, backward, optimizer update가 어떻게 연결되는지 코드 수준에서 학습했다. jungle / wil(weekly i learned)"
+      },
+    
+      
+      
+      
+      {
         "title": "[WIL] 12주",
         "url": "/BlogLim/wil-12%EC%A3%BC/",
         "description": "12주차는 Pintos Project 3의 기반이 되는 가상메모리, 페이징, 페이지 테이블, 페이지 폴트, 세그멘테이션, Copy-on-write를 정리하며 프로세스가 보는 주소 공간과 실제 메모리가 어떻게 연결되는지 학습한 한 주였다.",

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">MNIST MLP architecture</title>
+  <desc id="desc">A NumPy MNIST classifier pipeline from 784 input pixels through two hidden layers to ten output classes.</desc>
+  <rect width="1200" height="630" fill="#f8fafc"/>
+  <rect x="70" y="70" width="1060" height="490" rx="22" fill="#ffffff" stroke="#d7dee8" stroke-width="2"/>
+  <text x="100" y="130" fill="#111827" font-family="Arial, sans-serif" font-size="42" font-weight="700">MNIST Lab</text>
+  <text x="100" y="174" fill="#475569" font-family="Arial, sans-serif" font-size="24">NumPy only neural network training flow</text>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <rect x="105" y="255" width="150" height="120" rx="14" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+    <text x="180" y="306" fill="#075985" font-size="24" font-weight="700">Input</text>
+    <text x="180" y="340" fill="#0f172a" font-size="22">784</text>
+    <rect x="315" y="235" width="160" height="160" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="395" y="292" fill="#166534" font-size="24" font-weight="700">Hidden 1</text>
+    <text x="395" y="326" fill="#0f172a" font-size="21">512</text>
+    <text x="395" y="356" fill="#475569" font-size="17">BN + ReLU</text>
+    <rect x="535" y="235" width="160" height="160" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="615" y="292" fill="#92400e" font-size="24" font-weight="700">Hidden 2</text>
+    <text x="615" y="326" fill="#0f172a" font-size="21">256</text>
+    <text x="615" y="356" fill="#475569" font-size="17">BN + ReLU</text>
+    <rect x="755" y="255" width="150" height="120" rx="14" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+    <text x="830" y="306" fill="#9d174d" font-size="24" font-weight="700">Output</text>
+    <text x="830" y="340" fill="#0f172a" font-size="22">10</text>
+    <rect x="965" y="255" width="120" height="120" rx="60" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+    <text x="1025" y="306" fill="#5b21b6" font-size="23" font-weight="700">98.52%</text>
+    <text x="1025" y="340" fill="#0f172a" font-size="18">accuracy</text>
+  </g>
+  <g stroke="#64748b" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M260 315 H305"/>
+    <path d="M300 305 L315 315 L300 325"/>
+    <path d="M480 315 H525"/>
+    <path d="M520 305 L535 315 L520 325"/>
+    <path d="M700 315 H745"/>
+    <path d="M740 305 L755 315 L740 325"/>
+    <path d="M910 315 H955"/>
+    <path d="M950 305 L965 315 L950 325"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="20" fill="#334155">
+    <text x="105" y="472">Forward</text>
+    <text x="258" y="472">Loss</text>
+    <text x="388" y="472">Backward</text>
+    <text x="565" y="472">Optimizer Update</text>
+    <text x="795" y="472">Test</text>
+  </g>
+  <path d="M100 492 H885" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round"/>
+  <path d="M100 492 H835" stroke="#0f766e" stroke-width="8" stroke-linecap="round"/>
+  <text x="100" y="530" fill="#64748b" font-family="Arial, sans-serif" font-size="20">Affine, BatchNorm, Dropout, Cross Entropy, SGD, Adam implemented by hand</text>
+</svg>
