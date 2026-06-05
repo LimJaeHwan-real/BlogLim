@@ -50,6 +50,12 @@
     {% assign show_theme_toggle = theme.header.show_theme_toggle | default: true %}
     {% if show_github_link or show_rss_link or show_theme_toggle %}
       <nav class="header-actions" aria-label="바로가기">
+        <a class="write-button" href="{{ '/write/' | relative_url }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 17.25V20h2.75L17.8 8.95 15.05 6.2 4 17.25Zm15.9-10.2a1 1 0 0 0 0-1.4l-1.55-1.55a1 1 0 0 0-1.4 0l-1.1 1.1 2.75 2.75 1.3-1.3Z"></path>
+          </svg>
+          <span>글쓰기</span>
+        </a>
         {% if show_github_link and resolved_github_url != "" %}
           <a
             class="icon-button"
