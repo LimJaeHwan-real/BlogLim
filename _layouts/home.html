@@ -146,6 +146,12 @@ layout: default
 
         <div class="posts-panel">
           <div class="posts-panel__toolbar">
+            <a class="posts-write-button" href="{{ '/write/' | relative_url }}">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 17.25V20h2.75L17.8 8.95 15.05 6.2 4 17.25Zm15.9-10.2a1 1 0 0 0 0-1.4l-1.55-1.55a1 1 0 0 0-1.4 0l-1.1 1.1 2.75 2.75 1.3-1.3Z"></path>
+              </svg>
+              <span>글쓰기</span>
+            </a>
             {% if algolia_enabled %}
               <div
                 id="algolia-search"
