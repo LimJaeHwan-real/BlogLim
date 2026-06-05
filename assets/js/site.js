@@ -689,6 +689,519 @@
     }
   }
 
+  function setupMarkdownWriter() {
+    var writer = document.querySelector("[data-markdown-writer]");
+    var DRAFT_KEY = "velog-writer-draft";
+
+    if (!writer) {
+      return;
+    }
+
+    var titleInput = writer.querySelector("[data-writer-title]");
+    var descriptionInput = writer.querySelector("[data-writer-description]");
+    var categorySelect = writer.querySelector("[data-writer-category]");
+    var customCategoryInput = writer.querySelector("[data-writer-custom-category]");
+    var tagsInput = writer.querySelector("[data-writer-tags]");
+    var thumbnailInput = writer.querySelector("[data-writer-thumbnail]");
+    var bodyInput = writer.querySelector("[data-writer-body]");
+    var preview = writer.querySelector("[data-writer-preview]");
+    var status = writer.querySelector("[data-writer-status]");
+    var copyButton = writer.querySelector("[data-writer-copy]");
+    var downloadButton = writer.querySelector("[data-writer-download]");
+    var dropTarget = writer.querySelector("[data-writer-drop]");
+    var toolbarButtons = Array.prototype.slice.call(writer.querySelectorAll("[data-md-command]"));
+    var defaultBody = [
+      "# 새 글 제목",
+      "",
+      "**오늘 배운 것**을 정리합니다.",
+      "",
+      "## 핵심 내용",
+      "",
+      "- 첫 번째 포인트",
+      "- 두 번째 포인트",
+      "",
+      "## 회고",
+      "",
+      "> 다음 글에서 더 자세히 다뤄볼 내용",
+    ].join("\n");
+    var saveTimer = 0;
+
+    function setStatus(message) {
+      if (!status) {
+        return;
+      }
+
+      status.textContent = message;
+    }
+
+    function slugify(value) {
+      var normalized = String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\\/:*?"<>|]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+
+      return normalized || "new-post";
+    }
+
+    function yamlString(value) {
+      return '"' + String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '"';
+    }
+
+    function getCategories() {
+      var rawCategory = (customCategoryInput && customCategoryInput.value.trim()) || (categorySelect && categorySelect.value.trim()) || "";
+
+      return rawCategory
+        .split("/")
+        .map(function (item) {
+          return item.trim();
+        })
+        .filter(Boolean);
+    }
+
+    function getTags() {
+      return String(tagsInput ? tagsInput.value : "")
+        .split(",")
+        .map(function (item) {
+          return item.trim();
+        })
+        .filter(Boolean);
+    }
+
+    function getToday() {
+      var now = new Date();
+      var year = now.getFullYear();
+      var month = String(now.getMonth() + 1).padStart(2, "0");
+      var day = String(now.getDate()).padStart(2, "0");
+
+      return year + "-" + month + "-" + day;
+    }
+
+    function buildFrontMatter() {
+      var lines = ["---"];
+      var categories = getCategories();
+      var tags = getTags();
+      var thumbnail = thumbnailInput ? thumbnailInput.value.trim() : "";
+
+      lines.push("title: " + yamlString(titleInput ? titleInput.value.trim() : ""));
+      lines.push("description: " + yamlString(descriptionInput ? descriptionInput.value.trim() : ""));
+      lines.push("date: " + getToday() + " 09:00:00 +09:00");
+      lines.push("updated_at: " + getToday() + " 09:00:00 +09:00");
+
+      if (thumbnail) {
+        lines.push("thumbnail: " + yamlString(thumbnail));
+      }
+
+      if (categories.length) {
+        lines.push("categories:");
+        categories.forEach(function (category) {
+          lines.push("  - " + yamlString(category));
+        });
+      }
+
+      if (tags.length) {
+        lines.push("tags:");
+        tags.forEach(function (tag) {
+          lines.push("  - " + yamlString(tag));
+        });
+      }
+
+      lines.push("---");
+
+      return lines.join("\n");
+    }
+
+    function buildPostMarkdown() {
+      return buildFrontMatter() + "\n\n" + (bodyInput ? bodyInput.value.trim() : "") + "\n";
+    }
+
+    function inlineMarkdown(value) {
+      return escapeHtml(value)
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+    }
+
+    function renderMarkdown(markdown) {
+      var lines = String(markdown || "").split(/\r?\n/);
+      var html = [];
+      var index = 0;
+      var inCode = false;
+      var codeLines = [];
+      var inList = false;
+      var inOrderedList = false;
+      var inTable = false;
+
+      function closeList() {
+        if (inList) {
+          html.push("</ul>");
+          inList = false;
+        }
+
+        if (inOrderedList) {
+          html.push("</ol>");
+          inOrderedList = false;
+        }
+      }
+
+      function closeTable() {
+        if (inTable) {
+          html.push("</tbody></table>");
+          inTable = false;
+        }
+      }
+
+      function renderTableRow(line, isHeader) {
+        var cells = line
+          .replace(/^\|/, "")
+          .replace(/\|$/, "")
+          .split("|")
+          .map(function (cell) {
+            return inlineMarkdown(cell.trim());
+          });
+        var tag = isHeader ? "th" : "td";
+
+        return "<tr>" + cells.map(function (cell) {
+          return "<" + tag + ">" + cell + "</" + tag + ">";
+        }).join("") + "</tr>";
+      }
+
+      while (index < lines.length) {
+        var line = lines[index];
+        var trimmed = line.trim();
+        var nextLine = lines[index + 1] ? lines[index + 1].trim() : "";
+
+        if (trimmed.indexOf("```") === 0) {
+          closeList();
+          closeTable();
+
+          if (inCode) {
+            html.push("<pre><code>" + escapeHtml(codeLines.join("\n")) + "</code></pre>");
+            codeLines = [];
+            inCode = false;
+          } else {
+            inCode = true;
+          }
+
+          index += 1;
+          continue;
+        }
+
+        if (inCode) {
+          codeLines.push(line);
+          index += 1;
+          continue;
+        }
+
+        if (!trimmed) {
+          closeList();
+          closeTable();
+          index += 1;
+          continue;
+        }
+
+        if (/^\|.+\|$/.test(trimmed) && /^\|?[\s:-]+\|[\s|:-]+$/.test(nextLine)) {
+          closeList();
+          html.push("<table><thead>" + renderTableRow(trimmed, true) + "</thead><tbody>");
+          inTable = true;
+          index += 2;
+          continue;
+        }
+
+        if (inTable && /^\|.+\|$/.test(trimmed)) {
+          html.push(renderTableRow(trimmed, false));
+          index += 1;
+          continue;
+        }
+
+        closeTable();
+
+        if (/^#{1,6}\s+/.test(trimmed)) {
+          var level = Math.min(trimmed.match(/^#+/)[0].length, 4);
+          closeList();
+          html.push("<h" + level + ">" + inlineMarkdown(trimmed.replace(/^#{1,6}\s+/, "")) + "</h" + level + ">");
+        } else if (/^[-*]\s+/.test(trimmed)) {
+          if (!inList) {
+            closeList();
+            html.push("<ul>");
+            inList = true;
+          }
+          html.push("<li>" + inlineMarkdown(trimmed.replace(/^[-*]\s+/, "")) + "</li>");
+        } else if (/^\d+\.\s+/.test(trimmed)) {
+          if (!inOrderedList) {
+            closeList();
+            html.push("<ol>");
+            inOrderedList = true;
+          }
+          html.push("<li>" + inlineMarkdown(trimmed.replace(/^\d+\.\s+/, "")) + "</li>");
+        } else if (/^>\s?/.test(trimmed)) {
+          closeList();
+          html.push("<blockquote><p>" + inlineMarkdown(trimmed.replace(/^>\s?/, "")) + "</p></blockquote>");
+        } else if (/^---+$/.test(trimmed)) {
+          closeList();
+          html.push("<hr>");
+        } else {
+          closeList();
+          html.push("<p>" + inlineMarkdown(trimmed) + "</p>");
+        }
+
+        index += 1;
+      }
+
+      closeList();
+      closeTable();
+
+      if (inCode) {
+        html.push("<pre><code>" + escapeHtml(codeLines.join("\n")) + "</code></pre>");
+      }
+
+      return html.join("");
+    }
+
+    function updatePreview() {
+      var body = bodyInput ? bodyInput.value : "";
+
+      if (preview) {
+        preview.innerHTML = renderMarkdown(body);
+      }
+    }
+
+    function readDraft() {
+      try {
+        return JSON.parse(localStorage.getItem(DRAFT_KEY) || "{}");
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function writeDraft() {
+      var draft = {
+        title: titleInput ? titleInput.value : "",
+        description: descriptionInput ? descriptionInput.value : "",
+        category: categorySelect ? categorySelect.value : "",
+        customCategory: customCategoryInput ? customCategoryInput.value : "",
+        tags: tagsInput ? tagsInput.value : "",
+        thumbnail: thumbnailInput ? thumbnailInput.value : "",
+        body: bodyInput ? bodyInput.value : "",
+      };
+
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+        setStatus("임시 저장됨");
+      } catch (error) {
+        setStatus("임시 저장 공간이 부족합니다.");
+      }
+    }
+
+    function scheduleSave() {
+      window.clearTimeout(saveTimer);
+      saveTimer = window.setTimeout(writeDraft, 250);
+    }
+
+    function syncTitleWithBody() {
+      if (!titleInput || titleInput.value.trim() || !bodyInput) {
+        return;
+      }
+
+      var firstHeading = bodyInput.value.match(/^#\s+(.+)$/m);
+      if (firstHeading) {
+        titleInput.value = firstHeading[1].trim();
+      }
+    }
+
+    function insertAtCursor(before, after, placeholder) {
+      var start = bodyInput.selectionStart;
+      var end = bodyInput.selectionEnd;
+      var value = bodyInput.value;
+      var selection = value.slice(start, end) || placeholder || "";
+      var nextValue = value.slice(0, start) + before + selection + after + value.slice(end);
+      var nextPosition = start + before.length + selection.length + after.length;
+
+      bodyInput.value = nextValue;
+      bodyInput.focus();
+      bodyInput.setSelectionRange(nextPosition, nextPosition);
+      syncTitleWithBody();
+      updatePreview();
+      scheduleSave();
+    }
+
+    function insertLinePrefix(prefix) {
+      var start = bodyInput.selectionStart;
+      var value = bodyInput.value;
+      var lineStart = value.lastIndexOf("\n", Math.max(0, start - 1)) + 1;
+
+      bodyInput.value = value.slice(0, lineStart) + prefix + value.slice(lineStart);
+      bodyInput.focus();
+      bodyInput.setSelectionRange(start + prefix.length, start + prefix.length);
+      updatePreview();
+      scheduleSave();
+    }
+
+    function handleToolbar(commandButton) {
+      var command = commandButton.getAttribute("data-md-command");
+
+      if (command === "heading") {
+        insertLinePrefix(commandButton.getAttribute("data-md-value") || "## ");
+      } else if (command === "wrap") {
+        insertAtCursor(commandButton.getAttribute("data-md-before") || "", commandButton.getAttribute("data-md-after") || "", "텍스트");
+      } else if (command === "line") {
+        insertLinePrefix(commandButton.getAttribute("data-md-value") || "- ");
+      } else if (command === "link") {
+        insertAtCursor("[", "](https://example.com)", "링크 텍스트");
+      } else if (command === "image") {
+        insertAtCursor("![", "](/assets/images/posts/image.png)", "이미지 설명");
+      } else if (command === "table") {
+        insertAtCursor("\n| 항목 | 내용 |\n| --- | --- |\n| 예시 | 설명 |\n", "", "");
+      } else if (command === "hr") {
+        insertAtCursor("\n---\n", "", "");
+      }
+    }
+
+    function insertImageFile(file) {
+      if (!file || !file.type || file.type.indexOf("image/") !== 0) {
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function () {
+        insertAtCursor("\n![", "](" + reader.result + ")\n", file.name.replace(/\.[^.]+$/, "") || "image");
+        setStatus("이미지를 본문에 삽입했습니다.");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function downloadPost() {
+      syncTitleWithBody();
+      var markdown = buildPostMarkdown();
+      var filename = getToday() + "-" + slugify(titleInput ? titleInput.value : "") + ".md";
+      var blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+      var link = document.createElement("a");
+
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.setTimeout(function () {
+        URL.revokeObjectURL(link.href);
+      }, 1000);
+      setStatus(filename + " 파일로 저장했습니다.");
+    }
+
+    function copyPost() {
+      syncTitleWithBody();
+      var markdown = buildPostMarkdown();
+
+      if (!navigator.clipboard || !navigator.clipboard.writeText) {
+        setStatus("브라우저가 클립보드 복사를 지원하지 않습니다.");
+        return;
+      }
+
+      navigator.clipboard
+        .writeText(markdown)
+        .then(function () {
+          setStatus("마크다운을 클립보드에 복사했습니다.");
+        })
+        .catch(function () {
+          setStatus("클립보드 복사에 실패했습니다.");
+        });
+    }
+
+    function loadDraft() {
+      var draft = readDraft();
+
+      if (titleInput) {
+        titleInput.value = draft.title || "";
+      }
+      if (descriptionInput) {
+        descriptionInput.value = draft.description || "";
+      }
+      if (categorySelect) {
+        categorySelect.value = draft.category || "";
+      }
+      if (customCategoryInput) {
+        customCategoryInput.value = draft.customCategory || "";
+      }
+      if (tagsInput) {
+        tagsInput.value = draft.tags || "";
+      }
+      if (thumbnailInput) {
+        thumbnailInput.value = draft.thumbnail || "";
+      }
+      if (bodyInput) {
+        bodyInput.value = draft.body || defaultBody;
+      }
+
+      syncTitleWithBody();
+      updatePreview();
+    }
+
+    Array.prototype.slice
+      .call(writer.querySelectorAll("input, select, textarea"))
+      .forEach(function (input) {
+        input.addEventListener("input", function () {
+          syncTitleWithBody();
+          updatePreview();
+          scheduleSave();
+        });
+        input.addEventListener("change", scheduleSave);
+      });
+
+    toolbarButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        handleToolbar(button);
+      });
+    });
+
+    if (copyButton) {
+      copyButton.addEventListener("click", copyPost);
+    }
+
+    if (downloadButton) {
+      downloadButton.addEventListener("click", downloadPost);
+    }
+
+    if (bodyInput) {
+      bodyInput.addEventListener("paste", function (event) {
+        var items = event.clipboardData ? Array.prototype.slice.call(event.clipboardData.items) : [];
+        var imageItem = items.filter(function (item) {
+          return item.type && item.type.indexOf("image/") === 0;
+        })[0];
+
+        if (imageItem) {
+          event.preventDefault();
+          insertImageFile(imageItem.getAsFile());
+        }
+      });
+    }
+
+    if (dropTarget) {
+      ["dragenter", "dragover"].forEach(function (type) {
+        dropTarget.addEventListener(type, function (event) {
+          event.preventDefault();
+          writer.classList.add("is-dragging");
+        });
+      });
+      ["dragleave", "drop"].forEach(function (type) {
+        dropTarget.addEventListener(type, function (event) {
+          event.preventDefault();
+          writer.classList.remove("is-dragging");
+        });
+      });
+      dropTarget.addEventListener("drop", function (event) {
+        var files = event.dataTransfer ? Array.prototype.slice.call(event.dataTransfer.files) : [];
+        files.forEach(insertImageFile);
+      });
+    }
+
+    loadDraft();
+    setStatus("작성 중인 글은 이 브라우저에 자동 저장됩니다.");
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     setupAlgoliaSearch();
     setupGiscusThemeSync();
@@ -696,5 +1209,6 @@
     setupThemeToggle();
     setupSystemThemeSync();
     setupPostFilters();
+    setupMarkdownWriter();
   });
 })();
