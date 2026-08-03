@@ -48,13 +48,13 @@
 <meta name="twitter:description" content="Auto Programmer">
 
 
-<link rel="icon" href="/BlogLim/assets/images/favicon.png?v=1785738888" type="image/png" sizes="256x256">
-<link rel="shortcut icon" href="/BlogLim/assets/images/favicon.png?v=1785738888" type="image/png">
-<link rel="apple-touch-icon" href="/BlogLim/assets/images/favicon.png?v=1785738888">
-<link rel="mask-icon" href="/BlogLim/assets/images/profile.svg?v=1785738888" color="#495057">
+<link rel="icon" href="/BlogLim/assets/images/favicon.png?v=1785774841" type="image/png" sizes="256x256">
+<link rel="shortcut icon" href="/BlogLim/assets/images/favicon.png?v=1785774841" type="image/png">
+<link rel="apple-touch-icon" href="/BlogLim/assets/images/favicon.png?v=1785774841">
+<link rel="mask-icon" href="/BlogLim/assets/images/profile.svg?v=1785774841" color="#495057">
 <link rel="alternate" type="application/atom+xml" href="/BlogLim/feed.xml" title="임재환">
 
-<link rel="stylesheet" href="/BlogLim/assets/css/main.css?v=1785738888">
+<link rel="stylesheet" href="/BlogLim/assets/css/main.css?v=1785774841">
 <script>
   (function () {
     function applyTheme(theme) {
@@ -204,6 +204,8 @@
   class="writer"
   data-markdown-writer
   data-site-title="ForRest"
+  data-publisher-api-url="https://bloglim-secure-publisher.bloglim-secure-publisher.workers.dev"
+  data-site-url="https://LimJaeHwan-real.github.io/BlogLim"
 >
   <header class="writer-topbar">
     <div class="writer-brand">
@@ -230,11 +232,20 @@
         </svg>
         복사
       </button>
-      <button class="writer-action writer-action--primary" type="button" data-writer-download>
+      <button class="writer-action" type="button" data-writer-download>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M13 3v9.2l3.6-3.6L18 10l-6 6-6-6 1.4-1.4 3.6 3.6V3h2ZM5 19h14v2H5v-2Z"></path>
         </svg>
         마크다운 저장
+      </button>
+      <button class="writer-action" type="button" data-writer-logout hidden>
+        GitHub 연결 해제
+      </button>
+      <button class="writer-action writer-action--primary" type="button" data-writer-publish>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3 7 8h3v5h4V8h3l-5-5ZM5 12h3v5h8v-5h3v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7Z"></path>
+        </svg>
+        GitHub에 게시
       </button>
     </div>
   </header>
@@ -343,7 +354,46 @@
     </div>
   </section>
   <p class="writer-status" data-writer-status role="status" aria-live="polite"></p>
+
+  <dialog class="writer-publish-dialog" data-writer-publish-dialog aria-labelledby="writer-publish-title">
+    <div class="writer-publish-dialog__body">
+      <header class="writer-publish-dialog__header">
+        <div>
+          <span class="writer-publish-dialog__eyebrow">GitHub main 브랜치</span>
+          <h2 id="writer-publish-title">이 글을 공개할까요?</h2>
+        </div>
+        <button class="writer-publish-dialog__close" type="button" data-writer-publish-cancel aria-label="닫기">×</button>
+      </header>
+      <dl class="writer-publish-summary">
+        <div>
+          <dt>제목</dt>
+          <dd data-publish-summary-title></dd>
+        </div>
+        <div>
+          <dt>파일</dt>
+          <dd data-publish-summary-path></dd>
+        </div>
+        <div>
+          <dt>이미지</dt>
+          <dd data-publish-summary-images></dd>
+        </div>
+        <div>
+          <dt>공개 주소</dt>
+          <dd data-publish-summary-url></dd>
+        </div>
+      </dl>
+      <p class="writer-publish-dialog__notice">
+        확인을 누르면 GitHub 로그인 후 글과 이미지를 하나의 커밋으로 게시합니다.
+      </p>
+      <p class="writer-publish-dialog__error" data-publish-dialog-error role="alert" hidden></p>
+      <footer class="writer-publish-dialog__actions">
+        <button class="writer-action" type="button" data-writer-publish-cancel>취소</button>
+        <button class="writer-action writer-action--primary" type="button" data-writer-publish-confirm>확인하고 게시</button>
+      </footer>
+    </div>
+  </dialog>
 </section>
+<script src="/BlogLim/assets/js/publisher.js?v=1785774841" defer></script>
 
     </main>
     <footer class="site-footer">
@@ -354,6 +404,6 @@
 </footer>
 
     
-    <script src="/BlogLim/assets/js/site.js?v=1785738888"></script>
+    <script src="/BlogLim/assets/js/site.js?v=1785774841"></script>
   </body>
 </html>
