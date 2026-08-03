@@ -6,5 +6,8 @@ vendor/
 vendor/bundle/
 .DS_Store
 .playwright-cli/
+publisher-worker/node_modules/
+publisher-worker/.wrangler/
 _data/github_contributions_cache.json
 _data/github_profile_cache.json
+.gstack/

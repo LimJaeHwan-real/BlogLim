@@ -1612,6 +1612,19 @@ html[data-theme="dark"] {
   background: var(--primary2);
 }
 
+.writer-action:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.writer-action:disabled:hover {
+  background: var(--bg-element1);
+}
+
+.writer-action--primary:disabled:hover {
+  background: var(--primary1);
+}
+
 .writer-meta {
   padding: 1rem clamp(1rem, 2vw, 2rem);
   border-bottom: 1px solid var(--border3);
@@ -1774,6 +1787,120 @@ html[data-theme="dark"] {
   background: var(--bg-element1);
   color: var(--text3);
   font-size: 0.8125rem;
+}
+
+.writer-status a {
+  color: var(--primary1);
+  font-weight: 700;
+}
+
+.writer-publish-dialog {
+  width: min(36rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  border: 1px solid var(--border3);
+  border-radius: 0.875rem;
+  background: var(--bg-element1);
+  color: var(--text1);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.25);
+}
+
+.writer-publish-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.writer-publish-dialog__body {
+  padding: 1.5rem;
+}
+
+.writer-publish-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.writer-publish-dialog__eyebrow {
+  color: var(--primary1);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.writer-publish-dialog__header h2 {
+  margin: 0.25rem 0 0;
+  font-size: 1.5rem;
+}
+
+.writer-publish-dialog__close {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--text2);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.writer-publish-dialog__close:hover {
+  background: var(--bg-element2);
+}
+
+.writer-publish-summary {
+  margin: 1.25rem 0;
+  border: 1px solid var(--border3);
+  border-radius: 0.625rem;
+  overflow: hidden;
+}
+
+.writer-publish-summary div {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border4);
+}
+
+.writer-publish-summary div:last-child {
+  border-bottom: 0;
+}
+
+.writer-publish-summary dt {
+  color: var(--text3);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.writer-publish-summary dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+}
+
+.writer-publish-dialog__notice,
+.writer-publish-dialog__error {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.writer-publish-dialog__notice {
+  color: var(--text2);
+}
+
+.writer-publish-dialog__error {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(250, 82, 82, 0.12);
+  color: #e03131;
+}
+
+.writer-publish-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .site-footer {

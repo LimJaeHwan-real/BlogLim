@@ -1,0 +1,15 @@
+name = "bloglim-secure-publisher"
+main = "src/index.js"
+compatibility_date = "2026-08-03"
+workers_dev = true
+
+# 비밀값은 이 파일에 쓰지 않고 `wrangler secret put`으로만 등록합니다.
+[vars]
+GITHUB_CLIENT_ID = "SET_AFTER_CREATING_GITHUB_APP"
+GITHUB_REPOSITORY_ID = "1212419657"
+GITHUB_OWNER = "LimJaeHwan-real"
+GITHUB_REPO = "BlogLim"
+GITHUB_BRANCH = "main"
+ALLOWED_LOGIN = "LimJaeHwan-real"
+ALLOWED_ORIGIN = "https://limjaehwan-real.github.io"
+SITE_BASE_URL = "https://limjaehwan-real.github.io/BlogLim"
