@@ -12,6 +12,11 @@ analytics:
   google:
     measurement_id: ""
 
+publisher:
+  # Cloudflare Worker 배포 후 공개 API 주소를 입력합니다.
+  # GitHub 비밀키나 토큰은 이 파일에 넣지 않습니다.
+  api_url: "https://bloglim-secure-publisher.bloglim-secure-publisher.workers.dev"
+
 comments:
   provider: ""
   disqus:
@@ -71,5 +76,6 @@ exclude:
   - NOTICE.md
   - README.md
   - output
+  - publisher-worker
   - scripts
   - vendor

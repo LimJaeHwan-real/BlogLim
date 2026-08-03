@@ -205,6 +205,12 @@ tags:
 
 > `date` 가 미래 날짜이면 빌드 시 글이 보이지 않을 수 있습니다. 현재 날짜 이전으로 설정하세요.
 
+### 글쓰기 페이지에서 GitHub에 바로 게시하기
+
+`/write/`에는 로컬 마크다운 저장과 별도로 `GitHub에 게시` 기능이 포함되어 있습니다. 이 기능은 정적 페이지에 토큰을 저장하지 않고, 저장소 한정 GitHub App과 Cloudflare Worker를 통해 글과 이미지를 하나의 `main` 커밋으로 게시합니다.
+
+최초 설정과 보안 검증 절차는 [`publisher-worker/README.md`](publisher-worker/README.md)를 따르세요. Worker 주소가 설정되지 않은 상태에서는 GitHub 게시 버튼만 비활성화되고 기존 로컬 저장 기능은 계속 사용할 수 있습니다.
+
 ---
 
 ## 이 저장소 시작 방법 선택하기
