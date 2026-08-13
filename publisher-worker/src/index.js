@@ -216,7 +216,7 @@ function popupHtml(message, targetOrigin, nonce) {
   const safeOrigin = JSON.stringify(targetOrigin).replace(/</g, "\\u003c");
   return "<!doctype html><html lang=\"ko\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>GitHub 로그인</title></head>" +
     "<body><p>GitHub 인증을 처리했습니다. 이 창은 자동으로 닫힙니다.</p>" +
-    "<script nonce=\"" + nonce + "\">if(window.opener){window.opener.postMessage(" + safeMessage + "," + safeOrigin + ");window.close();}</script>" +
+    "<script nonce=\"" + nonce + "\">if(window.opener){window.opener.postMessage(" + safeMessage + "," + safeOrigin + ");window.close();}else{document.body.textContent='로그인 결과를 전달하지 못했습니다(opener 연결 끊김). 창을 닫고 다시 시도해 주세요.';}</script>" +
     "</body></html>";
 }
 
@@ -228,7 +228,9 @@ async function popupResponse(message, settings) {
       ...baseHeaders(),
       "Content-Type": "text/html; charset=utf-8",
       "Content-Security-Policy": "default-src 'none'; script-src 'nonce-" + nonce + "'; style-src 'none'; base-uri 'none'; frame-ancestors 'none'",
-      "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
+      // Cross-Origin-Opener-Policy를 두지 않는다.
+      // 이 페이지는 opener(글쓰기 화면)에게 세션을 postMessage로 넘기는 것이 유일한 목적인데,
+      // COOP는 교차 출처 opener와의 연결을 끊어 window.opener를 null로 만든다.
       "Set-Cookie": clearOauthCookie(),
     },
   });
