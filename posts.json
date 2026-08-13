@@ -5,6 +5,24 @@
       
       
       {
+        "title": "CLAUDE.MD 작성법",
+        "url": "/BlogLim/claude-md-%EC%9E%91%EC%84%B1%EB%B2%95/",
+        "description": "CLAUDE.MD 핵심 규칙",
+        "thumbnail": null,
+        "categories": ["AI"],
+        "category_path": "AI",
+        "tags": ["AI","CLAUDE"],
+        "series_key": "",
+        "series_title": null,
+        "date_label": "2026년 8월 13일",
+        "reading_time_label": "3분 읽기",
+        "search": "claude.md 작성법 claude.md 핵심 규칙 ai ai claude"
+      },
+    
+      
+      
+      
+      {
         "title": "[WIL] 13주차",
         "url": "/BlogLim/wil-13%EC%A3%BC/",
         "description": "13주차에는 PyTorch나 TensorFlow 없이 NumPy만으로 MNIST 손글씨 숫자 분류 신경망을 직접 구현하며 Forward, Loss, Backward, Optimizer Update가 어떻게 연결되는지 코드 수준에서 학습했다.",
